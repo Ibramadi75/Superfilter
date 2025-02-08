@@ -1,0 +1,10 @@
+# Ignore BenchmarkDotNet artifacts
+BenchmarkDotNet.Artifacts/
+
+# Ignore build and obj folders
+bin/
+obj/
+
+# Ignore Visual Studio or Rider-specific files (facultatif)
+.vs/
+.idea/
