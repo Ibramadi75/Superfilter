@@ -7,6 +7,7 @@ public static class Builder
 {
     public static Expression GetExpression<T>(MemberExpression property, string filterValue, Operator op)
     {
+        
         Expression? methodCallExpression = op switch
         {
             _ when typeof(T) == typeof(string) => BuildStringFilterExpression(property, filterValue, op),

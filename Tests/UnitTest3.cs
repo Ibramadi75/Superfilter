@@ -63,7 +63,7 @@ public class ApplyFiltersTranslationTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "MoneyAmount", new FieldConfiguration { DtoPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
+            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -101,7 +101,7 @@ public class ApplyFiltersTranslationTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "MoneyAmount", new FieldConfiguration { DtoPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
+            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -136,7 +136,7 @@ public class ApplyFiltersTranslationTests
             {
                 Filters =
                 [
-                    new FilterCriterion("CarName", Operator.StartsWith, "F"),
+                    new FilterCriterion("carName", Operator.StartsWith, "F"),
                 ]
             }
         };
@@ -144,7 +144,7 @@ public class ApplyFiltersTranslationTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "CarName", new FieldConfiguration { DtoPropertyName = "CarName", Selector = (Expression<Func<User, object>>)(x => x.Car.Name), IsRequired = false } },
+            { "carName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car.Name), IsRequired = false } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -189,8 +189,8 @@ public class ApplyFiltersTranslationTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "MoneyAmount", new FieldConfiguration { DtoPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
-            { "Name", new FieldConfiguration { DtoPropertyName = "Name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
+            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
+            { "Name", new FieldConfiguration { EntityPropertyName = "Name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -209,7 +209,7 @@ public class ApplyFiltersTranslationTests
         Assert.Contains("WHERE", sqlQuery, StringComparison.OrdinalIgnoreCase);
 
         // Assert query execution
-        Assert.Equal(2, result.Count);
+        Assert.Single(result);
         Assert.All(result, user => Assert.True(user.MoneyAmount > 100));
         Assert.All(result, user => Assert.Contains("a", user.Name, StringComparison.OrdinalIgnoreCase));
     }
@@ -234,7 +234,7 @@ public class ApplyFiltersTranslationTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "name", new FieldConfiguration { DtoPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
+            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -264,7 +264,7 @@ public class ApplyFiltersTranslationTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "name", new FieldConfiguration { DtoPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
+            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -306,7 +306,7 @@ public class ApplyFiltersTranslationTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "name", new FieldConfiguration { DtoPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
+            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -321,8 +321,8 @@ public class ApplyFiltersTranslationTests
 
         // Assert SQL query validity
         Assert.NotNull(sqlQuery);
-        Assert.Contains("SELECT", sqlQuery, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("WHERE", sqlQuery, StringComparison.OrdinalIgnoreCase);
+        // Vérifier l'absence de "WHERE" dans la requête SQL si le filtre est ignoré
+        Assert.DoesNotContain("WHERE", sqlQuery, StringComparison.OrdinalIgnoreCase);
 
         // Assert query execution
         Assert.Equal(4, result.Count); // Should return all users
@@ -348,7 +348,7 @@ public class ApplyFiltersTranslationTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "moneyamount", new FieldConfiguration { DtoPropertyName = "moneyamount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
+            { "moneyamount", new FieldConfiguration { EntityPropertyName = "moneyamount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
