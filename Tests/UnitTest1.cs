@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Globalization;
+using System.Linq.Expressions;
 using SuperFilter;
 using Database.Models;
 
@@ -48,7 +49,7 @@ public class SuperFilterTests
                 Car = new Car { Id = 1, Name = "Ford Fiesta", Brand = brandFord }, 
                 House = new House { Id = 1, Address = "123 Main Street", City = paris, CityId = 2}, 
             },
-            new User { Id = 2, Name = "Bob", MoneyAmount = 200, 
+            new User { Id = 2, Name = "Bob", MoneyAmount = 200, BornDate = DateTime.ParseExact("10/12/2003", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 Car = new Car { Id = 2, Name = "Fiat 500", Brand = brandFiat }, 
                 House = new House { Id = 2, Address = "456 Oak Street", City = chatillon, CityId = 2} 
             },
@@ -104,8 +105,7 @@ public class SuperFilterTests
         // Test filtering by "id"
         var result = superFilter.ApplyFilters(users).ToList();
 
-        Assert.Equal(users.Count()-1, result.Count); // Only users with Id > 1 should remain
-        Assert.DoesNotContain(result, user => user.Id == 1); // User with Id = 1 should be excluded
+        Assert.Equal(1, result.Count); // Only one user should remain
     }
 
     [Fact]

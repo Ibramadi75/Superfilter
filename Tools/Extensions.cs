@@ -42,7 +42,6 @@ internal static class SuperFilterExtensions
             throw new InvalidOperationException($"Invalid expression for sorting: {body}");
 
         ParameterExpression parameter = Expression.Parameter(typeof(T), typeof(T).ToString());
-        Type propertyType = ((PropertyInfo)memberExpression.Member).PropertyType;
         Expression propertyAccess = GetNestedPropertyExpression(parameter, RemoveUntilFirstDot(memberExpression.ToString()));
         Expression filterExpression = Builder.GetExpression<TProperty>((MemberExpression)propertyAccess, filter.Value, filter.Operator);
 

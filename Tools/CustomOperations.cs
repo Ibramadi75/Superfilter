@@ -1,49 +1,43 @@
+using System.Linq.Expressions;
+
 namespace SuperFilter
 {
     public static class CustomOperations
     {
-        private enum Precision
+        public static Expression CompareDateByYear(Expression property, Expression filterDate)
         {
-            YearOnly,
-            YearAndMonth,
-            YearAndMonthAndDay,
-            Everything
+            var yearProperty = Expression.Property(property, nameof(DateTime.Year));
+            var yearConstant = Expression.Property(filterDate, nameof(DateTime.Year));
+            return Expression.Equal(yearProperty, yearConstant);
         }
 
-        public static bool CompareDate(DateTime? dt1, DateTime? dt2)
+        public static Expression CompareDateByYearAndMonth(Expression property, Expression filterDate)
         {
-            return CompareDateWithPrecision(dt1, dt2, Precision.Everything);
+            var yearProperty = Expression.Property(property, nameof(DateTime.Year));
+            var yearConstant = Expression.Property(filterDate, nameof(DateTime.Year));
+            var monthProperty = Expression.Property(property, nameof(DateTime.Month));
+            var monthConstant = Expression.Property(filterDate, nameof(DateTime.Month));
+
+            var yearComparison = Expression.Equal(yearProperty, yearConstant);
+            var monthComparison = Expression.Equal(monthProperty, monthConstant);
+
+            return Expression.AndAlso(yearComparison, monthComparison);
         }
 
-        public static bool CompareDateByYear(DateTime? dt1, DateTime? dt2)
+        public static Expression CompareDateByYearMonthAndDay(Expression property, Expression filterDate)
         {
-            return CompareDateWithPrecision(dt1, dt2, Precision.YearOnly);
-        }
+            var yearProperty = Expression.Property(property, nameof(DateTime.Year));
+            var yearConstant = Expression.Property(filterDate, nameof(DateTime.Year));
+            var monthProperty = Expression.Property(property, nameof(DateTime.Month));
+            var monthConstant = Expression.Property(filterDate, nameof(DateTime.Month));
+            var dayProperty = Expression.Property(property, nameof(DateTime.Day));
+            var dayConstant = Expression.Property(filterDate, nameof(DateTime.Day));
 
-        public static bool CompareDateByYearAndMonth(DateTime? dt1, DateTime? dt2)
-        {
-            return CompareDateWithPrecision(dt1, dt2, Precision.YearAndMonth);
-        }
+            var yearComparison = Expression.Equal(yearProperty, yearConstant);
+            var monthComparison = Expression.Equal(monthProperty, monthConstant);
+            var dayComparison = Expression.Equal(dayProperty, dayConstant);
 
-        public static bool CompareDateByYearMonthAndDay(DateTime? dt1, DateTime? dt2)
-        {
-            return CompareDateWithPrecision(dt1, dt2, Precision.YearAndMonthAndDay);
-        }
-
-        private static bool CompareDateWithPrecision(DateTime? dt1, DateTime? dt2, Precision precision = Precision.Everything)
-        {
-            if (!dt1.HasValue && !dt2.HasValue)
-                return true;
-            if (!dt1.HasValue || !dt2.HasValue)
-                return false;
-
-            return precision switch
-            {
-                Precision.YearOnly => dt1.Value.Year == dt2.Value.Year,
-                Precision.YearAndMonth => dt1.Value.Year == dt2.Value.Year && dt1.Value.Month == dt2.Value.Month,
-                Precision.YearAndMonthAndDay => dt1.Value.Date == dt2.Value.Date,
-                _ => throw new ArgumentOutOfRangeException(nameof(precision), precision, "Invalid precision type")
-            };
+            return Expression.AndAlso(Expression.AndAlso(yearComparison, monthComparison), dayComparison);
         }
     }
 }
