@@ -153,7 +153,7 @@ public class SuperFilterTests
     }
 
     [Fact]
-    public void FilterProperty_ExceptionThrown_WhenRequiredFilterIsMissing()
+    public void FilterProperty_SuperFilterExceptionThrown_WhenRequiredFilterIsMissing()
     {
         var users = GetTestUsers();
         var globalConfiguration = new GlobalConfiguration

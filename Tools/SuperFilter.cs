@@ -30,7 +30,14 @@ namespace SuperFilter
                         .GetMethod("FilterProperty")
                         ?.MakeGenericMethod(typeof(T), propertyType);
 
-                    query = (IQueryable<T>)filterMethod?.Invoke(this, new object[] { query, GlobalConfiguration, typedExpression, fieldConfig.IsRequired });
+                    try
+                    {
+                        query = (IQueryable<T>)filterMethod?.Invoke(this, [query, GlobalConfiguration, typedExpression, fieldConfig.IsRequired])!;
+                    }
+                    catch (Exception e)
+                    {
+                        throw new SuperFilterException($"Problem occurred while invoking SuperFilterExtensions.FilterProperty on {filter.Field} with operator {filter.Operator}");
+                    }
                 }
             }
 
@@ -73,7 +80,7 @@ namespace SuperFilter
                 return ((PropertyInfo)memberExpression.Member).PropertyType;
             }
 
-            throw new InvalidCastException("Unable to determine property type from selector.");
+            throw new SuperFilterException("Unable to determine property type from selector.");
         }
 
 
@@ -85,7 +92,7 @@ namespace SuperFilter
             }
             else
             {
-                throw new InvalidCastException("Unsupported selector type for " + selector);
+                throw new SuperFilterException("Unsupported selector type for " + selector);
             }
         }
         public void SetGlobalConfiguration(GlobalConfiguration globalConfiguration)
