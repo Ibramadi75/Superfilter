@@ -69,12 +69,14 @@ public class SuperFilterTests
     public void FilterProperty_OnInteger_ValidFilter_ApplyFilterCorrectly()
     {
         var users = GetTestUsers();
+        
+        
         var globalConfiguration = GetGlobalConfiguration();
 
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "id", new FieldConfiguration { EntityPropertyName = "id", Selector = (Expression<Func<User, object>>)(x => x.Id), IsRequired = true } },
+            { "id", new FieldConfiguration { EntityPropertyName = nameof(User.Id), Selector = (Expression<Func<User, object>>)(x => x.Id), IsRequired = true } },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -338,7 +340,7 @@ public class SuperFilterTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "carBrandName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car.Brand.Name), IsRequired = false } }
+            { "carBrandName", new FieldConfiguration { EntityPropertyName = nameof(Brand.Name), Selector = (Expression<Func<User, object>>)(x => x.Car.Brand.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);

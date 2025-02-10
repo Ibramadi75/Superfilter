@@ -24,7 +24,7 @@ namespace SuperFilter
                 var typedSelector = ConvertSelector<T>(fieldConfig.Selector);
                 var propertyType = GetSelectorPropertyType(fieldConfig.Selector);
 
-                var typedExpression = ConvertExpressionType<T>(typedSelector, propertyType); // Corrigé
+                var typedExpression = ConvertExpressionType<T>(typedSelector, propertyType);
 
                 var filterMethod = typeof(SuperFilterExtensions)
                     .GetMethod("FilterProperty")
@@ -121,25 +121,13 @@ namespace SuperFilter
 
             if (fieldConfig.Selector.ToString().Count(c => c == '.') > 1)
             {
-                try
-                {
-                    fieldConfig.Selector = CreateSelectorExpression<T>(ExtractExpression(fieldConfig.Selector.ToString()));
-                }
-                catch
-                {
-                    continue;
-                }
+                try { fieldConfig.Selector = CreateSelectorExpression<T>(ExtractExpression(fieldConfig.Selector.ToString())); }
+                catch { continue; }
             }
             else
             {
-                try
-                {
-                    fieldConfig.Selector = CreateSelectorExpression<T>(mapping.Key);
-                }
-                catch
-                {
-                    continue;
-                }
+                try { fieldConfig.Selector = CreateSelectorExpression<T>(mapping.Value.EntityPropertyName); }
+                catch { continue; }
             }
 
             if (fieldConfigDict != null) fieldConfigDict[mapping.Key] = fieldConfig;
