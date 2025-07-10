@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
+using Database.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 using SuperFilter;
-using Database.Models;
 using Xunit.Abstractions;
 
 public class ApplyFiltersTranslationTests
@@ -20,7 +16,7 @@ public class ApplyFiltersTranslationTests
 
     private DbContextOptions<AppDbContext> GetDbContextOptions()
     {
-        var connection = new SqliteConnection("Filename=:memory:");
+        SqliteConnection connection = new("Filename=:memory:");
         connection.Open();
 
         return new DbContextOptionsBuilder<AppDbContext>()
@@ -30,14 +26,14 @@ public class ApplyFiltersTranslationTests
 
     private AppDbContext GetDbContext()
     {
-        var context = new AppDbContext(GetDbContextOptions());
+        AppDbContext context = new(GetDbContextOptions());
         context.Database.EnsureCreated(); // Important pour SQLite In-Memory
 
         context.Users.AddRange(
-            new User { Id = 1, Name = "Alice", MoneyAmount = 150, Car = new Car { Id = 1, Name = "Ford" }},
-            new User { Id = 2, Name = "Bob", MoneyAmount = 200, Car = new Car { Id = 2, Name = "Fiat" }},
-            new User { Id = 3, Name = "Charlie", MoneyAmount = 50, Car = new Car { Id = 3, Name = "BMW" }},
-            new User { Id = 4, Name = "Dave", MoneyAmount = 300, Car = new Car { Id = 4, Name = "Honda" }}
+            new User { Id = 1, Name = "Alice", MoneyAmount = 150, Car = new Car { Id = 1, Name = "Ford" } },
+            new User { Id = 2, Name = "Bob", MoneyAmount = 200, Car = new Car { Id = 2, Name = "Fiat" } },
+            new User { Id = 3, Name = "Charlie", MoneyAmount = 50, Car = new Car { Id = 3, Name = "BMW" } },
+            new User { Id = 4, Name = "Dave", MoneyAmount = 300, Car = new Car { Id = 4, Name = "Honda" } }
         );
         context.SaveChanges();
         return context;
@@ -47,31 +43,31 @@ public class ApplyFiltersTranslationTests
     public void ApplyFilters_ShouldGenerateValidSqlQuery()
     {
         // Arrange
-        using var context = GetDbContext();
-        var users = context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        using AppDbContext context = GetDbContext();
+        IQueryable<User> users = context.Users.AsQueryable();
+        GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
                 Filters =
                 [
-                    new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100"),
+                    new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")
                 ]
             }
         };
 
-        var superFilter = new SuperFilter.SuperFilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
+        SuperFilter.SuperFilter superFilter = new();
+        Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
+            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
         superFilter.SetupFieldConfiguration<User>();
 
         // Act
-        var filteredQuery = superFilter.ApplyFilters(users);
-        var sqlQuery = filteredQuery.ToQueryString();
+        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        string sqlQuery = filteredQuery.ToQueryString();
 
         _testOutputHelper.WriteLine(sqlQuery);
 
@@ -85,32 +81,32 @@ public class ApplyFiltersTranslationTests
     public void ApplyFilters_ShouldReturnExpectedResults()
     {
         // Arrange
-        using var context = GetDbContext();
-        var users = context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        using AppDbContext context = GetDbContext();
+        IQueryable<User> users = context.Users.AsQueryable();
+        GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
                 Filters =
                 [
-                    new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100"),
+                    new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")
                 ]
             }
         };
 
-        var superFilter = new SuperFilter.SuperFilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
+        SuperFilter.SuperFilter superFilter = new();
+        Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
+            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
         superFilter.SetupFieldConfiguration<User>();
 
         // Act
-        var filteredQuery = superFilter.ApplyFilters(users);
-        var sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
-        var result = filteredQuery.ToList(); // Exécuter la requête
+        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
+        List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
         _testOutputHelper.WriteLine(sqlQuery);
 
@@ -128,32 +124,32 @@ public class ApplyFiltersTranslationTests
     public void ApplyFilters_WithNavigationProperty_ShouldFilterCorrectly()
     {
         // Arrange
-        using var context = GetDbContext();
-        var users = context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        using AppDbContext context = GetDbContext();
+        IQueryable<User> users = context.Users.AsQueryable();
+        GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
                 Filters =
                 [
-                    new FilterCriterion("carName", Operator.StartsWith, "F"),
+                    new FilterCriterion("carName", Operator.StartsWith, "F")
                 ]
             }
         };
 
-        var superFilter = new SuperFilter.SuperFilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
+        SuperFilter.SuperFilter superFilter = new();
+        Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "carName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car.Name), IsRequired = false } },
+            { "carName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
         superFilter.SetupFieldConfiguration<User>();
 
         // Act
-        var filteredQuery = superFilter.ApplyFilters(users);
-        var sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
-        var result = filteredQuery.ToList(); // Exécuter la requête
+        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
+        List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
         _testOutputHelper.WriteLine(sqlQuery);
 
@@ -172,34 +168,34 @@ public class ApplyFiltersTranslationTests
     public void ApplyFilters_WithMultipleFilters_ShouldApplyAllFilters()
     {
         // Arrange
-        using var context = GetDbContext();
-        var users = context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        using AppDbContext context = GetDbContext();
+        IQueryable<User> users = context.Users.AsQueryable();
+        GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
                 Filters =
                 [
                     new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100"),
-                    new FilterCriterion("Name", Operator.Contains, "a"),
+                    new FilterCriterion("Name", Operator.Contains, "a")
                 ]
             }
         };
 
-        var superFilter = new SuperFilter.SuperFilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
+        SuperFilter.SuperFilter superFilter = new();
+        Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
-            { "Name", new FieldConfiguration { EntityPropertyName = "Name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
+            { "Name", new FieldConfiguration { EntityPropertyName = "Name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
         superFilter.SetupFieldConfiguration<User>();
 
         // Act
-        var filteredQuery = superFilter.ApplyFilters(users);
-        var sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
-        var result = filteredQuery.ToList(); // Exécuter la requête
+        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
+        List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
         _testOutputHelper.WriteLine(sqlQuery);
 
@@ -218,23 +214,23 @@ public class ApplyFiltersTranslationTests
     public void ApplyFilters_WithInvalidOperator_ShouldThrowException()
     {
         // Arrange
-        using var context = GetDbContext();
-        var users = context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        using AppDbContext context = GetDbContext();
+        IQueryable<User> users = context.Users.AsQueryable();
+        GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
                 Filters =
                 [
-                    new FilterCriterion("name", Operator.GreaterThan, "test"), // Invalid operator for string
+                    new FilterCriterion("name", Operator.GreaterThan, "test") // Invalid operator for string
                 ]
             }
         };
 
-        var superFilter = new SuperFilter.SuperFilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
+        SuperFilter.SuperFilter superFilter = new();
+        Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
+            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
@@ -248,32 +244,32 @@ public class ApplyFiltersTranslationTests
     public void ApplyFilters_WithEmptyFilter_ShouldReturnAllResults()
     {
         // Arrange
-        using var context = GetDbContext();
-        var users = context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        using AppDbContext context = GetDbContext();
+        IQueryable<User> users = context.Users.AsQueryable();
+        GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
                 Filters =
                 [
-                    new FilterCriterion("name", Operator.Contains, "e"),
+                    new FilterCriterion("name", Operator.Contains, "e")
                 ]
             }
         };
 
-        var superFilter = new SuperFilter.SuperFilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
+        SuperFilter.SuperFilter superFilter = new();
+        Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
+            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
         superFilter.SetupFieldConfiguration<User>();
 
         // Act
-        var filteredQuery = superFilter.ApplyFilters(users);
-        var sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
-        var result = filteredQuery.ToList(); // Exécuter la requête
+        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
+        List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
         _testOutputHelper.WriteLine(sqlQuery);
 
@@ -290,32 +286,32 @@ public class ApplyFiltersTranslationTests
     public void ApplyFilters_WithNonExistentProperty_ShouldIgnoreFilter()
     {
         // Arrange
-        using var context = GetDbContext();
-        var users = context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        using AppDbContext context = GetDbContext();
+        IQueryable<User> users = context.Users.AsQueryable();
+        GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
                 Filters =
                 [
-                    new FilterCriterion("NonExistentProperty", Operator.Equals, "test"),
+                    new FilterCriterion("NonExistentProperty", Operator.Equals, "test")
                 ]
             }
         };
 
-        var superFilter = new SuperFilter.SuperFilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
+        SuperFilter.SuperFilter superFilter = new();
+        Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } },
+            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
         superFilter.SetupFieldConfiguration<User>();
 
         // Act
-        var filteredQuery = superFilter.ApplyFilters(users);
-        var sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
-        var result = filteredQuery.ToList(); // Exécuter la requête
+        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
+        List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
         _testOutputHelper.WriteLine(sqlQuery);
 
@@ -332,32 +328,32 @@ public class ApplyFiltersTranslationTests
     public void ApplyFilters_WithCaseInsensitivePropertyName_ShouldFilterCorrectly()
     {
         // Arrange
-        using var context = GetDbContext();
-        var users = context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        using AppDbContext context = GetDbContext();
+        IQueryable<User> users = context.Users.AsQueryable();
+        GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
                 Filters =
                 [
-                    new FilterCriterion("moneyamount", Operator.GreaterThan, "200"), // lowercase property name
+                    new FilterCriterion("moneyamount", Operator.GreaterThan, "200") // lowercase property name
                 ]
             }
         };
 
-        var superFilter = new SuperFilter.SuperFilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
+        SuperFilter.SuperFilter superFilter = new();
+        Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "moneyamount", new FieldConfiguration { EntityPropertyName = "moneyamount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
+            { "moneyamount", new FieldConfiguration { EntityPropertyName = "moneyamount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);
         superFilter.SetupFieldConfiguration<User>();
 
         // Act
-        var filteredQuery = superFilter.ApplyFilters(users);
-        var sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
-        var result = filteredQuery.ToList(); // Exécuter la requête
+        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
+        List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
         _testOutputHelper.WriteLine(sqlQuery);
 

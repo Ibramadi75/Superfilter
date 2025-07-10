@@ -1,4 +1,3 @@
-
 using SuperFilter;
 
 public interface IHasFilters
@@ -12,4 +11,5 @@ public interface IHasSorts
 }
 
 public record FilterCriterion(string Field, Operator Operator, string Value);
+
 public record SortCriterion(string Field, string dir);

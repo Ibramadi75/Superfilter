@@ -5,20 +5,20 @@ namespace Database;
 public class Fake
 {
     public List<User> Users { get; set; }
-    
+
     public IQueryable<User> GetUsers()
     {
         return Users.AsQueryable();
     }
-    
+
     public void GenerateUsers(int numberOfUsers)
     {
-        var users = new List<User>();
-        var carIdCounter = 1;
+        List<User> users = new();
+        int carIdCounter = 1;
 
         for (int i = 1; i <= numberOfUsers; i++)
         {
-            var user = new User
+            User user = new()
             {
                 Id = i,
                 Name = $"User {i}",

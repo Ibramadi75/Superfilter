@@ -17,13 +17,13 @@ public enum Operator
 
 public static class Constants
 {
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForStringFiltering => new ()
+    private static Dictionary<Operator, MethodInfo?> MethodInfosForStringFiltering => new()
     {
         { Operator.StartsWith, typeof(string).GetMethod("StartsWith", [typeof(string)]) },
         { Operator.Contains, typeof(string).GetMethod("Contains", [typeof(string)]) },
         { Operator.Equals, typeof(string).GetMethod("Equals", [typeof(string)]) }
     };
-    
+
     private static Dictionary<Operator, MethodInfo?> MethodInfosForDateTimeFiltering => new()
     {
         { Operator.Equals, typeof(DateTime).GetMethod("Equals", new[] { typeof(DateTime) }) },
@@ -31,21 +31,21 @@ public static class Constants
         { Operator.IsEqualToYearAndMonth, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearAndMonth), new[] { typeof(DateTime), typeof(DateTime) }) },
         { Operator.IsEqualToFullDate, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearMonthAndDay), new[] { typeof(DateTime), typeof(DateTime) }) },
         { Operator.LessThan, typeof(DateTime).GetMethod("CompareTo", new[] { typeof(DateTime) }) },
-        { Operator.GreaterThan, typeof(DateTime).GetMethod("CompareTo", new[] { typeof(DateTime) }) },
+        { Operator.GreaterThan, typeof(DateTime).GetMethod("CompareTo", new[] { typeof(DateTime) }) }
     };
-    
+
     private static Dictionary<Operator, MethodInfo?> MethodInfosForBooleanFiltering => new()
     {
-        { Operator.Equals, typeof(bool).GetMethod("Equals", [typeof(bool)]) },
+        { Operator.Equals, typeof(bool).GetMethod("Equals", [typeof(bool)]) }
     };
-    
+
     private static Dictionary<Operator, MethodInfo?> MethodInfosForIntegerFiltering => new()
     {
         { Operator.Equals, typeof(int).GetMethod("Equals", [typeof(int)]) },
         { Operator.LessThan, typeof(int).GetMethod("LessThan", [typeof(int)]) },
-        { Operator.GreaterThan, typeof(int).GetMethod("GreaterThan", [typeof(int)]) },
+        { Operator.GreaterThan, typeof(int).GetMethod("GreaterThan", [typeof(int)]) }
     };
-    
+
     public static Dictionary<Operator, MethodInfo?> GetMethodInfos(Type propertyType)
     {
         if (propertyType == typeof(string))
@@ -62,7 +62,7 @@ public static class Constants
 
         return new Dictionary<Operator, MethodInfo?>();
     }
-    
+
     public static bool IsOperatorLegal<T>(Operator op)
     {
         Dictionary<Operator, MethodInfo?> methodInfos = GetMethodInfos(typeof(T));

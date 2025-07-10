@@ -6,7 +6,7 @@ namespace SuperFilter;
 internal static class SuperFilterExtensions
 {
     public static IQueryable<T> FilterProperty<T, TProperty>(
-        this IQueryable<T> query, 
+        this IQueryable<T> query,
         GlobalConfiguration globalConfiguration,
         Expression<Func<T, TProperty>> propertyExpression,
         bool isRequired)
@@ -14,14 +14,14 @@ internal static class SuperFilterExtensions
         Expression body = propertyExpression.Body is UnaryExpression unary ? unary.Operand : propertyExpression.Body;
         string propertyName = ((MemberExpression)body).Member.Name;
 
-        var kvp = globalConfiguration.PropertyMappings
+        KeyValuePair<string, FieldConfiguration> kvp = globalConfiguration.PropertyMappings
             .FirstOrDefault(x => x.Value.EntityPropertyName.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
 
         if (kvp.Equals(default(KeyValuePair<string, FieldConfiguration>)))
             return query;
 
-        var actualKey = kvp.Key;
-        var fieldConfig = kvp.Value;
+        string? actualKey = kvp.Key;
+        FieldConfiguration? fieldConfig = kvp.Value;
 
 
         string filterFieldName = propertyName;
@@ -37,7 +37,7 @@ internal static class SuperFilterExtensions
                 throw new SuperFilterException($"Filter {filterFieldName} is required.");
             return query;
         }
-    
+
         if (body is not MemberExpression memberExpression)
             throw new InvalidOperationException($"Invalid expression for sorting: {body}");
 
@@ -45,10 +45,10 @@ internal static class SuperFilterExtensions
         Expression propertyAccess = GetNestedPropertyExpression(parameter, RemoveUntilFirstDot(memberExpression.ToString()));
         Expression filterExpression = Builder.GetExpression<TProperty>((MemberExpression)propertyAccess, filter.Value, filter.Operator);
 
-        var lambda = Expression.Lambda<Func<T, bool>>(filterExpression, parameter);
+        Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(filterExpression, parameter);
 
         query = query.Where(lambda);
-        
+
         return query;
     }
 
@@ -59,9 +59,9 @@ internal static class SuperFilterExtensions
         if (globalConfiguration.HasSorts.Sorters.Count == 0)
             throw new SuperFilterException("At least 1 sorter must be specified");
 
-        foreach (var sorter in globalConfiguration.HasSorts.Sorters)
+        foreach (SortCriterion sorter in globalConfiguration.HasSorts.Sorters)
         {
-            if (!globalConfiguration.PropertyMappings.TryGetValue(sorter.Field, out var property)) continue;
+            if (!globalConfiguration.PropertyMappings.TryGetValue(sorter.Field, out FieldConfiguration? property)) continue;
 
             Expression body = property.Selector.Body is UnaryExpression unary ? unary.Operand : property.Selector.Body;
 
@@ -76,7 +76,9 @@ internal static class SuperFilterExtensions
 
             string methodName = query.Expression.Type == typeof(IOrderedQueryable<T>)
                 ? sorter.dir.Equals("asc", StringComparison.CurrentCultureIgnoreCase) ? "ThenBy" : "ThenByDescending"
-                : sorter.dir.Equals("asc", StringComparison.CurrentCultureIgnoreCase) ? "OrderBy" : "OrderByDescending";
+                : sorter.dir.Equals("asc", StringComparison.CurrentCultureIgnoreCase)
+                    ? "OrderBy"
+                    : "OrderByDescending";
 
             MethodInfo? method = typeof(Queryable)
                 .GetMethods()
@@ -85,14 +87,17 @@ internal static class SuperFilterExtensions
 
             query = (IQueryable<T>)method.Invoke(null, [query, lambda])!;
         }
-        
+
         return query;
     }
 
-    private static Expression GetNestedPropertyExpression(Expression parameter, string propertyPath) 
-        => propertyPath.Split('.').Aggregate(parameter, Expression.Property);
-    
-    private static string RemoveUntilFirstDot(string input) {
+    private static Expression GetNestedPropertyExpression(Expression parameter, string propertyPath)
+    {
+        return propertyPath.Split('.').Aggregate(parameter, Expression.Property);
+    }
+
+    private static string RemoveUntilFirstDot(string input)
+    {
         int index = input.IndexOf('.');
         return index == -1 ? input : input.Substring(index + 1);
     }

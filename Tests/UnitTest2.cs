@@ -1,8 +1,5 @@
-using System.Linq;
-using System.Linq.Expressions;
-using Xunit;
-using SuperFilter;
 using Database.Models;
+using SuperFilter;
 
 public class HasSortsDto : IHasSorts
 {
@@ -31,12 +28,10 @@ public class SuperFilterSortTests
     {
         return new List<User>
         {
-            new User { Id = 3, Name = "Charlie", MoneyAmount = 50 },
-            new User { Id = 1, Name = "Alice", MoneyAmount = 150 },
-            new User { Id = 4, Name = "Dave", MoneyAmount = 300 },
-            new User { Id = 2, Name = "Bob", MoneyAmount = 200 }
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 50 },
+            new() { Id = 1, Name = "Alice", MoneyAmount = 150 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 300 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 }
         }.AsQueryable();
     }
-
-
 }

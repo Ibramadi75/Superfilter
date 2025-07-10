@@ -16,7 +16,7 @@ public class Car
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    
+
     public User User { get; set; }
     public int UserId { get; set; }
 
@@ -39,7 +39,7 @@ public class City
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    
+
     public int MayorId { get; set; }
     public User Mayor { get; set; }
 }
@@ -53,7 +53,7 @@ public class House
     // Relations
     public User User { get; set; } = null!;
     public int UserId { get; set; }
-    
+
     public City City { get; set; } = null!;
     public int CityId { get; set; }
 }
