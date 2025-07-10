@@ -7,4 +7,16 @@
         <Optimize>true</Optimize>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Update="Superfilter.RequiredFilters.cs">
+        <DependentUpon>Superfilter.cs</DependentUpon>
+      </Compile>
+      <Compile Update="SuperFilter.ExpressionUtils.cs">
+        <DependentUpon>Superfilter.cs</DependentUpon>
+      </Compile>
+      <Compile Update="SuperFilter.FieldConfig.cs">
+        <DependentUpon>Superfilter.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

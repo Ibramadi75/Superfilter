@@ -3,17 +3,11 @@ using Database.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SuperFilter;
+using SuperFilter.Entities;
 using Xunit.Abstractions;
 
-public class ApplyFiltersTranslationTests
+public class ApplyFiltersTranslationTests(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public ApplyFiltersTranslationTests(ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-    }
-
     private DbContextOptions<AppDbContext> GetDbContextOptions()
     {
         SqliteConnection connection = new("Filename=:memory:");
@@ -56,20 +50,20 @@ public class ApplyFiltersTranslationTests
             }
         };
 
-        SuperFilter.SuperFilter superFilter = new();
+        SuperFilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
-        superFilter.SetGlobalConfiguration(globalConfiguration);
-        superFilter.SetupFieldConfiguration<User>();
+        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeFieldSelectors<User>();
 
         // Act
-        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
 
-        _testOutputHelper.WriteLine(sqlQuery);
+        testOutputHelper.WriteLine(sqlQuery);
 
         // Assert SQL query validity
         Assert.NotNull(sqlQuery);
@@ -94,21 +88,21 @@ public class ApplyFiltersTranslationTests
             }
         };
 
-        SuperFilter.SuperFilter superFilter = new();
+        SuperFilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
-        superFilter.SetGlobalConfiguration(globalConfiguration);
-        superFilter.SetupFieldConfiguration<User>();
+        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeFieldSelectors<User>();
 
         // Act
-        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
         List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
-        _testOutputHelper.WriteLine(sqlQuery);
+        testOutputHelper.WriteLine(sqlQuery);
 
         // Assert SQL query validity
         Assert.NotNull(sqlQuery);
@@ -137,21 +131,21 @@ public class ApplyFiltersTranslationTests
             }
         };
 
-        SuperFilter.SuperFilter superFilter = new();
+        SuperFilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "carName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
-        superFilter.SetGlobalConfiguration(globalConfiguration);
-        superFilter.SetupFieldConfiguration<User>();
+        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeFieldSelectors<User>();
 
         // Act
-        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
         List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
-        _testOutputHelper.WriteLine(sqlQuery);
+        testOutputHelper.WriteLine(sqlQuery);
 
         // Assert SQL query validity
         Assert.NotNull(sqlQuery);
@@ -182,22 +176,22 @@ public class ApplyFiltersTranslationTests
             }
         };
 
-        SuperFilter.SuperFilter superFilter = new();
+        SuperFilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
             { "Name", new FieldConfiguration { EntityPropertyName = "Name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
-        superFilter.SetGlobalConfiguration(globalConfiguration);
-        superFilter.SetupFieldConfiguration<User>();
+        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeFieldSelectors<User>();
 
         // Act
-        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
         List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
-        _testOutputHelper.WriteLine(sqlQuery);
+        testOutputHelper.WriteLine(sqlQuery);
 
         // Assert SQL query validity
         Assert.NotNull(sqlQuery);
@@ -227,17 +221,17 @@ public class ApplyFiltersTranslationTests
             }
         };
 
-        SuperFilter.SuperFilter superFilter = new();
+        SuperFilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
-        superFilter.SetGlobalConfiguration(globalConfiguration);
-        superFilter.SetupFieldConfiguration<User>();
+        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeFieldSelectors<User>();
 
         // Assert query execution
-        Assert.Throws<SuperFilterException>(() => superFilter.ApplyFilters(users));
+        Assert.Throws<SuperFilterException>(() => superfilter.ApplyConfiguredFilters(users));
     }
 
     [Fact]
@@ -257,21 +251,21 @@ public class ApplyFiltersTranslationTests
             }
         };
 
-        SuperFilter.SuperFilter superFilter = new();
+        SuperFilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
-        superFilter.SetGlobalConfiguration(globalConfiguration);
-        superFilter.SetupFieldConfiguration<User>();
+        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeFieldSelectors<User>();
 
         // Act
-        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
         List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
-        _testOutputHelper.WriteLine(sqlQuery);
+        testOutputHelper.WriteLine(sqlQuery);
 
         // Assert SQL query validity
         Assert.NotNull(sqlQuery);
@@ -299,21 +293,21 @@ public class ApplyFiltersTranslationTests
             }
         };
 
-        SuperFilter.SuperFilter superFilter = new();
+        SuperFilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
-        superFilter.SetGlobalConfiguration(globalConfiguration);
-        superFilter.SetupFieldConfiguration<User>();
+        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeFieldSelectors<User>();
 
         // Act
-        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
         List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
-        _testOutputHelper.WriteLine(sqlQuery);
+        testOutputHelper.WriteLine(sqlQuery);
 
         // Assert SQL query validity
         Assert.NotNull(sqlQuery);
@@ -341,21 +335,21 @@ public class ApplyFiltersTranslationTests
             }
         };
 
-        SuperFilter.SuperFilter superFilter = new();
+        SuperFilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "moneyamount", new FieldConfiguration { EntityPropertyName = "moneyamount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
-        superFilter.SetGlobalConfiguration(globalConfiguration);
-        superFilter.SetupFieldConfiguration<User>();
+        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeFieldSelectors<User>();
 
         // Act
-        IQueryable<User> filteredQuery = superFilter.ApplyFilters(users);
+        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString(); // Voir la requête générée
         List<User> result = filteredQuery.ToList(); // Exécuter la requête
 
-        _testOutputHelper.WriteLine(sqlQuery);
+        testOutputHelper.WriteLine(sqlQuery);
 
         // Assert SQL query validity
         Assert.NotNull(sqlQuery);

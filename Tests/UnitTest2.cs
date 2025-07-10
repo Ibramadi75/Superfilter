@@ -1,5 +1,6 @@
 using Database.Models;
 using SuperFilter;
+using SuperFilter.Entities;
 
 public class HasSortsDto : IHasSorts
 {
