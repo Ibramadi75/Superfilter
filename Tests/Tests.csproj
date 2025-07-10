@@ -22,7 +22,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Database\Database.csproj"/>
-        <ProjectReference Include="..\Tools\Tools.csproj"/>
+        <ProjectReference Include="..\SuperFilter\SuperFilter.csproj" />
     </ItemGroup>
 
 </Project>
