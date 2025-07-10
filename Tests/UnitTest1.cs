@@ -278,7 +278,12 @@ public class SuperFilterTests
         var superFilter = new SuperFilter.SuperFilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "houseAddress", new FieldConfiguration { EntityPropertyName = "address", Selector = (Expression<Func<User, object>>)(x => x.House.Address), IsRequired = false } }
+            {
+                "id", new FieldConfiguration { EntityPropertyName = "id", Selector = (Expression<Func<User, object>>)(x => x.Id), IsRequired = false }
+            },
+            {
+                "houseAddress", new FieldConfiguration { EntityPropertyName = "address", Selector = (Expression<Func<User, object>>)(x => x.House.Address), IsRequired = false }
+            },
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superFilter.SetGlobalConfiguration(globalConfiguration);

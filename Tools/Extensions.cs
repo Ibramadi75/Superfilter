@@ -63,7 +63,7 @@ internal static class SuperFilterExtensions
         {
             if (!globalConfiguration.PropertyMappings.TryGetValue(sorter.Field, out var property)) continue;
 
-            var body = property.Selector.Body is UnaryExpression unary ? unary.Operand : property.Selector.Body;
+            Expression body = property.Selector.Body is UnaryExpression unary ? unary.Operand : property.Selector.Body;
 
             if (body is not MemberExpression memberExpression)
                 throw new InvalidOperationException($"Invalid expression for sorting: {property.Selector.Body}");
@@ -88,16 +88,10 @@ internal static class SuperFilterExtensions
         
         return query;
     }
+
+    private static Expression GetNestedPropertyExpression(Expression parameter, string propertyPath) 
+        => propertyPath.Split('.').Aggregate(parameter, Expression.Property);
     
-    private static Expression GetNestedPropertyExpression(Expression parameter, string propertyPath)
-    {
-        Expression propertyAccess = parameter;
-        foreach (var property in propertyPath.Split('.'))
-        {
-            propertyAccess = Expression.Property(propertyAccess, property);
-        }
-        return propertyAccess;
-    }
     private static string RemoveUntilFirstDot(string input) {
         int index = input.IndexOf('.');
         return index == -1 ? input : input.Substring(index + 1);

@@ -1,4 +1,5 @@
 using System.Reflection;
+using SuperFilter.CustomOperations;
 
 namespace SuperFilter;
 
@@ -26,9 +27,9 @@ public static class Constants
     private static Dictionary<Operator, MethodInfo?> MethodInfosForDateTimeFiltering => new()
     {
         { Operator.Equals, typeof(DateTime).GetMethod("Equals", new[] { typeof(DateTime) }) },
-        { Operator.IsEqualToYear, typeof(CustomOperations).GetMethod(nameof(CustomOperations.CompareDateByYear), new[] { typeof(DateTime), typeof(DateTime) }) },
-        { Operator.IsEqualToYearAndMonth, typeof(CustomOperations).GetMethod(nameof(CustomOperations.CompareDateByYearAndMonth), new[] { typeof(DateTime), typeof(DateTime) }) },
-        { Operator.IsEqualToFullDate, typeof(CustomOperations).GetMethod(nameof(CustomOperations.CompareDateByYearMonthAndDay), new[] { typeof(DateTime), typeof(DateTime) }) },
+        { Operator.IsEqualToYear, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYear), new[] { typeof(DateTime), typeof(DateTime) }) },
+        { Operator.IsEqualToYearAndMonth, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearAndMonth), new[] { typeof(DateTime), typeof(DateTime) }) },
+        { Operator.IsEqualToFullDate, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearMonthAndDay), new[] { typeof(DateTime), typeof(DateTime) }) },
         { Operator.LessThan, typeof(DateTime).GetMethod("CompareTo", new[] { typeof(DateTime) }) },
         { Operator.GreaterThan, typeof(DateTime).GetMethod("CompareTo", new[] { typeof(DateTime) }) },
     };
