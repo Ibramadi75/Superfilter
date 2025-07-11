@@ -1,24 +1,6 @@
-<svg width="500" height="60" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-    .text {
-      font-family: sans-serif;
-      font-size: 20px;
-      animation: blink 1.5s infinite;
-      fill: #ff4081;
-    }
-    .background {
-      fill: #1e1e1e;
-    }
-  </style>
-  <rect class="background" width="100%" height="100%" rx="10" />
-  <text x="50%" y="50%" text-anchor="middle" alignment-baseline="central" class="text">
-    🚧 Work in progress – Soon available
-  </text>
-</svg>
+![pre-alpha](https://img.shields.io/badge/status-Available_soon_🚧-ff69b4?style=for-the-badge&logoColor=white&label=WIP)
+
+
 
 # SuperFilter
 
