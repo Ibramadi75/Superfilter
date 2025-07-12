@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 using Database.Models;
-using SuperFilter;
-using SuperFilter.Constants;
-using SuperFilter.Entities;
+using Superfilter;
+using Superfilter.Constants;
+using Superfilter.Entities;
 using Tests.Common;
 
 namespace Tests.Unit;
@@ -29,7 +29,7 @@ public class ValidationTests
     }
 
     [Fact]
-    public void FilterProperty_SuperFilterExceptionThrown_WhenRequiredFilterIsMissing()
+    public void FilterProperty_SuperfilterExceptionThrown_WhenRequiredFilterIsMissing()
     {
         IQueryable<User> users = GetTestUsers();
         GlobalConfiguration globalConfiguration = new()
@@ -49,7 +49,7 @@ public class ValidationTests
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
         superfilter.InitializeFieldSelectors<User>();
 
-        SuperFilterException exception = Assert.Throws<SuperFilterException>(() => superfilter.ApplyConfiguredFilters(users));
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
 
         Assert.Equal("Filter id is required.", exception.Message);
     }
@@ -75,7 +75,7 @@ public class ValidationTests
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
         superfilter.InitializeFieldSelectors<User>();
 
-        Assert.Throws<SuperFilterException>(() => superfilter.ApplyConfiguredFilters(users));
+        Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
     }
 
     [Fact]

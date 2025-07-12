@@ -1,7 +1,7 @@
 using System.Reflection;
-using SuperFilter.CustomOperations;
+using Superfilter.CustomOperations;
 
-namespace SuperFilter.Constants;
+namespace Superfilter.Constants;
 
 public static class MethodInfoMappings
 {

@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Linq.Expressions;
 using Database.Models;
-using SuperFilter;
-using SuperFilter.Constants;
-using SuperFilter.Entities;
+using Superfilter;
+using Superfilter.Constants;
+using Superfilter.Entities;
 using Tests.Common;
 
 namespace Tests.Unit;

@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 using System.Reflection;
-using SuperFilter.Constants;
+using Superfilter.Constants;
 
-namespace SuperFilter;
+namespace Superfilter;
 
 public static class Builder
 {

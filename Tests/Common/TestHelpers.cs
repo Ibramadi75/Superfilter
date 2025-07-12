@@ -1,4 +1,4 @@
-using SuperFilter.Entities;
+using Superfilter.Entities;
 
 namespace Tests.Common;
 

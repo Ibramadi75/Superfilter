@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using SuperFilter.Entities;
+using Superfilter.Entities;
 
-namespace SuperFilter;
+namespace Superfilter;
 
 public partial class Superfilter
 {
@@ -12,7 +12,7 @@ public partial class Superfilter
         foreach ((string? fieldConfigKey, FieldConfiguration? fieldConfig) in GlobalConfiguration.PropertyMappings)
         {
             if (IsRequiredFilterPresent(fieldConfig, fieldConfigKey)) continue;
-            throw new SuperFilterException($"Filter {fieldConfigKey} is required.");
+            throw new SuperfilterException($"Filter {fieldConfigKey} is required.");
         }
     }
     
@@ -30,6 +30,6 @@ public partial class Superfilter
     private void EnsureGlobalConfigurationIsSet()
     {
         if (GlobalConfiguration == null)
-            throw new SuperFilterException("GlobalConfiguration must be set before using AddFieldConfiguration");
+            throw new SuperfilterException("GlobalConfiguration must be set before using AddFieldConfiguration");
     }
 }

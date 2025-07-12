@@ -1,5 +1,5 @@
-using SuperFilter.Constants;
+using Superfilter.Constants;
 
-namespace SuperFilter.Entities;
+namespace Superfilter.Entities;
 
 public record FilterCriterion(string Field, Operator Operator, string Value);

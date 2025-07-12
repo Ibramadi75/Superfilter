@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace SuperFilter;
+namespace Superfilter;
 
 public partial class Superfilter
 {
@@ -22,7 +22,7 @@ public partial class Superfilter
 
         if (body is MemberExpression memberExpression) return ((PropertyInfo)memberExpression.Member).PropertyType;
 
-        throw new SuperFilterException("Unable to determine property type from selector.");
+        throw new SuperfilterException("Unable to determine property type from selector.");
     }
 
     private static Expression<Func<T, object>> NormalizeSelectorToObject<T>(LambdaExpression selector)
@@ -34,7 +34,7 @@ public partial class Superfilter
             selector.Body.Type == typeof(object))
             return Expression.Lambda<Func<T, object>>(Expression.Convert(selector.Body, typeof(object)), selector.Parameters);
 
-        throw new SuperFilterException("Unsupported selector type for " + selector);
+        throw new SuperfilterException("Unsupported selector type for " + selector);
     }
     
     private static LambdaExpression BuildSelectorLambda<T>(string memberExpression)

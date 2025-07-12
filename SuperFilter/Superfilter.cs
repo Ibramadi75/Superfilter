@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using SuperFilter.Entities;
+using Superfilter.Entities;
 
-namespace SuperFilter;
+namespace Superfilter;
 
 public partial class Superfilter
 {
@@ -12,9 +12,9 @@ public partial class Superfilter
     public IQueryable<T> ApplyConfiguredFilters<T>(IQueryable<T> query)
     {
         Dictionary<string, FieldConfiguration>? fieldConfiguration = GetFieldConfigurationsForType<T>();
-        if (fieldConfiguration is { Count: 0 }) throw new SuperFilterException($"No configuration found for {typeof(T).Name}");
+        if (fieldConfiguration is { Count: 0 }) throw new SuperfilterException($"No configuration found for {typeof(T).Name}");
 
-        if (GlobalConfiguration == null) throw new SuperFilterException("No global configuration found");
+        if (GlobalConfiguration == null) throw new SuperfilterException("No global configuration found");
 
         ValidateRequiredFiltersPresence();
 
@@ -26,7 +26,7 @@ public partial class Superfilter
 
                 LambdaExpression typedExpression = CastSelectorToPropertyType<T>(typedSelector, propertyType);
 
-                MethodInfo? filterMethod = typeof(SuperFilterExtensions)
+                MethodInfo? filterMethod = typeof(SuperfilterExtensions)
                     .GetMethod("FilterProperty")
                     ?.MakeGenericMethod(typeof(T), propertyType);
 
@@ -36,7 +36,7 @@ public partial class Superfilter
                 }
                 catch (Exception e)
                 {
-                    throw new SuperFilterException($"Problem occurred while invoking SuperFilterExtensions.FilterProperty on {filter.Field} with operator {filter.Operator}");
+                    throw new SuperfilterException($"Problem occurred while invoking SuperfilterExtensions.FilterProperty on {filter.Field} with operator {filter.Operator}");
                 }
             }
 
@@ -45,13 +45,13 @@ public partial class Superfilter
     public void InitializeGlobalConfiguration(GlobalConfiguration globalConfiguration)
     {
         if (GlobalConfiguration != null)
-            throw new SuperFilterException("GlobalConfiguration is already set. Use a new instance of Superfilter for different configurations.\n Using the same instance will lead to unexpected behavior.");
+            throw new SuperfilterException("GlobalConfiguration is already set. Use a new instance of Superfilter for different configurations.\n Using the same instance will lead to unexpected behavior.");
         GlobalConfiguration = globalConfiguration;
     }
     public void InitializeFieldSelectors<T>()
     {
         if (GlobalConfiguration is null)
-            throw new SuperFilterException("GlobalConfiguration must be set before using AddFieldConfiguration");
+            throw new SuperfilterException("GlobalConfiguration must be set before using AddFieldConfiguration");
 
         if (!FieldConfigurations.ContainsKey(typeof(T)))
             FieldConfigurations[typeof(T)] = new Dictionary<string, FieldConfiguration>();

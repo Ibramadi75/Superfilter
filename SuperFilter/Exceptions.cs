@@ -1,12 +1,12 @@
-namespace SuperFilter;
+namespace Superfilter;
 
-public class SuperFilterException : Exception
+public class SuperfilterException : Exception
 {
-    public SuperFilterException(string message = "") : base(message)
+    public SuperfilterException(string message = "") : base(message)
     {
     }
 
-    public SuperFilterException(string message, Exception innerException) : base(message, innerException)
+    public SuperfilterException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }

@@ -11,10 +11,10 @@
       <Compile Update="Superfilter.RequiredFilters.cs">
         <DependentUpon>Superfilter.cs</DependentUpon>
       </Compile>
-      <Compile Update="SuperFilter.ExpressionUtils.cs">
+      <Compile Update="Superfilter.ExpressionUtils.cs">
         <DependentUpon>Superfilter.cs</DependentUpon>
       </Compile>
-      <Compile Update="SuperFilter.FieldConfig.cs">
+      <Compile Update="Superfilter.FieldConfig.cs">
         <DependentUpon>Superfilter.cs</DependentUpon>
       </Compile>
     </ItemGroup>

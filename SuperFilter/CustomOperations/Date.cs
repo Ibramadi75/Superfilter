@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace SuperFilter.CustomOperations;
+namespace Superfilter.CustomOperations;
 
 public static class DateOperations
 {

@@ -1,4 +1,4 @@
-namespace SuperFilter.Entities;
+namespace Superfilter.Entities;
 
 public interface IHasSorts
 {

@@ -1,10 +1,10 @@
 using System.Linq.Expressions;
 using System.Reflection;
-using SuperFilter.Entities;
+using Superfilter.Entities;
 
-namespace SuperFilter;
+namespace Superfilter;
 
-internal static class SuperFilterExtensions
+internal static class SuperfilterExtensions
 {
     public static IQueryable<T> FilterProperty<T, TProperty>(
         this IQueryable<T> query,
@@ -35,7 +35,7 @@ internal static class SuperFilterExtensions
         if (filter == null || string.IsNullOrEmpty(filter.Value))
         {
             if (fieldConfig.IsRequired)
-                throw new SuperFilterException($"Filter {filterFieldName} is required.");
+                throw new SuperfilterException($"Filter {filterFieldName} is required.");
             return query;
         }
 
@@ -58,7 +58,7 @@ internal static class SuperFilterExtensions
         GlobalConfiguration globalConfiguration)
     {
         if (globalConfiguration.HasSorts.Sorters.Count == 0)
-            throw new SuperFilterException("At least 1 sorter must be specified");
+            throw new SuperfilterException("At least 1 sorter must be specified");
 
         foreach (SortCriterion sorter in globalConfiguration.HasSorts.Sorters)
         {

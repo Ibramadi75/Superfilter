@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace SuperFilter.Entities;
+namespace Superfilter.Entities;
 
 public class FieldConfiguration
 {

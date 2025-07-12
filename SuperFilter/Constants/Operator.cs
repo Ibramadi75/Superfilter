@@ -1,4 +1,4 @@
-namespace SuperFilter.Constants;
+namespace Superfilter.Constants;
 
 public enum Operator
 {

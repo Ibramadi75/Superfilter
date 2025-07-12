@@ -1,6 +1,6 @@
-using SuperFilter.Entities;
+using Superfilter.Entities;
 
-namespace SuperFilter;
+namespace Superfilter;
 
 public partial class Superfilter
 {

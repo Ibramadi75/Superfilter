@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFilter", "SuperFilter\SuperFilter.csproj", "{CA7EA575-A890-4F53-9A57-425B1E28CC92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superfilter", "Superfilter\Superfilter.csproj", "{CA7EA575-A890-4F53-9A57-425B1E28CC92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{B49362DC-9669-4B24-85BE-5BA7645E4D04}"
 EndProject
