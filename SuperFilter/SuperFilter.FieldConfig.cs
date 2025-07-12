@@ -11,5 +11,4 @@ public partial class Superfilter
 
         return new Dictionary<string, FieldConfiguration>();
     }
-
 }

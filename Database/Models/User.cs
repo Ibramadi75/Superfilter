@@ -8,7 +8,9 @@ public class User
     public DateTime? BornDate { get; set; }
 
     // Relations
+    public int CarId { get; set; }
     public Car? Car { get; set; }
+    public int HouseId { get; set; }
     public House? House { get; set; }
 }
 

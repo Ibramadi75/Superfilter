@@ -2,8 +2,9 @@ using System.Linq.Expressions;
 using Database.Models;
 using SuperFilter;
 using SuperFilter.Entities;
+using Tests.Common;
 
-namespace Tests;
+namespace Tests.Unit;
 
 public class ValidationTests
 {

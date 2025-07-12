@@ -1,17 +1,12 @@
-using System.Globalization;
 using System.Linq.Expressions;
 using Database.Models;
 using SuperFilter;
 using SuperFilter.Entities;
+using Tests.Common;
 
-namespace Tests;
+namespace Tests.Unit;
 
-internal class HasFiltersDto : IHasFilters
-{
-    public List<FilterCriterion> Filters { get; set; } = [];
-}
-
-public class BasicFilteringTests
+public class NestedPropertyFilteringTests
 {
     private static IQueryable<User> GetTestUsers()
     {
@@ -39,7 +34,7 @@ public class BasicFilteringTests
             },
             new()
             {
-                Id = 2, Name = "Bob", MoneyAmount = 200, BornDate = DateTime.ParseExact("10/12/2003", "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                Id = 2, Name = "Bob", MoneyAmount = 200,
                 Car = new Car { Id = 2, Name = "Fiat 500", Brand = brandFiat },
                 House = new House { Id = 2, Address = "456 Oak Street", City = chatillon, CityId = 2 }
             },
@@ -60,48 +55,21 @@ public class BasicFilteringTests
     }
 
     [Fact]
-    public void FilterProperty_OnInteger_ValidFilter_ApplyFilterCorrectly()
+    public void FilterByCarBrandName_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
         GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
-                Filters = [new FilterCriterion("id", Operator.GreaterThan, "1")]
+                Filters = [new FilterCriterion("carBrandName", Operator.Equals, "BMW")]
             }
         };
 
         Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "id", new FieldConfiguration { EntityPropertyName = nameof(User.Id), Selector = (Expression<Func<User, object>>)(x => x.Id), IsRequired = true } }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
-        superfilter.InitializeFieldSelectors<User>();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
-
-        Assert.Equal(users.Count() - 1, result.Count);
-        Assert.DoesNotContain(result, user => user.Id == 1);
-    }
-
-    [Fact]
-    public void FilterProperty_OnDate_ValidFilter_ApplyFilterCorrectly()
-    {
-        IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
-        {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "23/02/2003")]
-            }
-        };
-
-        Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "bornDate", new FieldConfiguration { EntityPropertyName = "bornDate", Selector = (Expression<Func<User, object>>)(x => x.BornDate!) } }
+            { "carBrandName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -110,24 +78,30 @@ public class BasicFilteringTests
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
         Assert.Single(result);
+        Assert.Contains(result, user => user.Car!.Brand!.Name == "BMW");
     }
 
     [Fact]
-    public void FilterProperty_OnString_ContainsOperator_ApplyFilterCorrectly()
+    public void FilterByHouseAddress_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
         GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
-                Filters = [new FilterCriterion("name", Operator.Contains, "e")]
+                Filters = [new FilterCriterion("houseAddress", Operator.Contains, "Oak")]
             }
         };
 
         Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name) } }
+            {
+                "id", new FieldConfiguration { EntityPropertyName = "id", Selector = (Expression<Func<User, object>>)(x => x.Id), IsRequired = false }
+            },
+            {
+                "houseAddress", new FieldConfiguration { EntityPropertyName = "address", Selector = (Expression<Func<User, object>>)(x => x.House!.Address), IsRequired = false }
+            }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -135,26 +109,26 @@ public class BasicFilteringTests
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
-        Assert.True(result.Count > 0);
-        Assert.All(result, user => Assert.Contains("e", user.Name, StringComparison.OrdinalIgnoreCase));
+        Assert.Single(result);
+        Assert.Contains(result, user => user.House!.Address.Contains("Oak"));
     }
 
     [Fact]
-    public void FilterProperty_NoMatchingFilter_EmptyResult()
+    public void FilterByCarBrandRate_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
         GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
-                Filters = [new FilterCriterion("name", Operator.Contains, "nonexistent")]
+                Filters = [new FilterCriterion("carBrandRate", Operator.GreaterThan, "3")]
             }
         };
 
         Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = true } }
+            { "carBrandRate", new FieldConfiguration { EntityPropertyName = "rate", Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Rate), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -162,25 +136,27 @@ public class BasicFilteringTests
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
-        Assert.Empty(result);
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, user => user.Car!.Brand!.Rate == 5);
+        Assert.Contains(result, user => user.Car!.Brand!.Rate == 4);
     }
 
     [Fact]
-    public void FilterProperty_FieldNotInCriteria_NoFilterApplied()
+    public void FilterByDoubleNestedProperty_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
         GlobalConfiguration globalConfiguration = new()
         {
             HasFilters = new HasFiltersDto
             {
-                Filters = [new FilterCriterion("unknownField", Operator.Contains, "e")]
+                Filters = [new FilterCriterion("carBrandName", Operator.Equals, "Ford")]
             }
         };
 
         Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
+            { "carBrandName", new FieldConfiguration { EntityPropertyName = nameof(Brand.Name), Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Name), IsRequired = false } }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -188,32 +164,7 @@ public class BasicFilteringTests
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
-        Assert.Equal(users.Count(), result.Count);
-    }
-
-    [Fact]
-    public void FilterProperty_EmptyValueInFilter_SkipFiltering()
-    {
-        IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
-        {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.Contains, "")]
-            }
-        };
-
-        Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "id", new FieldConfiguration { EntityPropertyName = "id", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
-        superfilter.InitializeFieldSelectors<User>();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
-
-        Assert.Equal(users.Count(), result.Count);
+        Assert.Single(result);
+        Assert.Contains(result, user => user.Car!.Brand!.Name == "Ford");
     }
 }

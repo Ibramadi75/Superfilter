@@ -8,3 +8,9 @@ obj/
 # Ignore Visual Studio or Rider-specific files (facultatif)
 .vs/
 .idea/
+
+*.DotSettings.user
+*.csproj.user
+*.suo
+*.userosscache
+*.sln.docstates

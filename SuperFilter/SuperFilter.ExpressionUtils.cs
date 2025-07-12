@@ -39,17 +39,15 @@ public partial class Superfilter
     
     private static LambdaExpression BuildSelectorLambda<T>(string memberExpression)
     {
-        ParameterExpression? parameter = Expression.Parameter(typeof(T), "x");
-        Expression? propertyAccess = BuildNestedPropertyAccess(parameter, memberExpression); // Corrigé
-        LambdaExpression? lambda = Expression.Lambda(propertyAccess, parameter); // Corrigé
+        ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
+        Expression propertyAccess = BuildNestedPropertyAccess(parameter, memberExpression);
+        LambdaExpression lambda = Expression.Lambda(propertyAccess, parameter);
         return lambda;
     }
 
     private static Expression BuildNestedPropertyAccess(Expression parameter, string propertyPath)
     {
-        Expression propertyAccess = parameter;
-        foreach (string? property in propertyPath.Split('.')) propertyAccess = Expression.Property(propertyAccess, property);
-        return propertyAccess;
+        return propertyPath.Split('.').Aggregate(parameter, Expression.Property);
     }
 
     private static string ExtractPropertyPathFromSelectorString(string input)
@@ -57,7 +55,7 @@ public partial class Superfilter
         int index = input.IndexOf('.');
         if (index == -1) return input;
 
-        string afterDot = input.Substring(index + 1);
+        string afterDot = input[(index + 1)..];
         int commaIndex = afterDot.IndexOf(',');
 
         return commaIndex == -1 ? afterDot : afterDot[..commaIndex];

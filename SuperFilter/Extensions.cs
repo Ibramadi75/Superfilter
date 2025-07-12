@@ -18,15 +18,15 @@ internal static class SuperFilterExtensions
         KeyValuePair<string, FieldConfiguration> kvp = globalConfiguration.PropertyMappings
             .FirstOrDefault(x => x.Value.EntityPropertyName.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
 
-        if (kvp.Equals(default(KeyValuePair<string, FieldConfiguration>)))
+        if (kvp.Key == null || kvp.Value == null)
             return query;
 
-        string? actualKey = kvp.Key;
-        FieldConfiguration? fieldConfig = kvp.Value;
+        string actualKey = kvp.Key;
+        FieldConfiguration fieldConfig = kvp.Value;
 
 
         string filterFieldName = propertyName;
-        if (string.IsNullOrEmpty(fieldConfig!.EntityPropertyName))
+        if (string.IsNullOrEmpty(fieldConfig.EntityPropertyName))
             filterFieldName = propertyName;
 
         FilterCriterion? filter = globalConfiguration.HasFilters.Filters
@@ -73,7 +73,7 @@ internal static class SuperFilterExtensions
             Type propertyType = ((PropertyInfo)memberExpression.Member).PropertyType;
 
             Expression propertyAccess = GetNestedPropertyExpression(parameter, RemoveUntilFirstDot(memberExpression.ToString()));
-            LambdaExpression? lambda = Expression.Lambda(Expression.Convert(propertyAccess, propertyType), parameter);
+            LambdaExpression lambda = Expression.Lambda(Expression.Convert(propertyAccess, propertyType), parameter);
 
             string methodName = query.Expression.Type == typeof(IOrderedQueryable<T>)
                 ? sorter.dir.Equals("asc", StringComparison.CurrentCultureIgnoreCase) ? "ThenBy" : "ThenByDescending"
@@ -81,7 +81,7 @@ internal static class SuperFilterExtensions
                     ? "OrderBy"
                     : "OrderByDescending";
 
-            MethodInfo? method = typeof(Queryable)
+            MethodInfo method = typeof(Queryable)
                 .GetMethods()
                 .First(m => m.Name == methodName && m.GetParameters().Length == 2)
                 .MakeGenericMethod(typeof(T), propertyType);
@@ -100,6 +100,6 @@ internal static class SuperFilterExtensions
     private static string RemoveUntilFirstDot(string input)
     {
         int index = input.IndexOf('.');
-        return index == -1 ? input : input.Substring(index + 1);
+        return index == -1 ? input : input[(index + 1)..];
     }
 }

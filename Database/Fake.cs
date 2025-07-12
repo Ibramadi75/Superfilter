@@ -13,7 +13,7 @@ public class Fake
 
     public void GenerateUsers(int numberOfUsers)
     {
-        List<User> users = new();
+        List<User> users = [];
         int carIdCounter = 1;
 
         for (int i = 1; i <= numberOfUsers; i++)

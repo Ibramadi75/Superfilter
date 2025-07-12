@@ -26,12 +26,12 @@ public static class Constants
 
     private static Dictionary<Operator, MethodInfo?> MethodInfosForDateTimeFiltering => new()
     {
-        { Operator.Equals, typeof(DateTime).GetMethod("Equals", new[] { typeof(DateTime) }) },
-        { Operator.IsEqualToYear, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYear), new[] { typeof(DateTime), typeof(DateTime) }) },
-        { Operator.IsEqualToYearAndMonth, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearAndMonth), new[] { typeof(DateTime), typeof(DateTime) }) },
-        { Operator.IsEqualToFullDate, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearMonthAndDay), new[] { typeof(DateTime), typeof(DateTime) }) },
-        { Operator.LessThan, typeof(DateTime).GetMethod("CompareTo", new[] { typeof(DateTime) }) },
-        { Operator.GreaterThan, typeof(DateTime).GetMethod("CompareTo", new[] { typeof(DateTime) }) }
+        { Operator.Equals, typeof(DateTime).GetMethod("Equals", [typeof(DateTime)]) },
+        { Operator.IsEqualToYear, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYear), [typeof(DateTime), typeof(DateTime)]) },
+        { Operator.IsEqualToYearAndMonth, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearAndMonth), [typeof(DateTime), typeof(DateTime)]) },
+        { Operator.IsEqualToFullDate, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearMonthAndDay), [typeof(DateTime), typeof(DateTime)]) },
+        { Operator.LessThan, typeof(DateTime).GetMethod("CompareTo", [typeof(DateTime)]) },
+        { Operator.GreaterThan, typeof(DateTime).GetMethod("CompareTo", [typeof(DateTime)]) }
     };
 
     private static Dictionary<Operator, MethodInfo?> MethodInfosForBooleanFiltering => new()

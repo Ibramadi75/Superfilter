@@ -12,7 +12,7 @@ public partial class Superfilter
     public IQueryable<T> ApplyConfiguredFilters<T>(IQueryable<T> query)
     {
         Dictionary<string, FieldConfiguration>? fieldConfiguration = GetFieldConfigurationsForType<T>();
-        if (fieldConfiguration.Count == 0) throw new SuperFilterException($"No configuration found for {typeof(T).Name}");
+        if (fieldConfiguration is { Count: 0 }) throw new SuperFilterException($"No configuration found for {typeof(T).Name}");
 
         if (GlobalConfiguration == null) throw new SuperFilterException("No global configuration found");
 

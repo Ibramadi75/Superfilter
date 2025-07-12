@@ -9,11 +9,10 @@ public partial class Superfilter
     {
         EnsureGlobalConfigurationIsSet();
         
-        foreach (KeyValuePair<string, FieldConfiguration> propertyMapping in GlobalConfiguration.PropertyMappings)
+        foreach ((string? fieldConfigKey, FieldConfiguration? fieldConfig) in GlobalConfiguration.PropertyMappings)
         {
-            FieldConfiguration fieldConfig = propertyMapping.Value;
-            if (IsRequiredFilterPresent(fieldConfig, propertyMapping.Key)) continue;
-            throw new SuperFilterException($"Filter {propertyMapping.Key} is required.");
+            if (IsRequiredFilterPresent(fieldConfig, fieldConfigKey)) continue;
+            throw new SuperFilterException($"Filter {fieldConfigKey} is required.");
         }
     }
     
