@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Database.Models;
 using SuperFilter;
+using SuperFilter.Constants;
 using SuperFilter.Entities;
 using Tests.Common;
 

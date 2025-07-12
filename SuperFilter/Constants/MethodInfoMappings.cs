@@ -1,21 +1,9 @@
 using System.Reflection;
 using SuperFilter.CustomOperations;
 
-namespace SuperFilter;
+namespace SuperFilter.Constants;
 
-public enum Operator
-{
-    Equals,
-    LessThan,
-    GreaterThan,
-    StartsWith,
-    Contains,
-    IsEqualToYear,
-    IsEqualToYearAndMonth,
-    IsEqualToFullDate
-}
-
-public static class Constants
+public static class MethodInfoMappings
 {
     private static Dictionary<Operator, MethodInfo?> MethodInfosForStringFiltering => new()
     {

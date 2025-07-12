@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
+using SuperFilter.Constants;
 
 namespace SuperFilter;
 
@@ -18,14 +19,14 @@ public static class Builder
         };
 
         if (methodCallExpression is null)
-            throw new InvalidOperationException($"Invalid operator for type {typeof(T).Name}, must be one of: {Constants.GetMethodInfos(typeof(T))}");
+            throw new InvalidOperationException($"Invalid operator for type {typeof(T).Name}, must be one of: {MethodInfoMappings.GetMethodInfos(typeof(T))}");
 
         return methodCallExpression;
     }
 
     private static MethodCallExpression? BuildStringFilterExpression(Expression property, string filterValue, Operator op)
     {
-        MethodInfo? method = Constants.GetMethodInfos(typeof(string))[op];
+        MethodInfo? method = MethodInfoMappings.GetMethodInfos(typeof(string))[op];
         return method is null ? null : Expression.Call(property, method, Expression.Constant(filterValue));
     }
 

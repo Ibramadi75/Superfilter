@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Database.Models;
 using Microsoft.EntityFrameworkCore;
 using SuperFilter;
+using SuperFilter.Constants;
 using SuperFilter.Entities;
 using Tests.Common;
 using Xunit.Abstractions;

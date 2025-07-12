@@ -3,6 +3,7 @@ using Database.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SuperFilter;
+using SuperFilter.Constants;
 using SuperFilter.Entities;
 using Tests.Common;
 using Xunit.Abstractions;
