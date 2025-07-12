@@ -67,7 +67,7 @@ public class NestedPropertyFilteringTests
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "carBrandName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Name), IsRequired = false } }
@@ -94,7 +94,7 @@ public class NestedPropertyFilteringTests
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             {
@@ -126,7 +126,7 @@ public class NestedPropertyFilteringTests
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "carBrandRate", new FieldConfiguration { EntityPropertyName = "rate", Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Rate), IsRequired = false } }
@@ -154,7 +154,7 @@ public class NestedPropertyFilteringTests
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "carBrandName", new FieldConfiguration { EntityPropertyName = nameof(Brand.Name), Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Name), IsRequired = false } }

@@ -50,7 +50,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
@@ -82,7 +82,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
@@ -118,7 +118,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "carName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car!.Name), IsRequired = false } }
@@ -159,7 +159,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
@@ -197,7 +197,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
@@ -231,7 +231,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             }
         };
 
-        Superfilter superfilter = new();
+        Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             { "moneyamount", new FieldConfiguration { EntityPropertyName = "moneyamount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }

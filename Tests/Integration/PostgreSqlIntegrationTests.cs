@@ -23,7 +23,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             }
         };
 
-        var superfilter = new Superfilter();
+        var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
             { "MoneyAmount", new FieldConfiguration 
@@ -77,7 +77,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             }
         };
 
-        var superfilter = new Superfilter();
+        var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
             { "carBrand", new FieldConfiguration 
@@ -127,7 +127,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             }
         };
 
-        var superfilter = new Superfilter();
+        var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
             { "MoneyAmount", new FieldConfiguration 
@@ -169,7 +169,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             }
         };
 
-        var superfilter = new Superfilter();
+        var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
             { "name", new FieldConfiguration 
@@ -219,7 +219,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             }
         };
 
-        var superfilter = new Superfilter();
+        var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
             { "MoneyAmount", new FieldConfiguration 
