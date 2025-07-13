@@ -5,6 +5,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Optimize>true</Optimize>
+        
+        <!-- Package Information -->
+        <PackageId>Superfilter</PackageId>
+        <Authors>Ibrahim Madi</Authors>
+        <Description>A lightweight C# .NET library for dynamic filtering and sorting of IQueryable sources. Designed to integrate seamlessly with Entity Framework Core (EF Core).</Description>
+        <PackageTags>filter;sorting;linq;queryable;dynamic;ef-core</PackageTags>
+        <RepositoryUrl>https://github.com/ibrahimmadi/SuperFilter</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,6 +34,10 @@
 
     <ItemGroup>
       <Folder Include="Constants\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="../README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
