@@ -40,7 +40,7 @@ internal static class SuperfilterExtensions
 
         ParameterExpression parameter = Expression.Parameter(typeof(T), typeof(T).ToString());
         Expression propertyAccess = GetNestedPropertyExpression(parameter, RemoveUntilFirstDot(memberExpression.ToString()));
-        Expression filterExpression = Builder.GetExpression<TProperty>((MemberExpression)propertyAccess, filter.Value, filter.Operator);
+        Expression filterExpression = ExpressionBuilders.Builder.GetExpression<TProperty>((MemberExpression)propertyAccess, filter.Value, filter.Operator);
 
         Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(filterExpression, parameter);
 
