@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Database.Models;
 using Superfilter;
 using Superfilter.Constants;
@@ -59,21 +58,19 @@ public class NestedPropertyFilteringTests
     public void FilterByCarBrandName_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("carBrandName", Operator.Equals, "BMW")]
-            }
+            Filters = [new FilterCriterion("carBrandName", Operator.Equals, "BMW")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "carBrandName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -86,26 +83,20 @@ public class NestedPropertyFilteringTests
     public void FilterByHouseAddress_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("houseAddress", Operator.Contains, "Oak")]
-            }
+            Filters = [new FilterCriterion("houseAddress", Operator.Contains, "Oak")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("id", x => x.Id)
+            .MapProperty("houseAddress", x => x.House!.Address)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            {
-                "id", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Id))
-            },
-            {
-                "houseAddress", new FieldConfiguration((Expression<Func<User, object>>)(x => x.House!.Address))
-            }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -118,21 +109,19 @@ public class NestedPropertyFilteringTests
     public void FilterByCarBrandRate_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("carBrandRate", Operator.GreaterThan, "3")]
-            }
+            Filters = [new FilterCriterion("carBrandRate", Operator.GreaterThan, "3")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("carBrandRate", x => x.Car!.Brand!.Rate)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "carBrandRate", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Rate)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -146,21 +135,19 @@ public class NestedPropertyFilteringTests
     public void FilterByDoubleNestedProperty_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("carBrandName", Operator.Equals, "Ford")]
-            }
+            Filters = [new FilterCriterion("carBrandName", Operator.Equals, "Ford")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "carBrandName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();

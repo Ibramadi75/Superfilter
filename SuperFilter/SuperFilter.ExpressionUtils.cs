@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -20,7 +19,6 @@ public partial class Superfilter
     private static Type ExtractPropertyTypeFromSelector(LambdaExpression selector)
     {
         Expression body = selector.Body is UnaryExpression unary ? unary.Operand : selector.Body;
-
         if (body is MemberExpression memberExpression) return ((PropertyInfo)memberExpression.Member).PropertyType;
 
         throw new SuperfilterException("Unable to determine property type from selector.");

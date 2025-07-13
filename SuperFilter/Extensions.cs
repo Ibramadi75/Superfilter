@@ -17,7 +17,7 @@ internal static class SuperfilterExtensions
         string propertyName = ((MemberExpression)body).Member.Name;
 
         KeyValuePair<string, FieldConfiguration> kvp = globalConfiguration.PropertyMappings
-            .FirstOrDefault(x => x.Value.GetPropertyName().Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
+            .FirstOrDefault(x => x.Value.Selector.ToString() == propertyExpression.ToString());
 
         if (kvp.Key == null || kvp.Value == null)
             return query;
@@ -25,17 +25,13 @@ internal static class SuperfilterExtensions
         string actualKey = kvp.Key;
         FieldConfiguration fieldConfig = kvp.Value;
 
-
-        string filterFieldName = propertyName;
-        
-
         FilterCriterion? filter = globalConfiguration.HasFilters.Filters
             .FirstOrDefault(filters => string.Equals(filters.Field, actualKey, StringComparison.CurrentCultureIgnoreCase));
 
         if (filter == null || string.IsNullOrEmpty(filter.Value))
         {
             if (fieldConfig.IsRequired)
-                throw new SuperfilterException($"Filter {filterFieldName} is required.");
+                throw new SuperfilterException($"Filter {propertyName} is required.");
             return query;
         }
 
@@ -44,7 +40,7 @@ internal static class SuperfilterExtensions
 
         ParameterExpression parameter = Expression.Parameter(typeof(T), typeof(T).ToString());
         Expression propertyAccess = GetNestedPropertyExpression(parameter, RemoveUntilFirstDot(memberExpression.ToString()));
-        Expression filterExpression = Builder.GetExpression<TProperty>((MemberExpression)propertyAccess, filter.Value, filter.Operator);
+        Expression filterExpression = ExpressionBuilders.Builder.GetExpression<TProperty>((MemberExpression)propertyAccess, filter.Value, filter.Operator);
 
         Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(filterExpression, parameter);
 

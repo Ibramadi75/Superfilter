@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Database.Models;
 using Superfilter;
 using Superfilter.Constants;
@@ -32,21 +31,19 @@ public class ValidationTests
     public void FilterProperty_SuperfilterExceptionThrown_WhenRequiredFilterIsMissing()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.Contains, "e")]
-            }
+            Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapRequiredProperty("id", x => x.Id)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "id", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Id), isRequired: true) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         SuperfilterException exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
@@ -58,21 +55,19 @@ public class ValidationTests
     public void FilterProperty_WithInvalidOperatorForStringType_ThrowsException()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.GreaterThan, "test")]
-            }
+            Filters = [new FilterCriterion("name", Operator.GreaterThan, "test")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
@@ -82,21 +77,19 @@ public class ValidationTests
     public void FilterProperty_WithNullValue_SkipsFilter()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.Contains, null!)]
-            }
+            Filters = [new FilterCriterion("name", Operator.Contains, null!)]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -108,21 +101,19 @@ public class ValidationTests
     public void FilterProperty_WithWhitespaceValue_FiltersWithWhitespace()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.Contains, "   ")]
-            }
+            Filters = [new FilterCriterion("name", Operator.Contains, "   ")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();

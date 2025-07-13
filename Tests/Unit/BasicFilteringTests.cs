@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Linq.Expressions;
 using Database.Models;
 using Superfilter;
 using Superfilter.Constants;
@@ -60,21 +59,19 @@ public class BasicFilteringTests
     public void FilterProperty_OnInteger_ValidFilter_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("id", Operator.GreaterThan, "1")]
-            }
+            Filters = [new FilterCriterion("id", Operator.GreaterThan, "1")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapRequiredProperty("id", x => x.Id)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>()
-        {
-            { "id", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Id), isRequired: true) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -87,21 +84,19 @@ public class BasicFilteringTests
     public void FilterProperty_OnDate_ValidFilter_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "23/02/2003")]
-            }
+            Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "23/02/2003")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("bornDate", x => x.BornDate!)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "bornDate", new FieldConfiguration((Expression<Func<User, object>>)(x => x.BornDate!)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -113,21 +108,19 @@ public class BasicFilteringTests
     public void FilterProperty_OnString_ContainsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.Contains, "e")]
-            }
+            Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -140,21 +133,19 @@ public class BasicFilteringTests
     public void FilterProperty_NoMatchingFilter_EmptyResult()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.Contains, "nonexistent")]
-            }
+            Filters = [new FilterCriterion("name", Operator.Contains, "nonexistent")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapRequiredProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name), isRequired: true) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -166,21 +157,19 @@ public class BasicFilteringTests
     public void FilterProperty_FieldNotInCriteria_NoFilterApplied()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("unknownField", Operator.Contains, "e")]
-            }
+            Filters = [new FilterCriterion("unknownField", Operator.Contains, "e")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
@@ -192,21 +181,19 @@ public class BasicFilteringTests
     public void FilterProperty_EmptyValueInFilter_SkipFiltering()
     {
         IQueryable<User> users = GetTestUsers();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.Contains, "")]
-            }
+            Filters = [new FilterCriterion("name", Operator.Contains, "")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "id", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
