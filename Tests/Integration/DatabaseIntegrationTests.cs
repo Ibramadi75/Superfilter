@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Database.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -42,21 +41,19 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
-            }
+            Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("MoneyAmount", x => x.MoneyAmount)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
@@ -74,21 +71,19 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
-            }
+            Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("MoneyAmount", x => x.MoneyAmount)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
@@ -110,21 +105,19 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("carName", Operator.StartsWith, "F")]
-            }
+            Filters = [new FilterCriterion("carName", Operator.StartsWith, "F")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("carName", x => x.Car!.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "carName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
@@ -147,26 +140,24 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters =
-                [
-                    new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100"),
-                    new FilterCriterion("Name", Operator.Contains, "a")
-                ]
-            }
+            Filters =
+            [
+                new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100"),
+                new FilterCriterion("Name", Operator.Contains, "a")
+            ]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("MoneyAmount", x => x.MoneyAmount)
+            .MapProperty("Name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) },
-            { "Name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
@@ -189,21 +180,19 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("NonExistentProperty", Operator.Equals, "test")]
-            }
+            Filters = [new FilterCriterion("NonExistentProperty", Operator.Equals, "test")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
@@ -223,21 +212,19 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        GlobalConfiguration globalConfiguration = new()
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("moneyamount", Operator.GreaterThan, "200")]
-            }
+            Filters = [new FilterCriterion("moneyamount", Operator.GreaterThan, "200")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("moneyamount", x => x.MoneyAmount)
+            .WithFilters(filters)
+            .Build();
+
         Superfilter.Superfilter superfilter = new();
-        Dictionary<string, FieldConfiguration> propertyMappings = new()
-        {
-            { "moneyamount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) }
-        };
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);

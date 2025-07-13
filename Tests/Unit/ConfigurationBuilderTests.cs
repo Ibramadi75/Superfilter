@@ -1,4 +1,4 @@
-using Superfilter.Builder;
+using Superfilter;
 using Superfilter.Constants;
 using Superfilter.Entities;
 using Database.Models;
