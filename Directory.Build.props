@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <!-- Version Management -->
+    <MajorVersion>0</MajorVersion>
+    <MinorVersion>1</MinorVersion>
+    <PatchVersion>3</PatchVersion>
+    <PreReleaseLabel>alpha</PreReleaseLabel>
+    
+    <!-- Auto-increment build number based on current date/time -->
+    <BuildNumber>$([System.DateTime]::Now.ToString('yyyyMMdd'))</BuildNumber>
+    
+    <!-- Construct version -->
+    <Version Condition="'$(PreReleaseLabel)' == ''">$(MajorVersion).$(MinorVersion).$(PatchVersion)</Version>
+    <Version Condition="'$(PreReleaseLabel)' != ''">$(MajorVersion).$(MinorVersion).$(PatchVersion)-$(PreReleaseLabel)</Version>
+    
+    <!-- Assembly version (use major.minor.0.0 for compatibility) -->
+    <AssemblyVersion>$(MajorVersion).$(MinorVersion).0.0</AssemblyVersion>
+    <FileVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildNumber)</FileVersion>
+  </PropertyGroup>
+</Project>
