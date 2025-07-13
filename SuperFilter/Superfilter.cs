@@ -18,7 +18,7 @@ public partial class Superfilter
 
         ValidateRequiredFiltersPresence();
         
-        if (GlobalConfiguration.HasFilters == null || GlobalConfiguration.HasFilters.Filters.Count == 0)
+        if (GlobalConfiguration.HasFilters.Filters.Count == 0)
             return query;
 
         foreach (FilterCriterion filter in GlobalConfiguration.HasFilters.Filters)

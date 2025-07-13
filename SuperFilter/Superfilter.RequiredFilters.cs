@@ -20,7 +20,7 @@ public partial class Superfilter
     {
         EnsureGlobalConfigurationIsSet();
         
-        bool filterIsPresent = GlobalConfiguration.HasFilters != null && GlobalConfiguration.HasFilters.Filters
+        bool filterIsPresent = GlobalConfiguration.HasFilters.Filters
             .Any(filters => string.Equals(filters.Field, propertyName, StringComparison.CurrentCultureIgnoreCase));
         
         return !fieldConfig.IsRequired || filterIsPresent;
@@ -31,11 +31,5 @@ public partial class Superfilter
     {
         if (GlobalConfiguration == null)
             throw new SuperfilterException("GlobalConfiguration must be set before using AddFieldConfiguration");
-    }
-    
-    private void EnsureHasFiltersIsSet()
-    {
-        if (GlobalConfiguration?.HasFilters == null)
-            throw new SuperfilterException("HasFilters must be set before using AddFieldConfiguration");
     }
 }
