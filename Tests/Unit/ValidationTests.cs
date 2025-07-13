@@ -43,7 +43,7 @@ public class ValidationTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "id", new FieldConfiguration { EntityPropertyName = "id", Selector = (Expression<Func<User, object>>)(x => x.Id), IsRequired = true } }
+            { "id", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Id), isRequired: true) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -69,7 +69,7 @@ public class ValidationTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
+            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -93,7 +93,7 @@ public class ValidationTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
+            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -119,7 +119,7 @@ public class ValidationTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
+            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);

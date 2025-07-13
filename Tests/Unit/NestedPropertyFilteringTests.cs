@@ -70,7 +70,7 @@ public class NestedPropertyFilteringTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "carBrandName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Name), IsRequired = false } }
+            { "carBrandName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -98,10 +98,10 @@ public class NestedPropertyFilteringTests
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
             {
-                "id", new FieldConfiguration { EntityPropertyName = "id", Selector = (Expression<Func<User, object>>)(x => x.Id), IsRequired = false }
+                "id", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Id))
             },
             {
-                "houseAddress", new FieldConfiguration { EntityPropertyName = "address", Selector = (Expression<Func<User, object>>)(x => x.House!.Address), IsRequired = false }
+                "houseAddress", new FieldConfiguration((Expression<Func<User, object>>)(x => x.House!.Address))
             }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
@@ -129,7 +129,7 @@ public class NestedPropertyFilteringTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "carBrandRate", new FieldConfiguration { EntityPropertyName = "rate", Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Rate), IsRequired = false } }
+            { "carBrandRate", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Rate)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -157,7 +157,7 @@ public class NestedPropertyFilteringTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "carBrandName", new FieldConfiguration { EntityPropertyName = nameof(Brand.Name), Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Name), IsRequired = false } }
+            { "carBrandName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);

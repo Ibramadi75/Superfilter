@@ -62,24 +62,19 @@ public partial class Superfilter
         {
             FieldConfiguration fieldConfig = mapping.Value;
 
-            if (fieldConfig.Selector.ToString().Count(c => c == '.') > 1)
+            // Si l'expression retourne object, on doit la reconstruire avec le type correct
+            if (fieldConfig.Selector.Body.Type == typeof(object) && fieldConfig.Selector.Body is UnaryExpression unary && unary.NodeType == ExpressionType.Convert)
+            {
                 try
                 {
-                    fieldConfig.Selector = BuildSelectorLambda<T>(ExtractPropertyPathFromSelectorString(fieldConfig.Selector.ToString()));
+                    string propertyPath = ExtractPropertyPathFromSelectorString(fieldConfig.Selector.ToString());
+                    fieldConfig.Selector = BuildSelectorLambda<T>(propertyPath);
                 }
                 catch
                 {
-                    continue;
+                    // Si la reconstruction échoue, on garde l'expression originale
                 }
-            else
-                try
-                {
-                    fieldConfig.Selector = BuildSelectorLambda<T>(mapping.Value.EntityPropertyName);
-                }
-                catch
-                {
-                    continue;
-                }
+            }
 
             if (fieldConfigDict != null) fieldConfigDict[mapping.Key] = fieldConfig;
         }

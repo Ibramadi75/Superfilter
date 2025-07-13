@@ -71,7 +71,7 @@ public class BasicFilteringTests
         Superfilter.Superfilter superfilter = new();
         var propertyMappings = new Dictionary<string, FieldConfiguration>()
         {
-            { "id", new FieldConfiguration { EntityPropertyName = nameof(User.Id), Selector = (Expression<Func<User, object>>)(x => x.Id), IsRequired = true } }
+            { "id", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Id), isRequired: true) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -98,7 +98,7 @@ public class BasicFilteringTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "bornDate", new FieldConfiguration { EntityPropertyName = "bornDate", Selector = (Expression<Func<User, object>>)(x => x.BornDate!) } }
+            { "bornDate", new FieldConfiguration((Expression<Func<User, object>>)(x => x.BornDate!)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -124,7 +124,7 @@ public class BasicFilteringTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name) } }
+            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -151,7 +151,7 @@ public class BasicFilteringTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = true } }
+            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name), isRequired: true) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -177,7 +177,7 @@ public class BasicFilteringTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
+            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -203,7 +203,7 @@ public class BasicFilteringTests
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "id", new FieldConfiguration { EntityPropertyName = "id", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
+            { "id", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);

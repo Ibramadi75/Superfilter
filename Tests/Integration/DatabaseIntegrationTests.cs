@@ -53,7 +53,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
+            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -85,7 +85,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
+            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -121,7 +121,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "carName", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Car!.Name), IsRequired = false } }
+            { "carName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -162,8 +162,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "MoneyAmount", new FieldConfiguration { EntityPropertyName = "MoneyAmount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } },
-            { "Name", new FieldConfiguration { EntityPropertyName = "Name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
+            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) },
+            { "Name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -200,7 +200,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "name", new FieldConfiguration { EntityPropertyName = "name", Selector = (Expression<Func<User, object>>)(x => x.Name), IsRequired = false } }
+            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);
@@ -234,7 +234,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         Superfilter.Superfilter superfilter = new();
         Dictionary<string, FieldConfiguration> propertyMappings = new()
         {
-            { "moneyamount", new FieldConfiguration { EntityPropertyName = "moneyamount", Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), IsRequired = false } }
+            { "moneyamount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) }
         };
         globalConfiguration.PropertyMappings = propertyMappings;
         superfilter.InitializeGlobalConfiguration(globalConfiguration);

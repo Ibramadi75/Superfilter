@@ -16,7 +16,7 @@ internal static class SuperfilterExtensions
         string propertyName = ((MemberExpression)body).Member.Name;
 
         KeyValuePair<string, FieldConfiguration> kvp = globalConfiguration.PropertyMappings
-            .FirstOrDefault(x => x.Value.EntityPropertyName.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
+            .FirstOrDefault(x => x.Value.GetPropertyName().Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
 
         if (kvp.Key == null || kvp.Value == null)
             return query;
@@ -26,8 +26,6 @@ internal static class SuperfilterExtensions
 
 
         string filterFieldName = propertyName;
-        if (string.IsNullOrEmpty(fieldConfig.EntityPropertyName))
-            filterFieldName = propertyName;
 
         FilterCriterion? filter = globalConfiguration.HasFilters.Filters
             .FirstOrDefault(filters => string.Equals(filters.Field, actualKey, StringComparison.CurrentCultureIgnoreCase));

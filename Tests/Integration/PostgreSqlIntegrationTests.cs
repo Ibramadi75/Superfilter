@@ -26,12 +26,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "MoneyAmount", new FieldConfiguration 
-                { 
-                    EntityPropertyName = "MoneyAmount", 
-                    Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), 
-                    IsRequired = false 
-                } 
+            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) 
             }
         };
         
@@ -80,19 +75,9 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "carBrand", new FieldConfiguration 
-                { 
-                    EntityPropertyName = "Name", 
-                    Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Name), 
-                    IsRequired = false 
-                } 
+            { "carBrand", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Name)) 
             },
-            { "cityName", new FieldConfiguration 
-                { 
-                    EntityPropertyName = "Name", 
-                    Selector = (Expression<Func<User, object>>)(x => x.House!.City!.Name), 
-                    IsRequired = false 
-                } 
+            { "cityName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.House!.City!.Name)) 
             }
         };
         
@@ -130,12 +115,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "MoneyAmount", new FieldConfiguration 
-                { 
-                    EntityPropertyName = "MoneyAmount", 
-                    Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), 
-                    IsRequired = false 
-                } 
+            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) 
             }
         };
         
@@ -172,12 +152,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "name", new FieldConfiguration 
-                { 
-                    EntityPropertyName = "Name", 
-                    Selector = (Expression<Func<User, object>>)(x => x.Name), 
-                    IsRequired = false 
-                } 
+            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) 
             }
         };
         
@@ -222,26 +197,11 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         var superfilter = new Superfilter.Superfilter();
         var propertyMappings = new Dictionary<string, FieldConfiguration>
         {
-            { "MoneyAmount", new FieldConfiguration 
-                { 
-                    EntityPropertyName = "MoneyAmount", 
-                    Selector = (Expression<Func<User, object>>)(x => x.MoneyAmount), 
-                    IsRequired = false 
-                } 
+            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) 
             },
-            { "carName", new FieldConfiguration 
-                { 
-                    EntityPropertyName = "CarName", 
-                    Selector = (Expression<Func<User, object>>)(x => x.Car!.Name), 
-                    IsRequired = false 
-                } 
+            { "carName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Name)) 
             },
-            { "brandRate", new FieldConfiguration 
-                { 
-                    EntityPropertyName = "BrandRate", 
-                    Selector = (Expression<Func<User, object>>)(x => x.Car!.Brand!.Rate), 
-                    IsRequired = false 
-                } 
+            { "brandRate", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Rate)) 
             }
         };
         
