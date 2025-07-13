@@ -27,6 +27,7 @@ internal static class SuperfilterExtensions
 
 
         string filterFieldName = propertyName;
+        
 
         FilterCriterion? filter = globalConfiguration.HasFilters.Filters
             .FirstOrDefault(filters => string.Equals(filters.Field, actualKey, StringComparison.CurrentCultureIgnoreCase));

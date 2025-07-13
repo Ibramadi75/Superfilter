@@ -17,6 +17,9 @@ public partial class Superfilter
         if (GlobalConfiguration == null) throw new SuperfilterException("No global configuration found");
 
         ValidateRequiredFiltersPresence();
+        
+        if (GlobalConfiguration.HasFilters == null || GlobalConfiguration.HasFilters.Filters.Count == 0)
+            return query;
 
         foreach (FilterCriterion filter in GlobalConfiguration.HasFilters.Filters)
             if (GlobalConfiguration.PropertyMappings.TryGetValue(filter.Field, out FieldConfiguration? fieldConfig))
@@ -36,7 +39,7 @@ public partial class Superfilter
                 }
                 catch (Exception e)
                 {
-                    throw new SuperfilterException($"Problem occurred while invoking SuperfilterExtensions.FilterProperty on {filter.Field} with operator {filter.Operator}");
+                    throw new SuperfilterException($"Problem occurred while invoking SuperfilterExtensions.FilterProperty on {filter.Field} with operator {filter.Operator}.\n", e);
                 }
             }
 
