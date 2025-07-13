@@ -1,6 +1,6 @@
 using Superfilter.Entities;
 
-namespace Superfilter.Builder;
+namespace Superfilter;
 
 /// <summary>
 /// Static factory class for creating configuration builders

@@ -1,6 +1,6 @@
 using System.Globalization;
 using Database.Models;
-using Superfilter.Builder;
+using Superfilter;
 using Superfilter.Constants;
 using Superfilter.Entities;
 using Tests.Common;

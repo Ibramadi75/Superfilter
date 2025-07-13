@@ -2,7 +2,6 @@ using System.Linq.Expressions;
 using Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Superfilter;
-using Superfilter.Builder;
 using Superfilter.Constants;
 using Superfilter.Entities;
 using Tests.Common;

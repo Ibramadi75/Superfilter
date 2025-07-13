@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Superfilter.Constants;
 using Superfilter.Entities;
 
-namespace Superfilter.Builder;
+namespace Superfilter;
 
 /// <summary>
 /// Fluent builder for creating GlobalConfiguration without manual casting

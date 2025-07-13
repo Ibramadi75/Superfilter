@@ -2,7 +2,6 @@ using Database.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Superfilter;
-using Superfilter.Builder;
 using Superfilter.Constants;
 using Superfilter.Entities;
 using Tests.Common;
