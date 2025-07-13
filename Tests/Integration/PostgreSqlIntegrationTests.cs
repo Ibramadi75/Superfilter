@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Superfilter;
+using Superfilter.Builder;
 using Superfilter.Constants;
 using Superfilter.Entities;
 using Tests.Common;
@@ -15,23 +16,19 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     public async Task ApplyFilters_WithPostgreSQL_ShouldGenerateValidQuery()
     {
         var users = Context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
-            }
+            Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("MoneyAmount", x => x.MoneyAmount)
+            .WithFilters(filters)
+            .Build();
+
         var superfilter = new Superfilter.Superfilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
-        {
-            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) 
-            }
-        };
-        
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
@@ -60,29 +57,23 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .ThenInclude(h => h!.City)
             .AsQueryable();
 
-        var globalConfiguration = new GlobalConfiguration
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = 
-                [
-                    new FilterCriterion("carBrand", Operator.Equals, "Ford"),
-                    new FilterCriterion("cityName", Operator.StartsWith, "P")
-                ]
-            }
+            Filters = 
+            [
+                new FilterCriterion("carBrand", Operator.Equals, "Ford"),
+                new FilterCriterion("cityName", Operator.StartsWith, "P")
+            ]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("carBrand", x => x.Car!.Brand!.Name)
+            .MapProperty("cityName", x => x.House!.City!.Name)
+            .WithFilters(filters)
+            .Build();
+
         var superfilter = new Superfilter.Superfilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
-        {
-            { "carBrand", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Name)) 
-            },
-            { "cityName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.House!.City!.Name)) 
-            }
-        };
-        
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
         
         var usersResult = await users.ToListAsync();
@@ -104,23 +95,19 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     public async Task ApplyFilters_WithDateOperations_ShouldWorkWithPostgreSQLDateFunctions()
     {
         var users = Context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("MoneyAmount", Operator.Equals, "200")]
-            }
+            Filters = [new FilterCriterion("MoneyAmount", Operator.Equals, "200")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("MoneyAmount", x => x.MoneyAmount)
+            .WithFilters(filters)
+            .Build();
+
         var superfilter = new Superfilter.Superfilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
-        {
-            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) 
-            }
-        };
-        
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
@@ -141,23 +128,19 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     public async Task ApplyFilters_WithStringContains_ShouldUsePostgreSQLILike()
     {
         var users = Context.Users.AsQueryable();
-        var globalConfiguration = new GlobalConfiguration
+        
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = [new FilterCriterion("name", Operator.Contains, "li")]
-            }
+            Filters = [new FilterCriterion("name", Operator.Contains, "li")]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("name", x => x.Name)
+            .WithFilters(filters)
+            .Build();
+
         var superfilter = new Superfilter.Superfilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
-        {
-            { "name", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name)) 
-            }
-        };
-        
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
@@ -181,32 +164,25 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .ThenInclude(c => c!.Brand)
             .AsQueryable();
 
-        var globalConfiguration = new GlobalConfiguration
+        var filters = new HasFiltersDto
         {
-            HasFilters = new HasFiltersDto
-            {
-                Filters = 
-                [
-                    new FilterCriterion("MoneyAmount", Operator.GreaterThan, "75"),
-                    new FilterCriterion("carName", Operator.Contains, "Ford"),
-                    new FilterCriterion("brandRate", Operator.GreaterThan, "3")
-                ]
-            }
+            Filters = 
+            [
+                new FilterCriterion("MoneyAmount", Operator.GreaterThan, "75"),
+                new FilterCriterion("carName", Operator.Contains, "Ford"),
+                new FilterCriterion("brandRate", Operator.GreaterThan, "3")
+            ]
         };
 
+        var config = SuperfilterBuilder.For<User>()
+            .MapProperty("MoneyAmount", x => x.MoneyAmount)
+            .MapProperty("carName", x => x.Car!.Name)
+            .MapProperty("brandRate", x => x.Car!.Brand!.Rate)
+            .WithFilters(filters)
+            .Build();
+
         var superfilter = new Superfilter.Superfilter();
-        var propertyMappings = new Dictionary<string, FieldConfiguration>
-        {
-            { "MoneyAmount", new FieldConfiguration((Expression<Func<User, object>>)(x => x.MoneyAmount)) 
-            },
-            { "carName", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Name)) 
-            },
-            { "brandRate", new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car!.Brand!.Rate)) 
-            }
-        };
-        
-        globalConfiguration.PropertyMappings = propertyMappings;
-        superfilter.InitializeGlobalConfiguration(globalConfiguration);
+        superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<User>();
 
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
