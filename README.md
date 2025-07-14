@@ -20,7 +20,7 @@ Superfilter is a lightweight C# .NET 9.0 library for applying dynamic filtering 
 
 ## Getting Started
 
-### 🚀 New: Using ConfigurationBuilder (Recommended)
+### 🚀 New: Using ConfigurationBuilder
 
 ```csharp
 using Superfilter;
