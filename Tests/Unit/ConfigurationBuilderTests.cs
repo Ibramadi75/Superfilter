@@ -196,8 +196,8 @@ public class ConfigurationBuilderTests
         var config = SuperfilterBuilder.For<User>()
             .MapProperty("name", u => u.Name)
             .MapProperty("moneyAmount", u => u.MoneyAmount)
-            .AddStaticFilterEquals("name", "John")
-            .AddStaticFilterGreaterThan("moneyAmount", "1000")
+            .AddStaticFilter("name", Operator.Equals, "John")
+            .AddStaticFilter("moneyAmount", Operator.GreaterThan, "1000")
             .Build();
 
         // Assert
@@ -232,7 +232,8 @@ public class ConfigurationBuilderTests
     {
         // Act
         var config = SuperfilterBuilder.For<User>()
-            .MapAndAddStaticFilter("name", u => u.Name, Operator.Equals, "John")
+            .MapProperty("name", u => u.Name)
+            .AddStaticFilter("name", Operator.Equals, "John")
             .Build();
 
         // Assert

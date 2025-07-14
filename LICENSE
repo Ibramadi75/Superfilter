@@ -1,0 +1,26 @@
+# Superfilter Public License v1.0 (based on the MIT License)
+
+**Copyright (c) 2025 Ibrahim Madi**
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, merge, publish, and distribute the Software, subject to the following conditions:
+
+## Attribution
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Proper credit must be given to the original author, Ibrahim Madi.
+
+## Non-commercial freedom
+The Software may be freely used and modified for personal, educational, research, or internal purposes, including within companies, provided it is not sold or turned into a standalone commercial product.
+
+## Commercial restriction
+It is not permitted, without explicit written permission from the copyright holder:
+
+- to sell the Software or any modified version of it,
+- to create or distribute a commercial product or service based substantially on this Software,
+- to distribute modified versions as standalone commercial offerings.
+
+## Use as a dependency
+The Software may be used as a dependency or component in commercial or open-source projects, as long as:
+- it is not the main functionality of the product.
+
+---
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

@@ -154,4 +154,13 @@ dotnet test
 
 ## License
 
-This project does not currently have a specified license.
+This project is licensed under the SuperFilter Public License v1.0, based on the MIT License. 
+
+**Key Points:**
+- ✅ **Free to use** as a dependency in your commercial or open-source projects
+- ✅ **Free for personal, educational, and research purposes**
+- ✅ **Attribution required**
+- ❌ **Cannot create a commercial product derived/forked from the codebase of Superfilter** without explicit permission
+- ❌ **Cannot sell or redistribute** as a standalone commercial offering
+
+See the [LICENSE](LICENSE) file for full details.

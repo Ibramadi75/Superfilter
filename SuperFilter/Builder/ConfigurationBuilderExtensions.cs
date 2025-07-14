@@ -20,60 +20,6 @@ public static class ConfigurationBuilderExtensions
     }
 
 
-    /// <summary>
-    /// Adds a static equals filter (for testing or default filters)
-    /// </summary>
-    public static ConfigurationBuilder<T> AddStaticFilterEquals<T>(
-        this ConfigurationBuilder<T> builder,
-        string field,
-        string value) where T : class
-    {
-        return builder.AddStaticFilter(field, Operator.Equals, value);
-    }
-
-    /// <summary>
-    /// Adds a static contains filter for string fields (for testing or default filters)
-    /// </summary>
-    public static ConfigurationBuilder<T> AddStaticFilterContains<T>(
-        this ConfigurationBuilder<T> builder,
-        string field,
-        string value) where T : class
-    {
-        return builder.AddStaticFilter(field, Operator.Contains, value);
-    }
-
-    /// <summary>
-    /// Adds a static starts with filter for string fields (for testing or default filters)
-    /// </summary>
-    public static ConfigurationBuilder<T> AddStaticFilterStartsWith<T>(
-        this ConfigurationBuilder<T> builder,
-        string field,
-        string value) where T : class
-    {
-        return builder.AddStaticFilter(field, Operator.StartsWith, value);
-    }
-
-    /// <summary>
-    /// Adds a static greater than filter for numeric/date fields (for testing or default filters)
-    /// </summary>
-    public static ConfigurationBuilder<T> AddStaticFilterGreaterThan<T>(
-        this ConfigurationBuilder<T> builder,
-        string field,
-        string value) where T : class
-    {
-        return builder.AddStaticFilter(field, Operator.GreaterThan, value);
-    }
-
-    /// <summary>
-    /// Adds a static less than filter for numeric/date fields (for testing or default filters)
-    /// </summary>
-    public static ConfigurationBuilder<T> AddStaticFilterLessThan<T>(
-        this ConfigurationBuilder<T> builder,
-        string field,
-        string value) where T : class
-    {
-        return builder.AddStaticFilter(field, Operator.LessThan, value);
-    }
 
     /// <summary>
     /// Adds a static ascending sort (for testing or default sorts)
@@ -109,20 +55,5 @@ public static class ConfigurationBuilderExtensions
         return builder
             .MapProperty(key, selector, isRequired)
             .AddStaticFilter(key, @operator, value);
-    }
-
-    /// <summary>
-    /// Maps property and adds static sort in one call (for testing or default sorts)
-    /// </summary>
-    public static ConfigurationBuilder<T> MapAndAddStaticSort<T, TProperty>(
-        this ConfigurationBuilder<T> builder,
-        string key,
-        Expression<Func<T, TProperty>> selector,
-        string direction = "asc",
-        bool isRequired = false) where T : class
-    {
-        return builder
-            .MapProperty(key, selector, isRequired)
-            .AddStaticSort(key, direction);
     }
 }
