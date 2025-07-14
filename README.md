@@ -39,7 +39,7 @@ public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest reques
         .WithSorts(request.Sorts)                        // Dynamic sorts from client
         .Build();
 
-    // 2. Use with Superfilter (same as before)
+    // 2. Use with Superfilter
     var superfilter = new Superfilter.Superfilter();
     superfilter.InitializeGlobalConfiguration(config);
     superfilter.InitializeFieldSelectors<User>();
