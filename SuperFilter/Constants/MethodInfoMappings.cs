@@ -34,6 +34,34 @@ public static class MethodInfoMappings
         { Operator.GreaterThan, typeof(int).GetMethod("GreaterThan", [typeof(int)]) }
     };
 
+    private static Dictionary<Operator, MethodInfo?> MethodInfosForLongFiltering => new()
+    {
+        { Operator.Equals, typeof(long).GetMethod("Equals", [typeof(long)]) },
+        { Operator.LessThan, typeof(long).GetMethod("LessThan", [typeof(long)]) },
+        { Operator.GreaterThan, typeof(long).GetMethod("GreaterThan", [typeof(long)]) }
+    };
+
+    private static Dictionary<Operator, MethodInfo?> MethodInfosForDecimalFiltering => new()
+    {
+        { Operator.Equals, typeof(decimal).GetMethod("Equals", [typeof(decimal)]) },
+        { Operator.LessThan, typeof(decimal).GetMethod("LessThan", [typeof(decimal)]) },
+        { Operator.GreaterThan, typeof(decimal).GetMethod("GreaterThan", [typeof(decimal)]) }
+    };
+
+    private static Dictionary<Operator, MethodInfo?> MethodInfosForDoubleFiltering => new()
+    {
+        { Operator.Equals, typeof(double).GetMethod("Equals", [typeof(double)]) },
+        { Operator.LessThan, typeof(double).GetMethod("LessThan", [typeof(double)]) },
+        { Operator.GreaterThan, typeof(double).GetMethod("GreaterThan", [typeof(double)]) }
+    };
+
+    private static Dictionary<Operator, MethodInfo?> MethodInfosForFloatFiltering => new()
+    {
+        { Operator.Equals, typeof(float).GetMethod("Equals", [typeof(float)]) },
+        { Operator.LessThan, typeof(float).GetMethod("LessThan", [typeof(float)]) },
+        { Operator.GreaterThan, typeof(float).GetMethod("GreaterThan", [typeof(float)]) }
+    };
+
     public static Dictionary<Operator, MethodInfo?> GetMethodInfos(Type propertyType)
     {
         if (propertyType == typeof(string))
@@ -47,6 +75,18 @@ public static class MethodInfoMappings
 
         if (propertyType == typeof(int) || propertyType == typeof(int?))
             return MethodInfosForIntegerFiltering;
+
+        if (propertyType == typeof(long) || propertyType == typeof(long?))
+            return MethodInfosForLongFiltering;
+
+        if (propertyType == typeof(decimal) || propertyType == typeof(decimal?))
+            return MethodInfosForDecimalFiltering;
+
+        if (propertyType == typeof(double) || propertyType == typeof(double?))
+            return MethodInfosForDoubleFiltering;
+
+        if (propertyType == typeof(float) || propertyType == typeof(float?))
+            return MethodInfosForFloatFiltering;
 
         return new Dictionary<Operator, MethodInfo?>();
     }
