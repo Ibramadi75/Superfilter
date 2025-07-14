@@ -84,40 +84,6 @@ SuperfilterBuilder.For<User>()
 | `WithFilters(IHasFilters)` | Set dynamic filters from client request |
 | `WithSorts(IHasSorts)` | Set dynamic sorts from client request |
 
-### Static Filter Methods (For Testing/Defaults)
-
-| Method | Operator | Description |
-|--------|----------|-------------|
-| `AddStaticFilterEquals(field, value)` | Equals | Static exact matching filter |
-| `AddStaticFilterContains(field, value)` | Contains | Static substring search filter |
-| `AddStaticFilterStartsWith(field, value)` | StartsWith | Static prefix search filter |
-| `AddStaticFilterGreaterThan(field, value)` | GreaterThan | Static numeric/date comparison |
-| `AddStaticFilterLessThan(field, value)` | LessThan | Static numeric/date comparison |
-
-### Static Sort Methods (For Testing/Defaults)
-
-| Method | Description |
-|--------|-------------|
-| `AddStaticSortAscending(field)` | Add static ascending sort |
-| `AddStaticSortDescending(field)` | Add static descending sort |
-
-## Legacy FieldConfiguration Constructor
-
-For backward compatibility, the traditional `FieldConfiguration` constructor is still supported:
-
-```csharp
-// Simple property (requires manual casting)
-new FieldConfiguration((Expression<Func<User, object>>)(x => x.Name))
-
-// Required filter (requires manual casting)
-new FieldConfiguration((Expression<Func<User, object>>)(x => x.Id), isRequired: true)
-
-// Nested property (requires manual casting)
-new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car.Brand.Name))
-```
-
-**💡 Tip:** Use the new `ConfigurationBuilder` API instead to avoid manual casting!
-
 ## Installation
 
 ```bash
