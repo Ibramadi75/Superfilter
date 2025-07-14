@@ -53,57 +53,6 @@ public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest reques
 }
 ```
 
-### Traditional Approach
-
-1. Create a `GlobalConfiguration` containing:
-   - `PropertyMappings` — a dictionary of filter keys and their `FieldConfiguration`
-   - `HasFilters` and `HasSorts` implementations holding incoming criteria
-2. Instantiate `Superfilter`, call `InitializeGlobalConfiguration`, then `InitializeFieldSelectors<T>()` for each entity type
-3. Call `ApplyConfiguredFilters` on an `IQueryable<T>` and optionally `ApplySorting`
-
-## Traditional Example (Still Supported)
-
-```csharp
-using Superfilter;
-using Superfilter.Entities;
-using Superfilter.Constants;
-
-// Create filter criteria with manual casting (legacy approach)
-var globalConfig = new GlobalConfiguration
-{
-    HasFilters = new HasFiltersDto
-    {
-        Filters =
-        [
-            new FilterCriterion("id", Operator.GreaterThan, "1"),
-            new FilterCriterion("carBrandName", Operator.Equals, "BMW")
-        ]
-    },
-    HasSorts = new HasSortsDto
-    {
-        Sorters = [ new SortCriterion("name", "asc") ]
-    },
-    PropertyMappings = new Dictionary<string, FieldConfiguration>
-    {
-        { "id", new FieldConfiguration((Expression<Func<User, object>>)(u => u.Id), isRequired: true) },
-        { "carBrandName", new FieldConfiguration((Expression<Func<User, object>>)(u => u.Car.Brand.Name)) },
-        { "name", new FieldConfiguration((Expression<Func<User, object>>)(u => u.Name)) }
-    }
-};
-
-// Initialize Superfilter
-var superfilter = new Superfilter.Superfilter();
-superfilter.InitializeGlobalConfiguration(globalConfig);
-superfilter.InitializeFieldSelectors<User>();
-
-// Apply filtering and sorting
-IQueryable<User> query = context.Users;
-query = superfilter.ApplyConfiguredFilters(query);
-query = query.ApplySorting(globalConfig);
-
-List<User> users = query.ToList();
-```
-
 ## ConfigurationBuilder API Reference
 
 ### Core Methods
