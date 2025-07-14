@@ -178,14 +178,14 @@ dotnet add package Superfilter --version 0.1.2-alpha
 ## Links
 
 - 📦 **[NuGet Package](https://www.nuget.org/packages/Superfilter/)** - Install from NuGet.org
-- 🐙 **[GitHub Repository](https://github.com/ibrahimmadi/SuperFilter)** - Source code and issues
+- 🐙 **[GitHub Repository](https://github.com/Ibramadi75/Superfilter)** - Source code and issues
 - 📖 **[ConfigurationBuilder Examples](CONFIGURATION_BUILDER_EXAMPLES.md)** - Comprehensive examples and use cases
 - 🚀 **[Integration Guide](CONFIGURATION_BUILDER_INTEGRATION.md)** - Migration guide and best practices
 - 📋 **[GitHub Issue](ISSUE_PROPERTY_MAPPING_CASTING.md)** - Background on the manual casting problem
 
 ## Project Layout
 
-- `SuperFilter/` – Core library implementation with partial class architecture
+- `Superfilter/` – Core library implementation with partial class architecture
   - `Builder/` – **New:** ConfigurationBuilder API for fluent configuration
 - `Database/` – EF Core context and domain models (User, Car, Brand, House, City)  
 - `Tests/` – xUnit test suite covering filtering scenarios and edge cases
