@@ -121,7 +121,7 @@ new FieldConfiguration((Expression<Func<User, object>>)(x => x.Car.Brand.Name))
 ## Installation
 
 ```bash
-dotnet add package Superfilter --version 0.1.2-alpha
+dotnet add package Superfilter --version 0.1.4-alpha
 ```
 
 ## Links
@@ -143,32 +143,6 @@ dotnet add package Superfilter --version 0.1.2-alpha
 
 ```bash
 dotnet test
-```
-
-## Migration from Manual Casting
-
-If you're using the old approach with manual casting, migrating is simple:
-
-```csharp
-// Old approach (still works but verbose)
-var config = new GlobalConfiguration
-{
-    PropertyMappings = new Dictionary<string, FieldConfiguration>
-    {
-        { "id", new FieldConfiguration((Expression<Func<User, object>>)(u => u.Id), true) },
-        { "name", new FieldConfiguration((Expression<Func<User, object>>)(u => u.Name)) }
-    },
-    HasFilters = clientFilters,  // From client request
-    HasSorts = clientSorts       // From client request
-};
-
-// New approach (clean and type-safe)
-var config = SuperfilterBuilder.For<User>()
-    .MapRequiredProperty("id", u => u.Id)        // No casting!
-    .MapProperty("name", u => u.Name)            // Type-safe!
-    .WithFilters(clientFilters)                  // Dynamic from client
-    .WithSorts(clientSorts)                      // Dynamic from client
-    .Build();
 ```
 
 **Key Benefits of Migration:**
