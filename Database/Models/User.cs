@@ -2,73 +2,73 @@ namespace Database.Models;
 
 public class User
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public int MoneyAmount { get; set; }
-    public DateTime? BornDate { get; set; }
-    public DateTimeOffset? RegistrationDate { get; set; }
-    public DateTimeOffset LastLoginDate { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public int MoneyAmount { get; init; }
+    public DateTime? BornDate { get; init; }
+    public DateTimeOffset? RegistrationDate { get; init; }
+    public DateTimeOffset LastLoginDate { get; init; }
     
     // New numeric properties for testing
-    public long LongValue { get; set; }
-    public long? NullableLongValue { get; set; }
-    public decimal DecimalValue { get; set; }
-    public decimal? NullableDecimalValue { get; set; }
-    public double DoubleValue { get; set; }
-    public double? NullableDoubleValue { get; set; }
-    public float FloatValue { get; set; }
-    public float? NullableFloatValue { get; set; }
+    public long LongValue { get; init; }
+    public long? NullableLongValue { get; init; }
+    public decimal DecimalValue { get; init; }
+    public decimal? NullableDecimalValue { get; init; }
+    public double DoubleValue { get; init; }
+    public double? NullableDoubleValue { get; init; }
+    public float FloatValue { get; init; }
+    public float? NullableFloatValue { get; init; }
 
     // Relations
-    public int CarId { get; set; }
-    public Car? Car { get; set; }
-    public int HouseId { get; set; }
-    public House? House { get; set; }
+    public int CarId { get; init; }
+    public Car? Car { get; init; }
+    public int HouseId { get; init; }
+    public House? House { get; init; }
 }
 
 public class Car
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public DateTimeOffset? ManufactureDate { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public DateTimeOffset? ManufactureDate { get; init; }
 
-    public User User { get; set; }
-    public int UserId { get; set; }
+    public User? User { get; init; }
+    public int UserId { get; init; }
 
     // Relations
-    public Brand? Brand { get; set; }
-    public int? BrandId { get; set; } // Clé étrangère vers Brand
+    public Brand? Brand { get; init; }
+    public int? BrandId { get; init; } // Clé étrangère vers Brand
 }
 
 public class Brand
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public int Rate { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public int Rate { get; init; }
 
     // Relation inverse
-    public ICollection<Car> Cars { get; set; } = new List<Car>();
+    public ICollection<Car> Cars { get; init; } = new List<Car>();
 }
 
 public class City
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
 
-    public int MayorId { get; set; }
-    public User Mayor { get; set; }
+    public int MayorId { get; init; }
+    public User? Mayor { get; init; }
 }
 
 public class House
 {
-    public int Id { get; set; }
-    public string Address { get; set; } = string.Empty;
-    public int? Size { get; set; }
+    public int Id { get; init; }
+    public string Address { get; init; } = string.Empty;
+    public int? Size { get; init; }
 
     // Relations
-    public User User { get; set; } = null!;
-    public int UserId { get; set; }
+    public User User { get; init; } = null!;
+    public int UserId { get; init; }
 
-    public City City { get; set; } = null!;
-    public int CityId { get; set; }
+    public City City { get; init; } = null!;
+    public int CityId { get; init; }
 }
