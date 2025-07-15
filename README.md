@@ -90,9 +90,7 @@ dotnet add package Superfilter --version 0.1.4-alpha
 
 - 📦 **[NuGet Package](https://www.nuget.org/packages/Superfilter/)** - Install from NuGet.org
 - 🐙 **[GitHub Repository](https://github.com/Ibramadi75/Superfilter)** - Source code and issues
-- 📖 **[ConfigurationBuilder Examples](CONFIGURATION_BUILDER_EXAMPLES.md)** - Comprehensive examples and use cases
-- 🚀 **[Integration Guide](CONFIGURATION_BUILDER_INTEGRATION.md)** - Migration guide and best practices
-- 📋 **[GitHub Issue](ISSUE_PROPERTY_MAPPING_CASTING.md)** - Background on the manual casting problem
+- 🚀 **[Ibradev.fr/Superfilter](https://ibradev.fr/superfilter)** - Official project's website
 
 ## Project Layout
 
