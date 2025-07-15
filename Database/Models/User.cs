@@ -8,6 +8,16 @@ public class User
     public DateTime? BornDate { get; set; }
     public DateTimeOffset? RegistrationDate { get; set; }
     public DateTimeOffset LastLoginDate { get; set; }
+    
+    // New numeric properties for testing
+    public long LongValue { get; set; }
+    public long? NullableLongValue { get; set; }
+    public decimal DecimalValue { get; set; }
+    public decimal? NullableDecimalValue { get; set; }
+    public double DoubleValue { get; set; }
+    public double? NullableDoubleValue { get; set; }
+    public float FloatValue { get; set; }
+    public float? NullableFloatValue { get; set; }
 
     // Relations
     public int CarId { get; set; }

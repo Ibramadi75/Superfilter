@@ -28,6 +28,10 @@ public partial class Superfilter
     {
         if (selector.Body.Type == typeof(string) ||
             selector.Body.Type == typeof(int) || selector.Body.Type == typeof(int?) ||
+            selector.Body.Type == typeof(long) || selector.Body.Type == typeof(long?) ||
+            selector.Body.Type == typeof(decimal) || selector.Body.Type == typeof(decimal?) ||
+            selector.Body.Type == typeof(double) || selector.Body.Type == typeof(double?) ||
+            selector.Body.Type == typeof(float) || selector.Body.Type == typeof(float?) ||
             selector.Body.Type == typeof(bool) ||
             selector.Body.Type == typeof(DateTime) || selector.Body.Type == typeof(DateTime?) ||
             selector.Body.Type == typeof(DateTimeOffset) || selector.Body.Type == typeof(DateTimeOffset?) ||
