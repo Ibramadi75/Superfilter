@@ -56,14 +56,14 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         {
             Filters = 
             [
-                new FilterCriterion("carBrand", Operator.Equals, "Ford"),
-                new FilterCriterion("cityName", Operator.StartsWith, "P")
+                new FilterCriterion("User.Car.Brand.Name", Operator.Equals, "Ford"),
+                new FilterCriterion("User.City.Name", Operator.StartsWith, "P")
             ]
         };
 
         var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("carBrand", x => x.Car!.Brand!.Name)
-            .MapProperty("cityName", x => x.House!.City!.Name)
+            .MapProperty(x => x.Car!.Brand!.Name)
+            .MapProperty(x => x.House!.City!.Name)
             .WithFilters(filters)
             .Build();
         

@@ -19,8 +19,6 @@ public static class ConfigurationBuilderExtensions
         return new ConfigurationBuilder<T>();
     }
 
-
-
     /// <summary>
     /// Adds a static ascending sort (for testing or default sorts)
     /// </summary>
