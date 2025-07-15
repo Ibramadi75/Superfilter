@@ -64,14 +64,10 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "BMW")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -89,15 +85,11 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("houseAddress", Operator.Contains, "Oak")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("id", x => x.Id)
             .MapProperty("houseAddress", x => x.House!.Address)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -115,14 +107,10 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandRate", Operator.GreaterThan, "3")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandRate", x => x.Car!.Brand!.Rate)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -141,14 +129,10 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "Ford")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 

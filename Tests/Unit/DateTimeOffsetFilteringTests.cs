@@ -66,14 +66,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("lastLoginDate", Operator.Equals, targetDate.ToString("O"))]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -92,14 +88,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("lastLoginDate", Operator.GreaterThan, targetDate.ToString("O"))]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -118,14 +110,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("lastLoginDate", Operator.LessThan, targetDate.ToString("O"))]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -145,14 +133,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToYear, targetDate.ToString("O"))]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -170,14 +154,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToYearAndMonth, targetDate.ToString("O"))]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -196,14 +176,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToFullDate, targetDate.ToString("O"))]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -222,14 +198,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("registrationDate", Operator.Equals, targetDate.ToString("O"))]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("registrationDate", x => x.RegistrationDate!)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -248,14 +220,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("car.manufactureDate", Operator.Equals, targetDate.ToString("O"))]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("car.manufactureDate", x => x.Car!.ManufactureDate!)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -273,14 +241,10 @@ public class DateTimeOffsetFilteringTests
             Filters = [new FilterCriterion("lastLoginDate", Operator.Equals, "invalid-date")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
     }

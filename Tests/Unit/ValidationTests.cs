@@ -37,14 +37,10 @@ public class ValidationTests
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapRequiredProperty("id", x => x.Id)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         SuperfilterException exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
 
@@ -61,14 +57,10 @@ public class ValidationTests
             Filters = [new FilterCriterion("name", Operator.GreaterThan, "test")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
     }
@@ -83,14 +75,10 @@ public class ValidationTests
             Filters = [new FilterCriterion("name", Operator.Contains, null!)]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -107,14 +95,10 @@ public class ValidationTests
             Filters = [new FilterCriterion("name", Operator.Contains, "   ")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
+            .BuildSuperfilter();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
