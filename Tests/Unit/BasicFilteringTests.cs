@@ -65,14 +65,10 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("id", Operator.GreaterThan, "1")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapRequiredProperty("id", x => x.Id)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -90,14 +86,10 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "23/02/2003")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("bornDate", x => x.BornDate!)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -114,14 +106,10 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -139,14 +127,10 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("name", Operator.Contains, "nonexistent")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapRequiredProperty("name", x => x.Name)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -163,14 +147,10 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("unknownField", Operator.Contains, "e")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -187,14 +167,10 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("name", Operator.Contains, "")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 

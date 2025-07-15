@@ -47,14 +47,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -77,14 +73,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -111,14 +103,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("carName", Operator.StartsWith, "F")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carName", x => x.Car!.Name)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -150,15 +138,11 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             ]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .MapProperty("Name", x => x.Name)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -186,14 +170,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("NonExistentProperty", Operator.Equals, "test")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -218,14 +198,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("moneyamount", Operator.GreaterThan, "200")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("moneyamount", x => x.MoneyAmount)
             .WithFilters(filters)
             .Build();
-
-        Superfilter.Superfilter superfilter = new();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();

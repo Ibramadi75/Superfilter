@@ -7,12 +7,13 @@ namespace Superfilter;
 public partial class Superfilter
 {
     private GlobalConfiguration? GlobalConfiguration { get; set; }
-    private Dictionary<Type, object> FieldConfigurations { get; } = new();
+    internal GlobalConfiguration? InternalGlobalConfiguration => GlobalConfiguration;
+    private Dictionary<string, FieldConfiguration>? FieldConfigurations { get; set; }
 
     public IQueryable<T> ApplyConfiguredFilters<T>(IQueryable<T> query)
     {
-        Dictionary<string, FieldConfiguration>? fieldConfiguration = GetFieldConfigurationsForType<T>();
-        if (fieldConfiguration is { Count: 0 }) throw new SuperfilterException($"No configuration found for {typeof(T).Name}");
+        if (FieldConfigurations == null || FieldConfigurations.Count == 0) 
+            throw new SuperfilterException($"No field configuration found. Call InitializeFieldSelectors<{typeof(T).Name}>() first.");
 
         if (GlobalConfiguration == null) throw new SuperfilterException("No global configuration found");
 
@@ -22,7 +23,7 @@ public partial class Superfilter
             return query;
 
         foreach (FilterCriterion filter in GlobalConfiguration.HasFilters.Filters)
-            if (GlobalConfiguration.PropertyMappings.TryGetValue(filter.Field, out FieldConfiguration? fieldConfig))
+            if (FieldConfigurations.TryGetValue(filter.Field, out FieldConfiguration? fieldConfig))
             {
                 Expression<Func<T, object>> typedSelector = NormalizeSelectorToObject<T>(fieldConfig.Selector);
                 Type propertyType = ExtractPropertyTypeFromSelector(fieldConfig.Selector);
@@ -45,21 +46,21 @@ public partial class Superfilter
 
         return query;
     }
-    public void InitializeGlobalConfiguration(GlobalConfiguration globalConfiguration)
+    internal void InitializeGlobalConfiguration(GlobalConfiguration globalConfiguration)
     {
         if (GlobalConfiguration != null)
             throw new SuperfilterException("GlobalConfiguration is already set. Use a new instance of Superfilter for different configurations.\n Using the same instance will lead to unexpected behavior.");
         GlobalConfiguration = globalConfiguration;
     }
-    public void InitializeFieldSelectors<T>()
+    internal void InitializeFieldSelectors<T>()
     {
         if (GlobalConfiguration is null)
-            throw new SuperfilterException("GlobalConfiguration must be set before using AddFieldConfiguration");
+            throw new SuperfilterException("GlobalConfiguration must be set before using InitializeFieldSelectors");
 
-        if (!FieldConfigurations.ContainsKey(typeof(T)))
-            FieldConfigurations[typeof(T)] = new Dictionary<string, FieldConfiguration>();
+        if (FieldConfigurations != null)
+            throw new SuperfilterException($"FieldSelectors already initialized for this instance. Use a new Superfilter instance for different types.");
 
-        Dictionary<string, FieldConfiguration>? fieldConfigDict = FieldConfigurations[typeof(T)] as Dictionary<string, FieldConfiguration>;
+        FieldConfigurations = new Dictionary<string, FieldConfiguration>();
 
         foreach (KeyValuePair<string, FieldConfiguration> mapping in GlobalConfiguration.PropertyMappings)
         {
@@ -79,7 +80,7 @@ public partial class Superfilter
                 }
             }
 
-            if (fieldConfigDict != null) fieldConfigDict[mapping.Key] = fieldConfig;
+            FieldConfigurations[mapping.Key] = fieldConfig;
         }
     }
 }

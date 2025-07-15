@@ -115,33 +115,24 @@ public class ConfigurationBuilder<T> where T : class
     }
 
     /// <summary>
-    /// Builds the final GlobalConfiguration
+    /// Builds and returns a ready-to-use Superfilter instance configured for type T
+    /// This is the only public method to create a Superfilter instance
     /// </summary>
-    /// <returns>Configured GlobalConfiguration instance</returns>
-    public GlobalConfiguration Build()
+    /// <returns>Fully configured Superfilter instance ready for filtering</returns>
+    public Superfilter Build()
     {
-        return new GlobalConfiguration
+        var config = new GlobalConfiguration
         {
             PropertyMappings = _propertyMappings,
             MissingOnStrategy = _onErrorStrategy,
             HasFilters = new FilterContainer(_filters),
             HasSorts = new SortContainer(_sorters)
         };
-    }
-
-    /// <summary>
-    /// Builds a GlobalConfiguration with only PropertyMappings (for reusable configurations)
-    /// </summary>
-    /// <returns>GlobalConfiguration with empty filters/sorts that can be populated later</returns>
-    public GlobalConfiguration BuildMappingsOnly()
-    {
-        return new GlobalConfiguration
-        {
-            PropertyMappings = _propertyMappings,
-            MissingOnStrategy = _onErrorStrategy,
-            HasFilters = new FilterContainer(new List<FilterCriterion>()),
-            HasSorts = new SortContainer(new List<SortCriterion>())
-        };
+        
+        var superfilter = new Superfilter();
+        superfilter.InitializeGlobalConfiguration(config);
+        superfilter.InitializeFieldSelectors<T>();
+        return superfilter;
     }
 
     /// <summary>

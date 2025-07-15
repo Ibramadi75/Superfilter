@@ -21,14 +21,10 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
             .Build();
-
-        var superfilter = new Superfilter.Superfilter();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
         var sqlQuery = filteredQuery.ToQueryString();
@@ -65,15 +61,11 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             ]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carBrand", x => x.Car!.Brand!.Name)
             .MapProperty("cityName", x => x.House!.City!.Name)
             .WithFilters(filters)
             .Build();
-
-        var superfilter = new Superfilter.Superfilter();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
         
         var usersResult = await users.ToListAsync();
 
@@ -100,14 +92,10 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             Filters = [new FilterCriterion("MoneyAmount", Operator.Equals, "200")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
             .Build();
-
-        var superfilter = new Superfilter.Superfilter();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
         var sqlQuery = filteredQuery.ToQueryString();
@@ -133,14 +121,10 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             Filters = [new FilterCriterion("name", Operator.Contains, "li")]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
             .Build();
-
-        var superfilter = new Superfilter.Superfilter();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
         var sqlQuery = filteredQuery.ToQueryString();
@@ -173,16 +157,12 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             ]
         };
 
-        var config = SuperfilterBuilder.For<User>()
+        var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .MapProperty("carName", x => x.Car!.Name)
             .MapProperty("brandRate", x => x.Car!.Brand!.Rate)
             .WithFilters(filters)
             .Build();
-
-        var superfilter = new Superfilter.Superfilter();
-        superfilter.InitializeGlobalConfiguration(config);
-        superfilter.InitializeFieldSelectors<User>();
 
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
