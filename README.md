@@ -34,7 +34,7 @@ public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest reques
         .MapRequiredProperty("id", u => u.Id)            // No casting required!
         .MapProperty("carBrandName", u => u.Car.Brand.Name)  // Navigation properties work naturally
         .MapProperty("name", u => u.Name)                // IntelliSense support
-        .MapProperty("moneyAmount", u => u.MoneyAmount)  // Handles int, string, DateTime, etc.
+        .MapProperty(u => u.MoneyAmount)                 // Implicit key usage; exposes the property path as the key
         .WithFilters(request.Filters)                    // Dynamic filters from client
         .WithSorts(request.Sorts)                        // Dynamic sorts from client
         .Build();                             // Ready-to-use instance!
@@ -79,6 +79,15 @@ var superfilter = SuperfilterBuilder.For<User>()
 |--------|-------------|
 | `WithFilters(IHasFilters)` | Set dynamic filters from client request |
 | `WithSorts(IHasSorts)` | Set dynamic sorts from client request |
+
+### Note on `MapProperty` Usage
+
+The `MapProperty` method is available in two forms:
+
+1. `MapProperty(key, selector)` - This allows you to explicitly define a key for the property mapping.
+2. `MapProperty(selector)` - This alternative does not require a key and uses the property name directly.
+
+**Important:** When using the second form (`MapProperty(selector)`), developers should carefully evaluate whether exposing the schema of their data model to the frontend is acceptable for their use case. This approach might inadvertently reveal sensitive or internal details of the data model.
 
 ## Installation
 
