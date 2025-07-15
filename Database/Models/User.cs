@@ -6,6 +6,8 @@ public class User
     public string Name { get; set; } = string.Empty;
     public int MoneyAmount { get; set; }
     public DateTime? BornDate { get; set; }
+    public DateTimeOffset? RegistrationDate { get; set; }
+    public DateTimeOffset LastLoginDate { get; set; }
 
     // Relations
     public int CarId { get; set; }
@@ -18,6 +20,7 @@ public class Car
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
+    public DateTimeOffset? ManufactureDate { get; set; }
 
     public User User { get; set; }
     public int UserId { get; set; }
