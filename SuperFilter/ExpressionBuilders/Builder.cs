@@ -11,6 +11,7 @@ public static class Builder
         {
             _ when typeof(T) == typeof(string) => StringExpressionBuilder.BuildStringFilterExpression(property, filterValue, op),
             _ when typeof(T) == typeof(DateTime) || typeof(T) == typeof(DateTime?) => DateExpressionBuilder.BuildDateFilterExpression(property, filterValue, op),
+            _ when typeof(T) == typeof(DateTimeOffset) || typeof(T) == typeof(DateTimeOffset?) => DateExpressionBuilder.BuildDateTimeOffsetFilterExpression(property, filterValue, op),
             _ when typeof(T) == typeof(bool) || typeof(T) == typeof(bool?) => BoolExpressionBuilder.BuildBoolFilterExpression(property, filterValue),
             _ when typeof(T) == typeof(int) || typeof(T) == typeof(int?) => IntExpressionBuilder.BuildIntFilterExpression(property, filterValue, op),
             _ when typeof(T) == typeof(long) || typeof(T) == typeof(long?) => LongExpressionBuilder.BuildLongFilterExpression(property, filterValue, op),

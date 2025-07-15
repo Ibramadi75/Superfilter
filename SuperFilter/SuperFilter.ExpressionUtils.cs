@@ -34,6 +34,7 @@ public partial class Superfilter
             selector.Body.Type == typeof(float) || selector.Body.Type == typeof(float?) ||
             selector.Body.Type == typeof(bool) ||
             selector.Body.Type == typeof(DateTime) || selector.Body.Type == typeof(DateTime?) ||
+            selector.Body.Type == typeof(DateTimeOffset) || selector.Body.Type == typeof(DateTimeOffset?) ||
             selector.Body.Type == typeof(object))
             return Expression.Lambda<Func<T, object>>(Expression.Convert(selector.Body, typeof(object)), selector.Parameters);
 
