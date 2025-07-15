@@ -64,9 +64,9 @@ public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest reques
 ```csharp
 // MapProperty handles all types automatically with type inference
 var superfilter = SuperfilterBuilder.For<User>()
-    .MapProperty("name", u => u.Name)                    // string
-    .MapProperty("id", u => u.Id)                        // int  
-    .MapProperty("bornDate", u => u.BornDate)            // DateTime?
+    .MapProperty(u => u.Name)                    // string
+    .MapProperty(u => u.Id)                        // int  
+    .MapProperty(u => u.BornDate)            // DateTime?
     .MapProperty(u => u.MoneyAmount)                     // int
     .MapProperty(u => u.IsActive)                        // bool
     .MapProperty(u => u.Car.Brand.Name)                  // nested string
