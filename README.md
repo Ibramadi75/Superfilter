@@ -31,13 +31,13 @@ public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest reques
 {
     // Create ready-to-use Superfilter instance with type-safe property mappings
     var superfilter = SuperfilterBuilder.For<User>()
-        .MapRequiredProperty("id", u => u.Id)            // No casting required!
-        .MapProperty("carBrandName", u => u.Car.Brand.Name)  // Navigation properties work naturally
-        .MapProperty("name", u => u.Name)                // IntelliSense support
+        .MapRequiredProperty(u => u.Id)                  // No casting required!
+        .MapProperty(u => u.Car.Brand.Name)              // Navigation properties work naturally
+        .MapProperty(u => u.Name)                        // IntelliSense support
         .MapProperty(u => u.MoneyAmount)                 // Implicit key usage; exposes the property path as the key
         .WithFilters(request.Filters)                    // Dynamic filters from client
         .WithSorts(request.Sorts)                        // Dynamic sorts from client
-        .Build();                             // Ready-to-use instance!
+        .Build();                                        // Ready-to-use instance!
 
     // Apply filters and sorting directly
     var query = _context.Users.AsQueryable();
