@@ -151,16 +151,16 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         {
             Filters = 
             [
-                new FilterCriterion("MoneyAmount", Operator.GreaterThan, "75"),
-                new FilterCriterion("carName", Operator.Contains, "Ford"),
-                new FilterCriterion("brandRate", Operator.GreaterThan, "3")
+                new FilterCriterion("User.MoneyAmount", Operator.GreaterThan, "75"),
+                new FilterCriterion("User.Car.Name", Operator.Contains, "Ford"),
+                new FilterCriterion("User.Car.Brand.Rate", Operator.GreaterThan, "3")
             ]
         };
 
         var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .MapProperty("carName", x => x.Car!.Name)
-            .MapProperty("brandRate", x => x.Car!.Brand!.Rate)
+            .MapProperty(x => x.MoneyAmount)
+            .MapProperty(x => x.Car!.Name)
+            .MapProperty(x => x.Car!.Brand!.Rate)
             .WithFilters(filters)
             .Build();
 
