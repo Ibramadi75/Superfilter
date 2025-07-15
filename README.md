@@ -67,9 +67,9 @@ var superfilter = SuperfilterBuilder.For<User>()
     .MapProperty("name", u => u.Name)                    // string
     .MapProperty("id", u => u.Id)                        // int  
     .MapProperty("bornDate", u => u.BornDate)            // DateTime?
-    .MapProperty("moneyAmount", u => u.MoneyAmount)      // int
-    .MapProperty("isActive", u => u.IsActive)            // bool
-    .MapProperty("carBrandName", u => u.Car.Brand.Name)  // nested string
+    .MapProperty(u => u.MoneyAmount)                     // int
+    .MapProperty(u => u.IsActive)                        // bool
+    .MapProperty(u => u.Car.Brand.Name)                  // nested string
     .Build();
 ```
 
