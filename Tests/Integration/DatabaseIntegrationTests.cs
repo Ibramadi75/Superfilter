@@ -50,7 +50,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -76,7 +76,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -106,7 +106,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carName", x => x.Car!.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -142,7 +142,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .MapProperty("Name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -173,7 +173,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();
@@ -201,7 +201,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("moneyamount", x => x.MoneyAmount)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
         string sqlQuery = filteredQuery.ToQueryString();

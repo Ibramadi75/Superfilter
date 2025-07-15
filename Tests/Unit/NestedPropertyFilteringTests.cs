@@ -67,7 +67,7 @@ public class NestedPropertyFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -89,7 +89,7 @@ public class NestedPropertyFilteringTests
             .MapProperty("id", x => x.Id)
             .MapProperty("houseAddress", x => x.House!.Address)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -110,7 +110,7 @@ public class NestedPropertyFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandRate", x => x.Car!.Brand!.Rate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -132,7 +132,7 @@ public class NestedPropertyFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 

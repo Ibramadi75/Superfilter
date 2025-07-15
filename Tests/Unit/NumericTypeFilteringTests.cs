@@ -66,7 +66,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("longValue", x => x.LongValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -87,7 +87,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("longValue", x => x.LongValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -109,7 +109,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("longValue", x => x.LongValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -130,7 +130,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("nullableLongValue", x => x.NullableLongValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -155,7 +155,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("decimalValue", x => x.DecimalValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -176,7 +176,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("decimalValue", x => x.DecimalValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -198,7 +198,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("decimalValue", x => x.DecimalValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -219,7 +219,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("nullableDecimalValue", x => x.NullableDecimalValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -244,7 +244,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("doubleValue", x => x.DoubleValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -265,7 +265,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("doubleValue", x => x.DoubleValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -287,7 +287,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("doubleValue", x => x.DoubleValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -308,7 +308,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("nullableDoubleValue", x => x.NullableDoubleValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -333,7 +333,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("floatValue", x => x.FloatValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -354,7 +354,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("floatValue", x => x.FloatValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -376,7 +376,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("floatValue", x => x.FloatValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -397,7 +397,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("nullableFloatValue", x => x.NullableFloatValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -422,7 +422,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("longValue", x => x.LongValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
         Assert.Contains("Invalid long format", exception.InnerException?.InnerException?.Message);
@@ -441,7 +441,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("decimalValue", x => x.DecimalValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
         Assert.Contains("Invalid decimal format", exception.InnerException?.InnerException?.Message);
@@ -460,7 +460,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("doubleValue", x => x.DoubleValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
         Assert.Contains("Invalid double format", exception.InnerException?.InnerException?.Message);
@@ -479,7 +479,7 @@ public class NumericTypeFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("floatValue", x => x.FloatValue)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
         Assert.Contains("Invalid float format", exception.InnerException?.InnerException?.Message);

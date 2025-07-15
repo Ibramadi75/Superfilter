@@ -119,7 +119,7 @@ public class ConfigurationBuilder<T> where T : class
     /// This is the only public method to create a Superfilter instance
     /// </summary>
     /// <returns>Fully configured Superfilter instance ready for filtering</returns>
-    public Superfilter BuildSuperfilter()
+    public Superfilter Build()
     {
         var config = new GlobalConfiguration
         {

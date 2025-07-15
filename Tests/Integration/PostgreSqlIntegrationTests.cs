@@ -24,7 +24,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
         var sqlQuery = filteredQuery.ToQueryString();
@@ -65,7 +65,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .MapProperty("carBrand", x => x.Car!.Brand!.Name)
             .MapProperty("cityName", x => x.House!.City!.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
         
         var usersResult = await users.ToListAsync();
 
@@ -95,7 +95,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
         var sqlQuery = filteredQuery.ToQueryString();
@@ -124,7 +124,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);
         var sqlQuery = filteredQuery.ToQueryString();
@@ -162,7 +162,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .MapProperty("carName", x => x.Car!.Name)
             .MapProperty("brandRate", x => x.Car!.Brand!.Rate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         var filteredQuery = superfilter.ApplyConfiguredFilters(users);

@@ -69,7 +69,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -91,7 +91,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -113,7 +113,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -136,7 +136,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -157,7 +157,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -179,7 +179,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -201,7 +201,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("registrationDate", x => x.RegistrationDate!)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -223,7 +223,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("car.manufactureDate", x => x.Car!.ManufactureDate!)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -244,7 +244,7 @@ public class DateTimeOffsetFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
     }

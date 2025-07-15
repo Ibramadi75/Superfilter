@@ -37,7 +37,7 @@ public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest reques
         .MapProperty("moneyAmount", u => u.MoneyAmount)  // Handles int, string, DateTime, etc.
         .WithFilters(request.Filters)                    // Dynamic filters from client
         .WithSorts(request.Sorts)                        // Dynamic sorts from client
-        .BuildSuperfilter();                             // Ready-to-use instance!
+        .Build();                             // Ready-to-use instance!
 
     // Apply filters and sorting directly
     var query = _context.Users.AsQueryable();
@@ -57,7 +57,7 @@ public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest reques
 | `SuperfilterBuilder.For<T>()` | Creates a new builder for entity type T |
 | `MapProperty<TProperty>(key, selector, required)` | Maps any property with automatic type inference |
 | `MapRequiredProperty<TProperty>(key, selector)` | Maps a required property |
-| `BuildSuperfilter()` | Creates a ready-to-use Superfilter instance |
+| `Build()` | Creates a ready-to-use Superfilter instance |
 
 ### Property Mapping Examples
 
@@ -70,7 +70,7 @@ var superfilter = SuperfilterBuilder.For<User>()
     .MapProperty("moneyAmount", u => u.MoneyAmount)      // int
     .MapProperty("isActive", u => u.IsActive)            // bool
     .MapProperty("carBrandName", u => u.Car.Brand.Name)  // nested string
-    .BuildSuperfilter();
+    .Build();
 ```
 
 ### Dynamic Data Methods (From Client)

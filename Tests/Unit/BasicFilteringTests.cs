@@ -68,7 +68,7 @@ public class BasicFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapRequiredProperty("id", x => x.Id)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -89,7 +89,7 @@ public class BasicFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("bornDate", x => x.BornDate!)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -109,7 +109,7 @@ public class BasicFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -130,7 +130,7 @@ public class BasicFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapRequiredProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -150,7 +150,7 @@ public class BasicFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -170,7 +170,7 @@ public class BasicFilteringTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 

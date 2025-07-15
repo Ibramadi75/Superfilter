@@ -40,7 +40,7 @@ public class ValidationTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapRequiredProperty("id", x => x.Id)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         SuperfilterException exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
 
@@ -60,7 +60,7 @@ public class ValidationTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
     }
@@ -78,7 +78,7 @@ public class ValidationTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 
@@ -98,7 +98,7 @@ public class ValidationTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
 

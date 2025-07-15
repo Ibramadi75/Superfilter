@@ -25,7 +25,7 @@ public class ConfigurationBuilderTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", u => u.Name)
             .MapProperty("id", u => u.Id)
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -58,7 +58,7 @@ public class ConfigurationBuilderTests
             .MapRequiredProperty("id", u => u.Id)
             .MapProperty("name", u => u.Name)
             .WithFilters(filters)
-            .BuildSuperfilter();
+            .Build();
 
         var testUsers = new List<User>
         {
@@ -74,9 +74,9 @@ public class ConfigurationBuilderTests
     {
         // Act
         var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("carBrandName", u => u.Car.Brand.Name)
-            .MapProperty("cityName", u => u.House.City.Name)
-            .BuildSuperfilter();
+            .MapProperty("carBrandName", u => u.Car!.Brand!.Name)
+            .MapProperty("cityName", u => u.House!.City.Name)
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -100,7 +100,7 @@ public class ConfigurationBuilderTests
             .MapProperty("moneyAmount", u => u.MoneyAmount)
             .AddStaticFilter("name", Operator.Equals, "John")
             .AddStaticFilter("moneyAmount", Operator.GreaterThan, "1000")
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -127,7 +127,7 @@ public class ConfigurationBuilderTests
             .MapProperty("bornDate", u => u.BornDate)
             .AddStaticSort("name", "asc")
             .AddStaticSort("bornDate", "desc")
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -151,7 +151,7 @@ public class ConfigurationBuilderTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", u => u.Name)
             .WithErrorStrategy(OnErrorStrategy.Ignore)
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -184,7 +184,7 @@ public class ConfigurationBuilderTests
             .MapProperty("name", u => u.Name)
             .MapProperty("moneyAmount", u => u.MoneyAmount)
             .WithFilters(clientFilters)
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -221,7 +221,7 @@ public class ConfigurationBuilderTests
             .MapProperty("name", u => u.Name)
             .MapProperty("moneyAmount", u => u.MoneyAmount)
             .WithSorts(clientSorts)
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -246,7 +246,7 @@ public class ConfigurationBuilderTests
             .MapProperty("moneyAmount", u => u.MoneyAmount)
             .AddStaticFilter("name", Operator.Equals, "John")
             .AddStaticFilter("moneyAmount", Operator.GreaterThan, "1000")
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -272,7 +272,7 @@ public class ConfigurationBuilderTests
             .MapProperty("bornDate", u => u.BornDate)
             .AddStaticSortAscending("name")
             .AddStaticSortDescending("bornDate")
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -295,7 +295,7 @@ public class ConfigurationBuilderTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("name", u => u.Name)
             .AddStaticFilter("name", Operator.Equals, "John")
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -321,7 +321,7 @@ public class ConfigurationBuilderTests
             .MapProperty("id", u => u.Id)                        // int
             .MapProperty("bornDate", u => u.BornDate)            // DateTime?
             .MapProperty("moneyAmount", u => u.MoneyAmount)      // int
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -343,7 +343,7 @@ public class ConfigurationBuilderTests
         var superfilter = SuperfilterBuilder.For<User>()
             .MapProperty("id", u => u.Id)  // int property
             .MapProperty("name", u => u.Name)  // string property
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -381,7 +381,7 @@ public class ConfigurationBuilderTests
             .MapProperty("name", u => u.Name)
             .AddStaticFilter("id", Operator.GreaterThan, "0")  // Static default filter
             .WithFilters(clientFilters)  // This should replace static filters
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
@@ -399,7 +399,7 @@ public class ConfigurationBuilderTests
     }
 
     [Fact]
-    public void ConfigurationBuilder_BuildSuperfilter_ShouldCreateReadyToUseInstance()
+    public void ConfigurationBuilder_Build_ShouldCreateReadyToUseInstance()
     {
         // Arrange
         var clientFilters = new TestFiltersDto
@@ -415,7 +415,7 @@ public class ConfigurationBuilderTests
             .MapProperty("name", u => u.Name)
             .MapProperty("id", u => u.Id)
             .WithFilters(clientFilters)
-            .BuildSuperfilter();
+            .Build();
 
         // Assert
         Assert.NotNull(superfilter);
