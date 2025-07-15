@@ -41,7 +41,7 @@ public partial class Superfilter
         throw new SuperfilterException("Unsupported selector type for " + selector);
     }
     
-    private static LambdaExpression BuildSelectorLambda<T>(string memberExpression)
+    internal static LambdaExpression BuildSelectorLambda<T>(string memberExpression)
     {
         ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
         Expression propertyAccess = BuildNestedPropertyAccess(parameter, memberExpression);
@@ -53,8 +53,23 @@ public partial class Superfilter
     {
         return propertyPath.Split('.').Aggregate(parameter, Expression.Property);
     }
-
-    private static string ExtractPropertyPathFromSelectorString(string input)
+    
+    /// <summary>
+    /// Extracts the property path from a selector-like string by removing everything
+    /// before the first dot ('.') and, if present, everything after the first comma (',').
+    /// </summary>
+    /// <param name="input">
+    /// A string representing a selector, typically in the form of a lambda expression
+    /// as a string (e.g., "x => x.User.Name" or "x => x.User.Name, String").
+    /// </param>
+    /// <returns>
+    /// The substring after the first dot, truncated at the first comma if one exists.
+    /// For example:
+    /// - "x => x.User.Name" returns "User.Name"
+    /// - "x => x.User.Name, String" returns "User.Name"
+    /// - "x" returns "x"
+    /// </returns>
+    internal static string ExtractPropertyPathFromSelectorString(string input)
     {
         int index = input.IndexOf('.');
         if (index == -1) return input;
@@ -63,5 +78,25 @@ public partial class Superfilter
         int commaIndex = afterDot.IndexOf(',');
 
         return commaIndex == -1 ? afterDot : afterDot[..commaIndex];
+    }
+    
+    /// <summary>
+    /// Extracts the last word in a string that is separated by dots ('.').
+    /// </summary>
+    /// <param name="input">
+    /// A string that may contain multiple words separated by dots.
+    /// </param>
+    /// <returns>
+    /// The last word in the string after the last dot.
+    /// "Database.Models.User" returns "User"
+    /// </returns>
+    internal static string ExtractLastWordFromDotSeparatedString(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return string.Empty;
+
+        int lastDotIndex = input.LastIndexOf('.');
+        if (lastDotIndex == -1) return input; // No dot found, return the whole string
+
+        return input[(lastDotIndex + 1)..]; // Return substring after the last dot
     }
 }

@@ -11,10 +11,10 @@ namespace Superfilter;
 public class ConfigurationBuilder<T> where T : class
 {
     private readonly Dictionary<string, FieldConfiguration> _propertyMappings = new();
-    private readonly List<FilterCriterion> _filters = new();
-    private readonly List<SortCriterion> _sorters = new();
+    private readonly List<FilterCriterion> _filters = [];
+    private readonly List<SortCriterion> _sorters = [];
     private OnErrorStrategy _onErrorStrategy = OnErrorStrategy.ThrowException;
-
+    
     /// <summary>
     /// Maps a property to a filter key with automatic type inference
     /// </summary>
@@ -33,6 +33,20 @@ public class ConfigurationBuilder<T> where T : class
         _propertyMappings[key] = new FieldConfiguration(objectSelector, isRequired);
         return this;
     }
+    
+    /// <summary>
+    /// Maps a property to a filter key auto-determined by `selector.toString()"` with automatic type inference
+    /// </summary>
+    /// <typeparam name="TProperty">The property type</typeparam>
+    /// <param name="selector">Property selector expression</param>
+    /// <param name="isRequired">Whether this filter is required</param>
+    /// <returns>Builder instance for method chaining</returns>
+    public ConfigurationBuilder<T> MapProperty<TProperty>(
+        Expression<Func<T, TProperty>> selector, 
+        bool isRequired = false)
+    {
+        return MapProperty($"{Superfilter.ExtractLastWordFromDotSeparatedString(typeof(T).ToString())}.{Superfilter.ExtractPropertyPathFromSelectorString(selector.ToString())}", selector, isRequired);
+    }
 
     /// <summary>
     /// Maps a property as required filter
@@ -47,6 +61,12 @@ public class ConfigurationBuilder<T> where T : class
     {
         return MapProperty(key, selector, isRequired: true);
     }
+    
+    public ConfigurationBuilder<T> MapRequiredProperty<TProperty>(
+        Expression<Func<T, TProperty>> selector)
+    {
+        return MapProperty(selector, isRequired: true);
+    }
 
     /// <summary>
     /// Sets the HasFilters implementation with dynamic filter criteria from client
@@ -56,10 +76,7 @@ public class ConfigurationBuilder<T> where T : class
     public ConfigurationBuilder<T> WithFilters(IHasFilters hasFilters)
     {
         _filters.Clear();
-        if (hasFilters?.Filters != null)
-        {
-            _filters.AddRange(hasFilters.Filters);
-        }
+        _filters.AddRange(hasFilters.Filters);
         return this;
     }
 
@@ -71,10 +88,7 @@ public class ConfigurationBuilder<T> where T : class
     public ConfigurationBuilder<T> WithSorts(IHasSorts hasSorts)
     {
         _sorters.Clear();
-        if (hasSorts?.Sorters != null)
-        {
-            _sorters.AddRange(hasSorts.Sorters);
-        }
+        _sorters.AddRange(hasSorts.Sorters);
         return this;
     }
 
