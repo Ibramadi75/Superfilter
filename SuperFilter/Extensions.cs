@@ -51,6 +51,16 @@ internal static class SuperfilterExtensions
 
     public static IQueryable<T> ApplySorting<T>(
         this IQueryable<T> query,
+        Superfilter superfilter)
+    {
+        if (superfilter.InternalGlobalConfiguration == null)
+            throw new SuperfilterException("Superfilter is not properly initialized");
+        
+        return query.ApplySorting(superfilter.InternalGlobalConfiguration);
+    }
+
+    public static IQueryable<T> ApplySorting<T>(
+        this IQueryable<T> query,
         GlobalConfiguration globalConfiguration)
     {
         if (globalConfiguration.HasSorts.Sorters.Count == 0)

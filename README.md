@@ -20,7 +20,7 @@ Superfilter is a lightweight C# .NET 9.0 library for applying dynamic filtering 
 
 ## Getting Started
 
-### 🚀 New: Using ConfigurationBuilder
+### 🚀 Simplified API (One Instance = One Type)
 
 ```csharp
 using Superfilter;
@@ -29,25 +29,20 @@ using Superfilter;
 [HttpPost("search")]
 public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest request)
 {
-    // 1. Create configuration with clean, type-safe property mappings
-    var config = SuperfilterBuilder.For<User>()
+    // Create ready-to-use Superfilter instance with type-safe property mappings
+    var superfilter = SuperfilterBuilder.For<User>()
         .MapRequiredProperty("id", u => u.Id)            // No casting required!
-        .MapProperty("carBrandName", u => u.Car.Brand.Name)  // Type inference works for any type
+        .MapProperty("carBrandName", u => u.Car.Brand.Name)  // Navigation properties work naturally
         .MapProperty("name", u => u.Name)                // IntelliSense support
         .MapProperty("moneyAmount", u => u.MoneyAmount)  // Handles int, string, DateTime, etc.
         .WithFilters(request.Filters)                    // Dynamic filters from client
         .WithSorts(request.Sorts)                        // Dynamic sorts from client
-        .Build();
+        .BuildSuperfilter();                             // Ready-to-use instance!
 
-    // 2. Use with Superfilter
-    var superfilter = new Superfilter.Superfilter();
-    superfilter.InitializeGlobalConfiguration(config);
-    superfilter.InitializeFieldSelectors<User>();
-
-    // 3. Apply to query
+    // Apply filters and sorting directly
     var query = _context.Users.AsQueryable();
     query = superfilter.ApplyConfiguredFilters(query);
-    query = query.ApplySorting(config);
+    query = query.ApplySorting(superfilter);
     
     return Ok(await query.ToListAsync());
 }
@@ -62,19 +57,20 @@ public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest reques
 | `SuperfilterBuilder.For<T>()` | Creates a new builder for entity type T |
 | `MapProperty<TProperty>(key, selector, required)` | Maps any property with automatic type inference |
 | `MapRequiredProperty<TProperty>(key, selector)` | Maps a required property |
-| `Build()` | Creates the final GlobalConfiguration |
+| `BuildSuperfilter()` | Creates a ready-to-use Superfilter instance |
 
 ### Property Mapping Examples
 
 ```csharp
 // MapProperty handles all types automatically with type inference
-SuperfilterBuilder.For<User>()
+var superfilter = SuperfilterBuilder.For<User>()
     .MapProperty("name", u => u.Name)                    // string
     .MapProperty("id", u => u.Id)                        // int  
     .MapProperty("bornDate", u => u.BornDate)            // DateTime?
     .MapProperty("moneyAmount", u => u.MoneyAmount)      // int
     .MapProperty("isActive", u => u.IsActive)            // bool
     .MapProperty("carBrandName", u => u.Car.Brand.Name)  // nested string
+    .BuildSuperfilter();
 ```
 
 ### Dynamic Data Methods (From Client)
@@ -101,7 +97,7 @@ dotnet add package Superfilter --version 0.1.4-alpha
 ## Project Layout
 
 - `Superfilter/` – Core library implementation with partial class architecture
-  - `Builder/` – **New:** ConfigurationBuilder API for fluent configuration
+  - `Builder/` – ConfigurationBuilder API for fluent configuration
 - `Database/` – EF Core context and domain models (User, Car, Brand, House, City)  
 - `Tests/` – xUnit test suite covering filtering scenarios and edge cases
 
@@ -111,12 +107,14 @@ dotnet add package Superfilter --version 0.1.4-alpha
 dotnet test
 ```
 
-**Key Benefits of Migration:**
+## Key Benefits
+
 - ✅ **No manual casting** required for PropertyMappings
 - ✅ **Type safety** with compile-time checking
 - ✅ **IntelliSense support** for better developer experience
-- ✅ **Clear separation** between static mappings and dynamic data
-- ✅ **100% backward compatible** - migrate gradually
+- ✅ **No type redundancy** - specify type only once
+- ✅ **One instance per entity type** for clean architecture
+- ✅ **Natural navigation properties** support
 
 ## License
 

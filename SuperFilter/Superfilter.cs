@@ -7,6 +7,7 @@ namespace Superfilter;
 public partial class Superfilter
 {
     private GlobalConfiguration? GlobalConfiguration { get; set; }
+    internal GlobalConfiguration? InternalGlobalConfiguration => GlobalConfiguration;
     private Dictionary<string, FieldConfiguration>? FieldConfigurations { get; set; }
 
     public IQueryable<T> ApplyConfiguredFilters<T>(IQueryable<T> query)
