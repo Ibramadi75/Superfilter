@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
+using Superfilter.Constants;
 using Superfilter.Entities;
 using Superfilter.ExpressionBuilders;
 
@@ -28,7 +29,7 @@ internal static class SuperfilterExtensions
         FilterCriterion? filter = globalConfiguration.HasFilters.Filters
             .FirstOrDefault(filters => string.Equals(filters.Field, actualKey, StringComparison.CurrentCultureIgnoreCase));
 
-        if (filter == null || string.IsNullOrEmpty(filter.Value))
+        if (filter == null || (string.IsNullOrEmpty(filter.Value) && filter.Operator != Operator.IsNull && filter.Operator != Operator.IsNotNull && filter.Operator != Operator.IsEmpty && filter.Operator != Operator.IsNotEmpty))
         {
             if (fieldConfig.IsRequired)
                 throw new SuperfilterException($"Filter {propertyName} is required.");
@@ -40,7 +41,7 @@ internal static class SuperfilterExtensions
 
         ParameterExpression parameter = Expression.Parameter(typeof(T), typeof(T).ToString());
         Expression propertyAccess = GetNestedPropertyExpression(parameter, RemoveUntilFirstDot(memberExpression.ToString()));
-        Expression filterExpression = ExpressionBuilders.Builder.GetExpression<TProperty>((MemberExpression)propertyAccess, filter.Value, filter.Operator);
+        Expression filterExpression = Builder.GetExpression<TProperty>((MemberExpression)propertyAccess, filter.Value, filter.Operator);
 
         Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(filterExpression, parameter);
 
