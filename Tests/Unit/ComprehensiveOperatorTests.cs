@@ -23,6 +23,7 @@ public class ComprehensiveOperatorTests
                 Id = 1, Name = "Alice", MoneyAmount = 100, 
                 BornDate = DateTime.ParseExact("01/01/2000", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 LongValue = 1000L, DecimalValue = 100.5m, DoubleValue = 100.75, FloatValue = 100.25f,
+                NullableLongValue = 1100L, NullableDecimalValue = 100.6m, NullableDoubleValue = 100.85, NullableFloatValue = 100.35f,
                 Car = new Car { Id = 1, Name = "Ford Fiesta", Brand = brandFord }
             },
             new()
@@ -30,6 +31,7 @@ public class ComprehensiveOperatorTests
                 Id = 2, Name = "Bob", MoneyAmount = 200, 
                 BornDate = DateTime.ParseExact("15/06/1995", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 LongValue = 2000L, DecimalValue = 200.5m, DoubleValue = 200.75, FloatValue = 200.25f,
+                NullableLongValue = 2200L, NullableDecimalValue = 200.6m, NullableDoubleValue = 200.85, NullableFloatValue = 200.35f,
                 Car = new Car { Id = 2, Name = "Fiat 500", Brand = brandFiat }
             },
             new()
@@ -37,6 +39,7 @@ public class ComprehensiveOperatorTests
                 Id = 3, Name = "Charlie", MoneyAmount = 300, 
                 BornDate = DateTime.ParseExact("10/12/1990", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 LongValue = 3000L, DecimalValue = 300.5m, DoubleValue = 300.75, FloatValue = 300.25f,
+                NullableLongValue = 3300L, NullableDecimalValue = 300.6m, NullableDoubleValue = 300.85, NullableFloatValue = 300.35f,
                 Car = new Car { Id = 3, Name = "BMW X3", Brand = brandBmw }
             },
             new()
@@ -52,6 +55,7 @@ public class ComprehensiveOperatorTests
                 Id = 5, Name = "", MoneyAmount = 250, 
                 BornDate = DateTime.ParseExact("25/08/2005", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 LongValue = 2500L, DecimalValue = 250.5m, DoubleValue = 250.75, FloatValue = 250.25f,
+                NullableLongValue = 2750L, NullableDecimalValue = 250.6m, NullableDoubleValue = 250.85, NullableFloatValue = 250.35f,
                 Car = null
             }
         }.AsQueryable();
@@ -769,7 +773,8 @@ public class ComprehensiveOperatorTests
             .WithFilters(filters)
             .Build();
 
-        Assert.Throws<ArgumentException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        Assert.IsType<ArgumentException>(exception.InnerException?.InnerException);
     }
 
     [Fact]
@@ -786,7 +791,8 @@ public class ComprehensiveOperatorTests
             .WithFilters(filters)
             .Build();
 
-        Assert.Throws<FormatException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
 
     [Fact]
@@ -803,7 +809,8 @@ public class ComprehensiveOperatorTests
             .WithFilters(filters)
             .Build();
 
-        Assert.Throws<FormatException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
 
     #endregion

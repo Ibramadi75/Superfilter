@@ -38,34 +38,7 @@ public static class DateExpressionBuilder
     private static Expression BuildDateTimeFilterExpression<T>(Expression property, T filterDate, Operator operatorName, Type nullableType, T minValue)
     {
         // For nullable types, we need to handle null values differently based on the operator
-        if (property.Type == nullableType)
-        {
-            // Create a null check expression
-            Expression nullCheck = Expression.Equal(property, Expression.Constant(null, property.Type));
-            
-            // For comparison operators, exclude null values
-            Expression comparison = operatorName switch
-            {
-                Operator.Equals => Expression.Equal(property, Expression.Constant(filterDate, property.Type)),
-                Operator.IsEqualToFullDate => CreateDatePartComparison(property, filterDate, true, true, true),
-                Operator.IsEqualToYearAndMonth => CreateDatePartComparison(property, filterDate, true, true, false),
-                Operator.IsEqualToYear => CreateDatePartComparison(property, filterDate, true, false, false),
-                Operator.LessThan => Expression.LessThan(property, Expression.Constant(filterDate, property.Type)),
-                Operator.LessThanOrEqual => Expression.LessThanOrEqual(property, Expression.Constant(filterDate, property.Type)),
-                Operator.GreaterThan => Expression.GreaterThan(property, Expression.Constant(filterDate, property.Type)),
-                Operator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(property, Expression.Constant(filterDate, property.Type)),
-                Operator.NotEquals => Expression.NotEqual(property, Expression.Constant(filterDate, property.Type)),
-                Operator.IsBefore => Expression.LessThan(property, Expression.Constant(filterDate, property.Type)),
-                Operator.IsAfter => Expression.GreaterThan(property, Expression.Constant(filterDate, property.Type)),
-                _ => throw new InvalidOperationException($"Invalid operator for {typeof(T).Name}.")
-            };
-            
-            // Return: property != null AND comparison
-            return Expression.AndAlso(Expression.NotEqual(property, Expression.Constant(null, property.Type)), comparison);
-        }
-        else
-        {
-            // Non-nullable types
+        if (property.Type != nullableType)
             return operatorName switch
             {
                 Operator.Equals => Expression.Equal(property, Expression.Constant(filterDate)),
@@ -81,17 +54,38 @@ public static class DateExpressionBuilder
                 Operator.IsAfter => Expression.GreaterThan(property, Expression.Constant(filterDate)),
                 _ => throw new InvalidOperationException($"Invalid operator for {typeof(T).Name}.")
             };
-        }
+        // For comparison operators, exclude null values
+        Expression comparison = operatorName switch
+        {
+            Operator.Equals => Expression.Equal(property, Expression.Constant(filterDate, property.Type)),
+            Operator.IsEqualToFullDate => CreateDatePartComparison(property, filterDate, true, true, true),
+            Operator.IsEqualToYearAndMonth => CreateDatePartComparison(property, filterDate, true, true, false),
+            Operator.IsEqualToYear => CreateDatePartComparison(property, filterDate, true, false, false),
+            Operator.LessThan => Expression.LessThan(property, Expression.Constant(filterDate, property.Type)),
+            Operator.LessThanOrEqual => Expression.LessThanOrEqual(property, Expression.Constant(filterDate, property.Type)),
+            Operator.GreaterThan => Expression.GreaterThan(property, Expression.Constant(filterDate, property.Type)),
+            Operator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(property, Expression.Constant(filterDate, property.Type)),
+            Operator.NotEquals => Expression.NotEqual(property, Expression.Constant(filterDate, property.Type)),
+            Operator.IsBefore => Expression.LessThan(property, Expression.Constant(filterDate, property.Type)),
+            Operator.IsAfter => Expression.GreaterThan(property, Expression.Constant(filterDate, property.Type)),
+            _ => throw new InvalidOperationException($"Invalid operator for {typeof(T).Name}.")
+        };
+            
+        return Expression.AndAlso(Expression.NotEqual(property, Expression.Constant(null, property.Type)), comparison);
     }
 
     private static Expression CreateDatePartComparison<T>(Expression property, T filterDate, bool compareYear, bool compareMonth, bool compareDay)
     {
         Expression comparison = Expression.Constant(true);
         
+        Expression actualProperty = property.Type.IsGenericType && property.Type.GetGenericTypeDefinition() == typeof(Nullable<>)
+            ? Expression.Property(property, "Value")
+            : property;
+        
         if (compareYear)
         {
             Expression yearComparison = Expression.Equal(
-                Expression.Property(property, nameof(DateTime.Year)),
+                Expression.Property(actualProperty, nameof(DateTime.Year)),
                 Expression.Constant(GetYear(filterDate))
             );
             comparison = Expression.AndAlso(comparison, yearComparison);
@@ -100,7 +94,7 @@ public static class DateExpressionBuilder
         if (compareMonth)
         {
             Expression monthComparison = Expression.Equal(
-                Expression.Property(property, nameof(DateTime.Month)),
+                Expression.Property(actualProperty, nameof(DateTime.Month)),
                 Expression.Constant(GetMonth(filterDate))
             );
             comparison = Expression.AndAlso(comparison, monthComparison);
@@ -109,7 +103,7 @@ public static class DateExpressionBuilder
         if (compareDay)
         {
             Expression dayComparison = Expression.Equal(
-                Expression.Property(property, nameof(DateTime.Day)),
+                Expression.Property(actualProperty, nameof(DateTime.Day)),
                 Expression.Constant(GetDay(filterDate))
             );
             comparison = Expression.AndAlso(comparison, dayComparison);
