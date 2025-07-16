@@ -17,7 +17,7 @@ public static class DateExpressionBuilder
         if (!DateTime.TryParse(filterValue, out DateTime filterDate))
             throw new FormatException($"Invalid date format: {filterValue}");
 
-        return BuildDateTimeFilterExpression(property, filterDate, operatorName, typeof(DateTime?), DateTime.MinValue);
+        return BuildDateTimeFilterExpression(property, filterDate, operatorName, typeof(DateTime?));
     }
 
     public static Expression BuildDateTimeOffsetFilterExpression(Expression property, string filterValue, Operator operatorName)
@@ -32,10 +32,10 @@ public static class DateExpressionBuilder
         if (!DateTimeOffset.TryParse(filterValue, out DateTimeOffset filterDate))
             throw new FormatException($"Invalid DateTimeOffset format: {filterValue}");
 
-        return BuildDateTimeFilterExpression(property, filterDate, operatorName, typeof(DateTimeOffset?), DateTimeOffset.MinValue);
+        return BuildDateTimeFilterExpression(property, filterDate, operatorName, typeof(DateTimeOffset?));
     }
 
-    private static Expression BuildDateTimeFilterExpression<T>(Expression property, T filterDate, Operator operatorName, Type nullableType, T minValue)
+    private static Expression BuildDateTimeFilterExpression<T>(Expression property, T filterDate, Operator operatorName, Type nullableType)
     {
         // For nullable types, we need to handle null values differently based on the operator
         if (property.Type != nullableType)
