@@ -29,7 +29,7 @@ public static class CommonExpressionBuilder
         };
     }
 
-    private static Expression BuildInExpression(Expression property, Expression[] comparisons)
+    private static Expression BuildInExpression(Expression[] comparisons)
         => comparisons.Length == 0 ? Expression.Constant(false) : comparisons.Aggregate(Expression.OrElse);
 
     private static BinaryExpression BuildBetweenExpression(Expression property, Expression minConstant, Expression maxConstant)
@@ -60,7 +60,7 @@ public static class CommonExpressionBuilder
             }
         }).ToArray<Expression>();
 
-        return BuildInExpression(property, comparisons);
+        return BuildInExpression(comparisons);
     }
 
     public static Expression BuildBetweenExpressionWithParser<T>(Expression property, string filterValue, Func<string, T> parser, string typeName)
