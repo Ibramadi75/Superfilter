@@ -7,12 +7,12 @@ public static class MethodInfoMappings
 {
     private static Dictionary<Operator, MethodInfo?> MethodInfosForStringFiltering => new()
     {
-        { Operator.StartsWith, typeof(string).GetMethod("StartsWith", [typeof(string)]) },
-        { Operator.EndsWith, typeof(string).GetMethod("EndsWith", [typeof(string)]) },
-        { Operator.Contains, typeof(string).GetMethod("Contains", [typeof(string)]) },
-        { Operator.Equals, typeof(string).GetMethod("Equals", [typeof(string)]) },
-        { Operator.NotEquals, typeof(string).GetMethod("Equals", [typeof(string)]) },
-        { Operator.NotContains, typeof(string).GetMethod("Contains", [typeof(string)]) },
+        { Operator.StartsWith, typeof(string).GetMethod(nameof(string.StartsWith), [typeof(string)]) },
+        { Operator.EndsWith, typeof(string).GetMethod(nameof(string.EndsWith), [typeof(string)]) },
+        { Operator.Contains, typeof(string).GetMethod(nameof(string.Contains), [typeof(string)]) },
+        { Operator.Equals, typeof(string).GetMethod(nameof(string.Equals), [typeof(string)]) },
+        { Operator.NotEquals, typeof(string).GetMethod(nameof(string.Equals), [typeof(string)]) },
+        { Operator.NotContains, typeof(string).GetMethod(nameof(string.Contains), [typeof(string)]) },
         { Operator.IsNull, null },
         { Operator.IsNotNull, null },
         { Operator.IsEmpty, null },
@@ -21,19 +21,19 @@ public static class MethodInfoMappings
         { Operator.NotIn, null }
     };
 
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForDateTimeFiltering => new()
+    private static readonly Dictionary<Operator, MethodInfo?> MethodInfosForDateTimeFiltering = new()
     {
-        { Operator.Equals, typeof(DateTime).GetMethod("Equals", [typeof(DateTime)]) },
-        { Operator.NotEquals, typeof(DateTime).GetMethod("Equals", [typeof(DateTime)]) },
+        { Operator.Equals, typeof(DateTime).GetMethod(nameof(DateTime.Equals), [typeof(DateTime)]) },
+        { Operator.NotEquals, typeof(DateTime).GetMethod(nameof(DateTime.Equals), [typeof(DateTime)]) },
         { Operator.IsEqualToYear, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYear), [typeof(DateTime), typeof(DateTime)]) },
         { Operator.IsEqualToYearAndMonth, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearAndMonth), [typeof(DateTime), typeof(DateTime)]) },
         { Operator.IsEqualToFullDate, typeof(DateOperations).GetMethod(nameof(DateOperations.CompareDateByYearMonthAndDay), [typeof(DateTime), typeof(DateTime)]) },
-        { Operator.LessThan, typeof(DateTime).GetMethod("CompareTo", [typeof(DateTime)]) },
-        { Operator.LessThanOrEqual, typeof(DateTime).GetMethod("CompareTo", [typeof(DateTime)]) },
-        { Operator.GreaterThan, typeof(DateTime).GetMethod("CompareTo", [typeof(DateTime)]) },
-        { Operator.GreaterThanOrEqual, typeof(DateTime).GetMethod("CompareTo", [typeof(DateTime)]) },
-        { Operator.IsBefore, typeof(DateTime).GetMethod("CompareTo", [typeof(DateTime)]) },
-        { Operator.IsAfter, typeof(DateTime).GetMethod("CompareTo", [typeof(DateTime)]) },
+        { Operator.LessThan, typeof(DateTime).GetMethod(nameof(DateTime.CompareTo), [typeof(DateTime)]) },
+        { Operator.LessThanOrEqual, typeof(DateTime).GetMethod(nameof(DateTime.CompareTo), [typeof(DateTime)]) },
+        { Operator.GreaterThan, typeof(DateTime).GetMethod(nameof(DateTime.CompareTo), [typeof(DateTime)]) },
+        { Operator.GreaterThanOrEqual, typeof(DateTime).GetMethod(nameof(DateTime.CompareTo), [typeof(DateTime)]) },
+        { Operator.IsBefore, typeof(DateTime).GetMethod(nameof(DateTime.CompareTo), [typeof(DateTime)]) },
+        { Operator.IsAfter, typeof(DateTime).GetMethod(nameof(DateTime.CompareTo), [typeof(DateTime)]) },
         { Operator.IsBetween, null },
         { Operator.Between, null },
         { Operator.NotBetween, null },
@@ -43,22 +43,22 @@ public static class MethodInfoMappings
         { Operator.NotIn, null }
     };
 
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForBooleanFiltering => new()
+    private static readonly Dictionary<Operator, MethodInfo?> MethodInfosForBooleanFiltering = new()
     {
-        { Operator.Equals, typeof(bool).GetMethod("Equals", [typeof(bool)]) },
-        { Operator.NotEquals, typeof(bool).GetMethod("Equals", [typeof(bool)]) },
+        { Operator.Equals, typeof(bool).GetMethod(nameof(bool.Equals), [typeof(bool)]) },
+        { Operator.NotEquals, typeof(bool).GetMethod(nameof(bool.Equals), [typeof(bool)]) },
         { Operator.IsNull, null },
         { Operator.IsNotNull, null }
     };
 
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForIntegerFiltering => new()
+    private static readonly Dictionary<Operator, MethodInfo?> MethodInfosForIntegerFiltering = new()
     {
-        { Operator.Equals, typeof(int).GetMethod("Equals", [typeof(int)]) },
-        { Operator.NotEquals, typeof(int).GetMethod("Equals", [typeof(int)]) },
-        { Operator.LessThan, typeof(int).GetMethod("LessThan", [typeof(int)]) },
-        { Operator.LessThanOrEqual, typeof(int).GetMethod("LessThan", [typeof(int)]) },
-        { Operator.GreaterThan, typeof(int).GetMethod("GreaterThan", [typeof(int)]) },
-        { Operator.GreaterThanOrEqual, typeof(int).GetMethod("GreaterThan", [typeof(int)]) },
+        { Operator.Equals, typeof(int).GetMethod(nameof(int.Equals), [typeof(int)]) },
+        { Operator.NotEquals, typeof(int).GetMethod(nameof(int.Equals), [typeof(int)]) },
+        { Operator.LessThan, typeof(int).GetMethod(nameof(int.CompareTo), [typeof(int)]) },
+        { Operator.LessThanOrEqual, typeof(int).GetMethod(nameof(int.CompareTo), [typeof(int)]) },
+        { Operator.GreaterThan, typeof(int).GetMethod(nameof(int.CompareTo), [typeof(int)]) },
+        { Operator.GreaterThanOrEqual, typeof(int).GetMethod(nameof(int.CompareTo), [typeof(int)]) },
         { Operator.Between, null },
         { Operator.NotBetween, null },
         { Operator.In, null },
@@ -67,14 +67,14 @@ public static class MethodInfoMappings
         { Operator.IsNotNull, null }
     };
 
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForLongFiltering => new()
+    private static readonly Dictionary<Operator, MethodInfo?> MethodInfosForLongFiltering = new()
     {
-        { Operator.Equals, typeof(long).GetMethod("Equals", [typeof(long)]) },
-        { Operator.NotEquals, typeof(long).GetMethod("Equals", [typeof(long)]) },
-        { Operator.LessThan, typeof(long).GetMethod("LessThan", [typeof(long)]) },
-        { Operator.LessThanOrEqual, typeof(long).GetMethod("LessThan", [typeof(long)]) },
-        { Operator.GreaterThan, typeof(long).GetMethod("GreaterThan", [typeof(long)]) },
-        { Operator.GreaterThanOrEqual, typeof(long).GetMethod("GreaterThan", [typeof(long)]) },
+        { Operator.Equals, typeof(long).GetMethod(nameof(long.Equals), [typeof(long)]) },
+        { Operator.NotEquals, typeof(long).GetMethod(nameof(long.Equals), [typeof(long)]) },
+        { Operator.LessThan, typeof(long).GetMethod(nameof(long.CompareTo), [typeof(long)]) },
+        { Operator.LessThanOrEqual, typeof(long).GetMethod(nameof(long.CompareTo), [typeof(long)]) },
+        { Operator.GreaterThan, typeof(long).GetMethod(nameof(long.CompareTo), [typeof(long)]) },
+        { Operator.GreaterThanOrEqual, typeof(long).GetMethod(nameof(long.CompareTo), [typeof(long)]) },
         { Operator.Between, null },
         { Operator.NotBetween, null },
         { Operator.In, null },
@@ -83,14 +83,14 @@ public static class MethodInfoMappings
         { Operator.IsNotNull, null }
     };
 
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForDecimalFiltering => new()
+    private static readonly Dictionary<Operator, MethodInfo?> MethodInfosForDecimalFiltering = new()
     {
-        { Operator.Equals, typeof(decimal).GetMethod("Equals", [typeof(decimal)]) },
-        { Operator.NotEquals, typeof(decimal).GetMethod("Equals", [typeof(decimal)]) },
-        { Operator.LessThan, typeof(decimal).GetMethod("LessThan", [typeof(decimal)]) },
-        { Operator.LessThanOrEqual, typeof(decimal).GetMethod("LessThan", [typeof(decimal)]) },
-        { Operator.GreaterThan, typeof(decimal).GetMethod("GreaterThan", [typeof(decimal)]) },
-        { Operator.GreaterThanOrEqual, typeof(decimal).GetMethod("GreaterThan", [typeof(decimal)]) },
+        { Operator.Equals, typeof(decimal).GetMethod(nameof(decimal.Equals), [typeof(decimal)]) },
+        { Operator.NotEquals, typeof(decimal).GetMethod(nameof(decimal.Equals), [typeof(decimal)]) },
+        { Operator.LessThan, typeof(decimal).GetMethod(nameof(decimal.CompareTo), [typeof(decimal)]) },
+        { Operator.LessThanOrEqual, typeof(decimal).GetMethod(nameof(decimal.CompareTo), [typeof(decimal)]) },
+        { Operator.GreaterThan, typeof(decimal).GetMethod(nameof(decimal.CompareTo), [typeof(decimal)]) },
+        { Operator.GreaterThanOrEqual, typeof(decimal).GetMethod(nameof(decimal.CompareTo), [typeof(decimal)]) },
         { Operator.Between, null },
         { Operator.NotBetween, null },
         { Operator.In, null },
@@ -99,14 +99,14 @@ public static class MethodInfoMappings
         { Operator.IsNotNull, null }
     };
 
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForDoubleFiltering => new()
+    private static readonly Dictionary<Operator, MethodInfo?> MethodInfosForDoubleFiltering = new()
     {
-        { Operator.Equals, typeof(double).GetMethod("Equals", [typeof(double)]) },
-        { Operator.NotEquals, typeof(double).GetMethod("Equals", [typeof(double)]) },
-        { Operator.LessThan, typeof(double).GetMethod("LessThan", [typeof(double)]) },
-        { Operator.LessThanOrEqual, typeof(double).GetMethod("LessThan", [typeof(double)]) },
-        { Operator.GreaterThan, typeof(double).GetMethod("GreaterThan", [typeof(double)]) },
-        { Operator.GreaterThanOrEqual, typeof(double).GetMethod("GreaterThan", [typeof(double)]) },
+        { Operator.Equals, typeof(double).GetMethod(nameof(double.Equals), [typeof(double)]) },
+        { Operator.NotEquals, typeof(double).GetMethod(nameof(double.Equals), [typeof(double)]) },
+        { Operator.LessThan, typeof(double).GetMethod(nameof(double.CompareTo), [typeof(double)]) },
+        { Operator.LessThanOrEqual, typeof(double).GetMethod(nameof(double.CompareTo), [typeof(double)]) },
+        { Operator.GreaterThan, typeof(double).GetMethod(nameof(double.CompareTo), [typeof(double)]) },
+        { Operator.GreaterThanOrEqual, typeof(double).GetMethod(nameof(double.CompareTo), [typeof(double)]) },
         { Operator.Between, null },
         { Operator.NotBetween, null },
         { Operator.In, null },
@@ -115,14 +115,14 @@ public static class MethodInfoMappings
         { Operator.IsNotNull, null }
     };
 
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForFloatFiltering => new()
+    private static readonly Dictionary<Operator, MethodInfo?> MethodInfosForFloatFiltering = new()
     {
-        { Operator.Equals, typeof(float).GetMethod("Equals", [typeof(float)]) },
-        { Operator.NotEquals, typeof(float).GetMethod("Equals", [typeof(float)]) },
-        { Operator.LessThan, typeof(float).GetMethod("LessThan", [typeof(float)]) },
-        { Operator.LessThanOrEqual, typeof(float).GetMethod("LessThan", [typeof(float)]) },
-        { Operator.GreaterThan, typeof(float).GetMethod("GreaterThan", [typeof(float)]) },
-        { Operator.GreaterThanOrEqual, typeof(float).GetMethod("GreaterThan", [typeof(float)]) },
+        { Operator.Equals, typeof(float).GetMethod(nameof(float.Equals), [typeof(float)]) },
+        { Operator.NotEquals, typeof(float).GetMethod(nameof(float.Equals), [typeof(float)]) },
+        { Operator.LessThan, typeof(float).GetMethod(nameof(float.CompareTo), [typeof(float)]) },
+        { Operator.LessThanOrEqual, typeof(float).GetMethod(nameof(float.CompareTo), [typeof(float)]) },
+        { Operator.GreaterThan, typeof(float).GetMethod(nameof(float.CompareTo), [typeof(float)]) },
+        { Operator.GreaterThanOrEqual, typeof(float).GetMethod(nameof(float.CompareTo), [typeof(float)]) },
         { Operator.Between, null },
         { Operator.NotBetween, null },
         { Operator.In, null },
@@ -158,11 +158,5 @@ public static class MethodInfoMappings
             return MethodInfosForFloatFiltering;
 
         return new Dictionary<Operator, MethodInfo?>();
-    }
-
-    public static bool IsOperatorLegal<T>(Operator op)
-    {
-        Dictionary<Operator, MethodInfo?> methodInfos = GetMethodInfos(typeof(T));
-        return methodInfos.ContainsKey(op);
     }
 }
