@@ -8,5 +8,3 @@ BenchmarkSwitcher
     .Run(args);
 
 // Benchmark séparé pour des tests de performance ultra-haute
-
-public record User(string Name, int Age, string Country);

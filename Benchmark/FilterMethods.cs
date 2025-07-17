@@ -1,7 +1,10 @@
+using Benchmark;
 using Superfilter;
 using Superfilter.Constants;
 using Superfilter.Defaults;
 using Superfilter.Entities;
+
+namespace Benchmark;
 
 internal static class FilterMethods
 {

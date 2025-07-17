@@ -1,3 +1,5 @@
+namespace Benchmark;
+
 public static class UserGenerator
 {
     public static List<User> GenerateUsers(int count)

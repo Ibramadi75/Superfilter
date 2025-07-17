@@ -4,6 +4,8 @@ using Superfilter.Constants;
 using Superfilter.Defaults;
 using Superfilter.Entities;
 
+namespace Benchmark;
+
 [MemoryDiagnoser]
 [SimpleJob(RuntimeMoniker.Net90)]
 internal class UltraLargeScaleTest(int datasetSize)

@@ -1,8 +1,11 @@
+using Benchmark;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
 using Superfilter.Constants;
 using Superfilter.Defaults;
 using Superfilter.Entities;
+
+namespace Benchmark;
 
 [MemoryDiagnoser]
 [SimpleJob(RuntimeMoniker.Net90)] // Plus rapide pour tester de gros volumes
