@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="BenchmarkDotNet" Version="0.15.2" />
-      <PackageReference Include="xunit.assert" Version="2.9.2" />
+        <PackageReference Include="BenchmarkDotNet" Version="0.15.2"/>
+        <PackageReference Include="xunit.assert" Version="2.9.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Superfilter\Superfilter.csproj" />
+        <ProjectReference Include="..\Superfilter\Superfilter.csproj"/>
     </ItemGroup>
 
 </Project>
