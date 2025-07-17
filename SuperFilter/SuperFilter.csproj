@@ -38,6 +38,7 @@
 
     <ItemGroup>
       <Folder Include="Constants\" />
+      <Folder Include="Operators\" />
     </ItemGroup>
 
     <ItemGroup>
