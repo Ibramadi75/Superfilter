@@ -92,7 +92,7 @@ The `MapProperty` method is available in two forms:
 ## Installation
 
 ```bash
-dotnet add package Superfilter --version 0.1.4-alpha
+dotnet add package Superfilter --version 0.1.6-alpha
 ```
 
 ## Links
