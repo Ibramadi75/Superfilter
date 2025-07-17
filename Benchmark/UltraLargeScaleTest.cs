@@ -8,7 +8,7 @@ namespace Benchmark;
 
 [MemoryDiagnoser]
 [SimpleJob(RuntimeMoniker.Net90)]
-public class UltraLargeScaleTest(int datasetSize)
+public class UltraLargeScaleTest
 {
     private readonly DefaultHasFilters _defaultHasFilters = new([
         new FilterCriterion("User.Name", Operator.Contains, "John"),
@@ -19,7 +19,7 @@ public class UltraLargeScaleTest(int datasetSize)
     private List<User> _users = [];
 
     // Test extrême pour voir si on peut atteindre le point de basculement
-    [Params(2_000_000, 5_000_000)] public int DatasetSize { get; set; } = datasetSize;
+    [Params(2_000_000, 5_000_000)] public int DatasetSize { get; set; }
 
     [GlobalSetup]
     public void Setup()
