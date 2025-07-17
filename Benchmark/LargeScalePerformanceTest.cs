@@ -9,7 +9,7 @@ namespace Benchmark;
 
 [MemoryDiagnoser]
 [SimpleJob(RuntimeMoniker.Net90)] // Plus rapide pour tester de gros volumes
-internal class LargeScalePerformanceTest(int datasetSize)
+public class LargeScalePerformanceTest(int datasetSize)
 {
     private readonly DefaultHasFilters _defaultHasFilters = new([
         new FilterCriterion("User.Name", Operator.Contains, "John"),
@@ -21,7 +21,7 @@ internal class LargeScalePerformanceTest(int datasetSize)
 
     // Test jusqu'à des datasets très larges pour trouver le point de basculement
     [Params(50_000, 100_000, 250_000, 500_000, 1_000_000)]
-    private int DatasetSize { get; } = datasetSize;
+    public int DatasetSize { get; set; } = datasetSize;
 
     [GlobalSetup]
     public void Setup()
