@@ -129,11 +129,12 @@ public class ConfigurationBuilder<T> where T : class
     }
 
     /// <summary>
-    /// Builds and returns a ready-to-use Superfilter instance configured for type T
-    /// This is the only public method to create a Superfilter instance
+    /// Builds and applies filters to the provided query, returning the filtered query
+    /// This method applies all configured filters and modifies the original query in place
     /// </summary>
-    /// <returns>Fully configured Superfilter instance ready for filtering</returns>
-    public Superfilter Build()
+    /// <param name="query">The IQueryable to filter</param>
+    /// <returns>The filtered IQueryable</returns>
+    public IQueryable<T> Build(IQueryable<T> query)
     {
         var config = new GlobalConfiguration
         {
@@ -146,7 +147,7 @@ public class ConfigurationBuilder<T> where T : class
         var superfilter = new Superfilter();
         superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<T>();
-        return superfilter;
+        return superfilter.ApplyConfiguredFilters(query);
     }
 
     /// <summary>
@@ -170,26 +171,16 @@ public class ConfigurationBuilder<T> where T : class
     /// <summary>
     /// Internal implementation of IHasFilters for the builder
     /// </summary>
-    private class FilterContainer : IHasFilters
+    private class FilterContainer(List<FilterCriterion> filters) : IHasFilters
     {
-        public List<FilterCriterion> Filters { get; set; }
-
-        public FilterContainer(List<FilterCriterion> filters)
-        {
-            Filters = filters;
-        }
+        public List<FilterCriterion> Filters { get; set; } = filters;
     }
 
     /// <summary>
     /// Internal implementation of IHasSorts for the builder
     /// </summary>
-    private class SortContainer : IHasSorts
+    private class SortContainer(List<SortCriterion> sorters) : IHasSorts
     {
-        public List<SortCriterion> Sorters { get; set; }
-
-        public SortContainer(List<SortCriterion> sorters)
-        {
-            Sorters = sorters;
-        }
+        public List<SortCriterion> Sorters { get; set; } = sorters;
     }
 }

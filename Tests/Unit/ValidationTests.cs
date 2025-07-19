@@ -37,12 +37,11 @@ public class ValidationTests
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapRequiredProperty("id", x => x.Id)
-            .WithFilters(filters)
-            .Build();
-
-        SuperfilterException exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() => 
+            SuperfilterBuilder.For<User>()
+                .MapRequiredProperty("id", x => x.Id)
+                .WithFilters(filters)
+                .Build(users).ToList());
 
         Assert.Equal("Filter id is required.", exception.Message);
     }
@@ -57,12 +56,11 @@ public class ValidationTests
             Filters = [new FilterCriterion("name", Operator.GreaterThan, "test")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build();
-
-        Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
+        Assert.Throws<SuperfilterException>(() => 
+            SuperfilterBuilder.For<User>()
+                .MapProperty("name", x => x.Name)
+                .WithFilters(filters)
+                .Build(users).ToList());
     }
 
     [Fact]
@@ -75,14 +73,12 @@ public class ValidationTests
             Filters = [new FilterCriterion("name", Operator.Contains, null!)]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .Build();
+            .Build(users).ToList();
 
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
-
-        Assert.Equal(users.Count(), result.Count);
+        Assert.Equal(GetTestUsers().Count(), result.Count);
     }
 
     [Fact]
@@ -95,12 +91,10 @@ public class ValidationTests
             Filters = [new FilterCriterion("name", Operator.Contains, "   ")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Empty(result);
     }

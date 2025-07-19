@@ -63,12 +63,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("longValue", Operator.Equals, "1000000000000")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("longValue", x => x.LongValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -84,12 +82,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("longValue", Operator.LessThan, "2000000000000")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("longValue", x => x.LongValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, u => u.Name == "Alice");
@@ -106,12 +102,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("longValue", Operator.GreaterThan, "1000000000000")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("longValue", x => x.LongValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Bob", result[0].Name);
@@ -127,12 +121,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("nullableLongValue", Operator.Equals, "2000000000000")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("nullableLongValue", x => x.NullableLongValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -152,12 +144,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "123.456")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("decimalValue", x => x.DecimalValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -173,12 +163,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("decimalValue", Operator.LessThan, "500")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("decimalValue", x => x.DecimalValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, u => u.Name == "Alice");
@@ -195,12 +183,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("decimalValue", Operator.GreaterThan, "500")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("decimalValue", x => x.DecimalValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Charlie", result[0].Name);
@@ -216,12 +202,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("nullableDecimalValue", Operator.Equals, "789.012")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("nullableDecimalValue", x => x.NullableDecimalValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -241,12 +225,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("doubleValue", Operator.Equals, "3.14159")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("doubleValue", x => x.DoubleValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -262,12 +244,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("doubleValue", Operator.LessThan, "5")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("doubleValue", x => x.DoubleValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, u => u.Name == "Alice");
@@ -284,12 +264,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("doubleValue", Operator.GreaterThan, "5")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("doubleValue", x => x.DoubleValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Bob", result[0].Name);
@@ -305,12 +283,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("nullableDoubleValue", Operator.Equals, "2.71828")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("nullableDoubleValue", x => x.NullableDoubleValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -330,12 +306,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("floatValue", Operator.Equals, "1.5")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("floatValue", x => x.FloatValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -351,12 +325,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("floatValue", Operator.LessThan, "2")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("floatValue", x => x.FloatValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, u => u.Name == "Alice");
@@ -373,12 +345,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("floatValue", Operator.GreaterThan, "2")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("floatValue", x => x.FloatValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Bob", result[0].Name);
@@ -394,12 +364,10 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("nullableFloatValue", Operator.Equals, "2.5")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("nullableFloatValue", x => x.NullableFloatValue)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -419,12 +387,11 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("longValue", Operator.Equals, "not_a_long")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("longValue", x => x.LongValue)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => 
+            SuperfilterBuilder.For<User>()
+                .MapProperty("longValue", x => x.LongValue)
+                .WithFilters(filters)
+                .Build(users).ToList());
         Assert.Contains("Invalid long format", exception.InnerException?.InnerException?.Message);
     }
 
@@ -438,12 +405,11 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "not_a_decimal")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("decimalValue", x => x.DecimalValue)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => 
+            SuperfilterBuilder.For<User>()
+                .MapProperty("decimalValue", x => x.DecimalValue)
+                .WithFilters(filters)
+                .Build(users).ToList());
         Assert.Contains("Invalid decimal format", exception.InnerException?.InnerException?.Message);
     }
 
@@ -457,12 +423,11 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("doubleValue", Operator.Equals, "not_a_double")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("doubleValue", x => x.DoubleValue)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => 
+            SuperfilterBuilder.For<User>()
+                .MapProperty("doubleValue", x => x.DoubleValue)
+                .WithFilters(filters)
+                .Build(users).ToList());
         Assert.Contains("Invalid double format", exception.InnerException?.InnerException?.Message);
     }
 
@@ -476,12 +441,11 @@ public class NumericTypeFilteringTests
             Filters = [new FilterCriterion("floatValue", Operator.Equals, "not_a_float")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("floatValue", x => x.FloatValue)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => 
+            SuperfilterBuilder.For<User>()
+                .MapProperty("floatValue", x => x.FloatValue)
+                .WithFilters(filters)
+                .Build(users).ToList());
         Assert.Contains("Invalid float format", exception.InnerException?.InnerException?.Message);
     }
 

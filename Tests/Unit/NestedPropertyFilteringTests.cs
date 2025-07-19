@@ -64,12 +64,10 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "BMW")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.Car!.Brand!.Name == "BMW");
@@ -85,13 +83,11 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("houseAddress", Operator.Contains, "Oak")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("id", x => x.Id)
             .MapProperty("houseAddress", x => x.House!.Address)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.House!.Address.Contains("Oak"));
@@ -107,12 +103,10 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandRate", Operator.GreaterThan, "3")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandRate", x => x.Car!.Brand!.Rate)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, user => user.Car!.Brand!.Rate == 5);
@@ -129,12 +123,10 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "Ford")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = SuperfilterBuilder.For<User>()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
             .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.Car!.Brand!.Name == "Ford");
