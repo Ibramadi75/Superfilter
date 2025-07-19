@@ -53,7 +53,7 @@ internal static class FilterMethods
         return query.ToList();
     }
 
-    public static List<User> SuperfilterApproachMethod(List<User> users, DefaultHasFilters filters)
+    public static List<User> SuperfilterWithBuilderApproachMethod(List<User> users, DefaultHasFilters filters)
     {
         IQueryable<User> query = users.AsQueryable();
 
