@@ -38,8 +38,14 @@ public class LargeScalePerformanceTest
     }
 
     [Benchmark]
-    public List<User> SuperfilterApproach()
+    public List<User> SuperfilterBuilderApproach()
     {
         return FilterMethods.SuperfilterWithBuilderApproachMethod(_users, _defaultHasFilters);
+    }
+    
+    [Benchmark]
+    public List<User> SuperfilterIQueryableExtensionsApproachMethod()
+    {
+        return FilterMethods.SuperfilterIQueryableExtensionsApproachMethod(_users, _defaultHasFilters);
     }
 }

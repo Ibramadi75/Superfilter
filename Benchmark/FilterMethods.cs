@@ -71,11 +71,11 @@ internal static class FilterMethods
         return result;
     }
     
-    /*public static List<User> SuperfilterIQueryableExtensionsApproachMethod(List<User> users, GlobalConfiguration configuration)
+    public static List<User> SuperfilterIQueryableExtensionsApproachMethod(List<User> users, DefaultHasFilters filters)
     {
         IQueryable<User> query = users.AsQueryable();
 
-        if (configuration.PropertyMappings.Count == 0)
+        if (filters.Filters.Count == 0)
             return users;
 
         var result = query
@@ -87,5 +87,5 @@ internal static class FilterMethods
             .ToList();
 
         return result;
-    }*/
+    }
 }
