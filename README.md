@@ -89,6 +89,9 @@ The `MapProperty` method is available in two forms:
 
 **Important:** When using the second form (`MapProperty(selector)`), developers should carefully evaluate whether exposing the schema of their data model to the frontend is acceptable for their use case. This approach might inadvertently reveal sensitive or internal details of the data model.
 
+### Benchmarks show better results with Superfilter
+<img width="1006" height="251" alt="image" src="https://github.com/user-attachments/assets/0dc5d072-72f1-4734-b32c-c132ffab9c02" />
+
 ## Installation
 
 ```bash
