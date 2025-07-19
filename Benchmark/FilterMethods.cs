@@ -60,13 +60,14 @@ internal static class FilterMethods
         if (filters.Filters.Count == 0)
             return users;
 
-        Superfilter.Superfilter superfilter = SuperfilterBuilder.For<User>()
+        var result = SuperfilterBuilder.For<User>()
             .MapProperty(x => x.Name)
             .MapProperty(x => x.Age)
             .MapProperty(x => x.Country)
             .WithFilters(filters)
-            .Build();
+            .Build(query)
+            .ToList();
 
-        return superfilter.ApplyConfiguredFilters(query).ToList();
+        return result;
     }
 }
