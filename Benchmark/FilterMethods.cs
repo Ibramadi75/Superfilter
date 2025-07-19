@@ -83,7 +83,7 @@ internal static class FilterMethods
             .MapProperty(x => x.Name)
             .MapProperty(x => x.Age)
             .MapProperty(x => x.Country)
-            .WithFilters(filters) // Should apply filters without waiting another method call and returning IQueryable
+            .WithFilters(filters)
             .ToList();
 
         return result;
