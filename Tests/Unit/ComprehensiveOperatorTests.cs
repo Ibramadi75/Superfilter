@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using Database.Models;
 using Superfilter;
 using Superfilter.Constants;
@@ -768,12 +769,15 @@ public class ComprehensiveOperatorTests
             Filters = [new FilterCriterion("moneyAmount", Operator.Between, "100")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("moneyAmount", u => u.MoneyAmount)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => 
+        {
+            SuperfilterBuilder.For<User>()
+                .MapProperty("moneyAmount", u => u.MoneyAmount)
+                .WithFilters(filters)
+                .Build(users);
+            
+            return users.ToList();
+        });
         Assert.IsType<ArgumentException>(exception.InnerException?.InnerException);
     }
 
@@ -786,12 +790,14 @@ public class ComprehensiveOperatorTests
             Filters = [new FilterCriterion("moneyAmount", Operator.Equals, "invalid")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("moneyAmount", u => u.MoneyAmount)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => 
+        {
+            SuperfilterBuilder.For<User>()
+                .MapProperty("moneyAmount", u => u.MoneyAmount)
+                .WithFilters(filters)
+                .Build(users);
+            return users.ToList();
+        });
         Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
 
@@ -804,12 +810,14 @@ public class ComprehensiveOperatorTests
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "invalid")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("decimalValue", u => u.DecimalValue)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        var exception = Assert.Throws<SuperfilterException>(() => 
+        {
+            SuperfilterBuilder.For<User>()
+                .MapProperty("decimalValue", u => u.DecimalValue)
+                .WithFilters(filters)
+                .Build(users);
+            return users.ToList();
+        });
         Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
 
@@ -817,11 +825,9 @@ public class ComprehensiveOperatorTests
 
     private List<User> GetFilteredUsers<T>(IQueryable<User> users, HasFiltersDto filters, System.Linq.Expressions.Expression<Func<User, T>> propertySelector)
     {
-        var superfilter = SuperfilterBuilder.For<User>()
+        return SuperfilterBuilder.For<User>()
             .MapProperty(filters.Filters[0].Field, propertySelector)
             .WithFilters(filters)
-            .Build();
-
-        return superfilter.ApplyConfiguredFilters(users).ToList();
+            .Build(users).ToList();
     }
 }

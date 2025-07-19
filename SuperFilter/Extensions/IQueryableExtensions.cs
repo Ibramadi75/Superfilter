@@ -5,16 +5,39 @@ using Superfilter.Entities;
 namespace Superfilter;
 
 /// <summary>
-/// Fluent builder for creating GlobalConfiguration without manual casting
+/// IQueryable extension methods for fluent Superfilter configuration
 /// </summary>
-/// <typeparam name="T">The entity type being configured</typeparam>
-public class ConfigurationBuilder<T> where T : class
+public static class IQueryableExtensions
 {
+    /// <summary>
+    /// Starts a fluent configuration chain for Superfilter
+    /// </summary>
+    /// <typeparam name="T">The entity type</typeparam>
+    /// <param name="query">The IQueryable to configure</param>
+    /// <returns>A QueryableWrapper for fluent configuration</returns>
+    public static QueryableWrapper<T> WithSuperfilter<T>(this IQueryable<T> query) where T : class
+    {
+        return new QueryableWrapper<T>(query);
+    }
+}
+
+/// <summary>
+/// Wrapper class that provides fluent configuration for IQueryable with Superfilter
+/// </summary>
+/// <typeparam name="T">The entity type</typeparam>
+public class QueryableWrapper<T> where T : class
+{
+    private readonly IQueryable<T> _query;
     private readonly Dictionary<string, FieldConfiguration> _propertyMappings = new();
     private readonly List<FilterCriterion> _filters = [];
     private readonly List<SortCriterion> _sorters = [];
     private OnErrorStrategy _onErrorStrategy = OnErrorStrategy.ThrowException;
-    
+
+    internal QueryableWrapper(IQueryable<T> query)
+    {
+        _query = query;
+    }
+
     /// <summary>
     /// Maps a property to a filter key with automatic type inference
     /// </summary>
@@ -22,26 +45,25 @@ public class ConfigurationBuilder<T> where T : class
     /// <param name="key">The filter key</param>
     /// <param name="selector">Property selector expression</param>
     /// <param name="isRequired">Whether this filter is required</param>
-    /// <returns>Builder instance for method chaining</returns>
-    public ConfigurationBuilder<T> MapProperty<TProperty>(
+    /// <returns>Wrapper instance for method chaining</returns>
+    public QueryableWrapper<T> MapProperty<TProperty>(
         string key, 
         Expression<Func<T, TProperty>> selector, 
         bool isRequired = false)
     {
-        // Convert to Expression<Func<T, object>> to match FieldConfiguration
         var objectSelector = ConvertToObjectExpression(selector);
         _propertyMappings[key] = new FieldConfiguration(objectSelector, isRequired);
         return this;
     }
-    
+
     /// <summary>
-    /// Maps a property to a filter key auto-determined by `selector.toString()"` with automatic type inference
+    /// Maps a property to a filter key auto-determined by selector expression
     /// </summary>
     /// <typeparam name="TProperty">The property type</typeparam>
     /// <param name="selector">Property selector expression</param>
     /// <param name="isRequired">Whether this filter is required</param>
-    /// <returns>Builder instance for method chaining</returns>
-    public ConfigurationBuilder<T> MapProperty<TProperty>(
+    /// <returns>Wrapper instance for method chaining</returns>
+    public QueryableWrapper<T> MapProperty<TProperty>(
         Expression<Func<T, TProperty>> selector, 
         bool isRequired = false)
     {
@@ -54,15 +76,21 @@ public class ConfigurationBuilder<T> where T : class
     /// <typeparam name="TProperty">The property type</typeparam>
     /// <param name="key">The filter key</param>
     /// <param name="selector">Property selector expression</param>
-    /// <returns>Builder instance for method chaining</returns>
-    public ConfigurationBuilder<T> MapRequiredProperty<TProperty>(
+    /// <returns>Wrapper instance for method chaining</returns>
+    public QueryableWrapper<T> MapRequiredProperty<TProperty>(
         string key, 
         Expression<Func<T, TProperty>> selector)
     {
         return MapProperty(key, selector, isRequired: true);
     }
-    
-    public ConfigurationBuilder<T> MapRequiredProperty<TProperty>(
+
+    /// <summary>
+    /// Maps a property as required filter with auto-determined key
+    /// </summary>
+    /// <typeparam name="TProperty">The property type</typeparam>
+    /// <param name="selector">Property selector expression</param>
+    /// <returns>Wrapper instance for method chaining</returns>
+    public QueryableWrapper<T> MapRequiredProperty<TProperty>(
         Expression<Func<T, TProperty>> selector)
     {
         return MapProperty(selector, isRequired: true);
@@ -70,22 +98,23 @@ public class ConfigurationBuilder<T> where T : class
 
     /// <summary>
     /// Sets the HasFilters implementation with dynamic filter criteria from client
+    /// This method applies filters immediately and returns the filtered IQueryable
     /// </summary>
     /// <param name="hasFilters">Filter criteria from client request</param>
-    /// <returns>Builder instance for method chaining</returns>
-    public ConfigurationBuilder<T> WithFilters(IHasFilters hasFilters)
+    /// <returns>The filtered IQueryable</returns>
+    public IQueryable<T> WithFilters(IHasFilters hasFilters)
     {
         _filters.Clear();
         _filters.AddRange(hasFilters.Filters);
-        return this;
+        return ApplyConfiguration();
     }
 
     /// <summary>
     /// Sets the HasSorts implementation with dynamic sort criteria from client
     /// </summary>
     /// <param name="hasSorts">Sort criteria from client request</param>
-    /// <returns>Builder instance for method chaining</returns>
-    public ConfigurationBuilder<T> WithSorts(IHasSorts hasSorts)
+    /// <returns>Wrapper instance for method chaining</returns>
+    public QueryableWrapper<T> WithSorts(IHasSorts hasSorts)
     {
         _sorters.Clear();
         _sorters.AddRange(hasSorts.Sorters);
@@ -93,25 +122,25 @@ public class ConfigurationBuilder<T> where T : class
     }
 
     /// <summary>
-    /// Adds a static filter criterion (for testing or default filters)
+    /// Adds a static filter criterion
     /// </summary>
     /// <param name="field">Field name</param>
     /// <param name="operator">Filter operator</param>
     /// <param name="value">Filter value</param>
-    /// <returns>Builder instance for method chaining</returns>
-    public ConfigurationBuilder<T> AddStaticFilter(string field, Operator @operator, string value)
+    /// <returns>Wrapper instance for method chaining</returns>
+    public QueryableWrapper<T> AddStaticFilter(string field, Operator @operator, string value)
     {
         _filters.Add(new FilterCriterion(field, @operator, value));
         return this;
     }
 
     /// <summary>
-    /// Adds a static sort criterion (for testing or default sorts)
+    /// Adds a static sort criterion
     /// </summary>
     /// <param name="field">Field name</param>
     /// <param name="direction">Sort direction (asc/desc)</param>
-    /// <returns>Builder instance for method chaining</returns>
-    public ConfigurationBuilder<T> AddStaticSort(string field, string direction = "asc")
+    /// <returns>Wrapper instance for method chaining</returns>
+    public QueryableWrapper<T> AddStaticSort(string field, string direction = "asc")
     {
         _sorters.Add(new SortCriterion(field, direction));
         return this;
@@ -121,20 +150,27 @@ public class ConfigurationBuilder<T> where T : class
     /// Sets the error handling strategy
     /// </summary>
     /// <param name="strategy">Error handling strategy</param>
-    /// <returns>Builder instance for method chaining</returns>
-    public ConfigurationBuilder<T> WithErrorStrategy(OnErrorStrategy strategy)
+    /// <returns>Wrapper instance for method chaining</returns>
+    public QueryableWrapper<T> WithErrorStrategy(OnErrorStrategy strategy)
     {
         _onErrorStrategy = strategy;
         return this;
     }
 
     /// <summary>
-    /// Builds and applies filters to the provided query, returning the filtered query
-    /// This method applies all configured filters and modifies the original query in place
+    /// Applies the configuration and returns the filtered/sorted IQueryable
     /// </summary>
-    /// <param name="query">The IQueryable to filter</param>
-    /// <returns>The filtered IQueryable</returns>
-    public IQueryable<T> Build(IQueryable<T> query)
+    /// <returns>The configured IQueryable</returns>
+    public IQueryable<T> Build()
+    {
+        return ApplyConfiguration();
+    }
+
+    /// <summary>
+    /// Applies all configured filters and sorts to the query
+    /// </summary>
+    /// <returns>The filtered and sorted IQueryable</returns>
+    private IQueryable<T> ApplyConfiguration()
     {
         var config = new GlobalConfiguration
         {
@@ -147,7 +183,22 @@ public class ConfigurationBuilder<T> where T : class
         var superfilter = new Superfilter();
         superfilter.InitializeGlobalConfiguration(config);
         superfilter.InitializeFieldSelectors<T>();
-        return superfilter.ApplyConfiguredFilters(query);
+        
+        var result = _query;
+        
+        // Apply filters if any
+        if (_filters.Count > 0)
+        {
+            result = superfilter.ApplyConfiguredFilters(result);
+        }
+        
+        // Apply sorts if any
+        if (_sorters.Count > 0)
+        {
+            result = result.ApplySorting(superfilter);
+        }
+        
+        return result;
     }
 
     /// <summary>
@@ -169,7 +220,7 @@ public class ConfigurationBuilder<T> where T : class
     }
 
     /// <summary>
-    /// Internal implementation of IHasFilters for the builder
+    /// Internal implementation of IHasFilters for the wrapper
     /// </summary>
     private class FilterContainer(List<FilterCriterion> filters) : IHasFilters
     {
@@ -177,7 +228,7 @@ public class ConfigurationBuilder<T> where T : class
     }
 
     /// <summary>
-    /// Internal implementation of IHasSorts for the builder
+    /// Internal implementation of IHasSorts for the wrapper
     /// </summary>
     private class SortContainer(List<SortCriterion> sorters) : IHasSorts
     {

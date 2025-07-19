@@ -53,20 +53,39 @@ internal static class FilterMethods
         return query.ToList();
     }
 
-    public static List<User> SuperfilterApproachMethod(List<User> users, DefaultHasFilters filters)
+    public static List<User> SuperfilterWithBuilderApproachMethod(List<User> users, DefaultHasFilters filters)
     {
         IQueryable<User> query = users.AsQueryable();
 
         if (filters.Filters.Count == 0)
             return users;
 
-        Superfilter.Superfilter superfilter = SuperfilterBuilder.For<User>()
+        var result = SuperfilterBuilder.For<User>()
             .MapProperty(x => x.Name)
             .MapProperty(x => x.Age)
             .MapProperty(x => x.Country)
             .WithFilters(filters)
-            .Build();
+            .Build(query)
+            .ToList();
 
-        return superfilter.ApplyConfiguredFilters(query).ToList();
+        return result;
+    }
+    
+    public static List<User> SuperfilterIQueryableExtensionsApproachMethod(List<User> users, DefaultHasFilters filters)
+    {
+        IQueryable<User> query = users.AsQueryable();
+
+        if (filters.Filters.Count == 0)
+            return users;
+
+        var result = query
+            .WithSuperfilter()
+            .MapProperty(x => x.Name)
+            .MapProperty(x => x.Age)
+            .MapProperty(x => x.Country)
+            .WithFilters(filters)
+            .ToList();
+
+        return result;
     }
 }

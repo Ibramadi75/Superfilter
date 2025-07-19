@@ -47,12 +47,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        IQueryable<User> filteredQuery = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
-            .Build();
-
-        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
+            .Build(users);
         string sqlQuery = filteredQuery.ToQueryString();
 
         testOutputHelper.WriteLine(sqlQuery);
@@ -73,12 +71,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        IQueryable<User> filteredQuery = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
-            .Build();
-
-        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
+            .Build(users);
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
@@ -103,12 +99,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("carName", Operator.StartsWith, "F")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        IQueryable<User> filteredQuery = SuperfilterBuilder.For<User>()
             .MapProperty("carName", x => x.Car!.Name)
             .WithFilters(filters)
-            .Build();
-
-        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
+            .Build(users);
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
@@ -138,13 +132,11 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             ]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        IQueryable<User> filteredQuery = SuperfilterBuilder.For<User>()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .MapProperty("Name", x => x.Name)
             .WithFilters(filters)
-            .Build();
-
-        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
+            .Build(users);
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
@@ -170,12 +162,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("NonExistentProperty", Operator.Equals, "test")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        IQueryable<User> filteredQuery = SuperfilterBuilder.For<User>()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
-            .Build();
-
-        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
+            .Build(users);
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
@@ -198,12 +188,10 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("moneyamount", Operator.GreaterThan, "200")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        IQueryable<User> filteredQuery = SuperfilterBuilder.For<User>()
             .MapProperty("moneyamount", x => x.MoneyAmount)
             .WithFilters(filters)
-            .Build();
-
-        IQueryable<User> filteredQuery = superfilter.ApplyConfiguredFilters(users);
+            .Build(users);
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
