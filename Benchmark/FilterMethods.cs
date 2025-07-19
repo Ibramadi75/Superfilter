@@ -70,4 +70,22 @@ internal static class FilterMethods
 
         return result;
     }
+    
+    /*public static List<User> SuperfilterIQueryableExtensionsApproachMethod(List<User> users, GlobalConfiguration configuration)
+    {
+        IQueryable<User> query = users.AsQueryable();
+
+        if (configuration.PropertyMappings.Count == 0)
+            return users;
+
+        var result = query
+            .WithSuperfilter()
+            .MapProperty(x => x.Name)
+            .MapProperty(x => x.Age)
+            .MapProperty(x => x.Country)
+            .WithFilters(filters) // Should apply filters without waiting another method call and returning IQueryable
+            .ToList();
+
+        return result;
+    }*/
 }

@@ -96,14 +96,10 @@ internal static class SuperfilterExtensions
         return query;
     }
 
-    private static Expression GetNestedPropertyExpression(Expression parameter, string propertyPath)
-    {
-        return propertyPath.Split('.').Aggregate(parameter, Expression.Property);
-    }
+    private static Expression GetNestedPropertyExpression(Expression parameter, string propertyPath) 
+        =>propertyPath.Split('.').Aggregate(parameter, Expression.Property);
 
-    private static string RemoveUntilFirstDot(string input)
-    {
-        int index = input.IndexOf('.');
-        return index == -1 ? input : input[(index + 1)..];
-    }
+    private static string RemoveUntilFirstDot(string input) 
+        => !input.Contains('.') ? 
+            input : input[(input.IndexOf('.') + 1)..];
 }
