@@ -58,8 +58,6 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             ]
         };
 
-        var usersResult = await users.ToListAsync();
-
         var filteredQuery = users.WithSuperfilter()
             .MapProperty(x => x.Car!.Brand!.Name)
             .MapProperty(x => x.House!.City!.Name)
