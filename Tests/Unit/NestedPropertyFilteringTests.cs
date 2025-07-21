@@ -64,10 +64,9 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "BMW")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.Car!.Brand!.Name == "BMW");
@@ -83,11 +82,10 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("houseAddress", Operator.Contains, "Oak")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("id", x => x.Id)
             .MapProperty("houseAddress", x => x.House!.Address)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.House!.Address.Contains("Oak"));
@@ -103,10 +101,9 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandRate", Operator.GreaterThan, "3")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandRate", x => x.Car!.Brand!.Rate)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, user => user.Car!.Brand!.Rate == 5);
@@ -123,10 +120,9 @@ public class NestedPropertyFilteringTests
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "Ford")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.Car!.Brand!.Name == "Ford");

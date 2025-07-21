@@ -65,10 +65,9 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("id", Operator.GreaterThan, "1")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapRequiredProperty("id", x => x.Id)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(users.Count() - 1, result.Count);
         Assert.DoesNotContain(result, user => user.Id == 1);
@@ -84,10 +83,9 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "23/02/2003")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("bornDate", x => x.BornDate!)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
     }
@@ -102,10 +100,9 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.True(result.Count > 0);
         Assert.All(result, user => Assert.Contains("e", user.Name, StringComparison.OrdinalIgnoreCase));
@@ -121,10 +118,9 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("name", Operator.Contains, "nonexistent")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapRequiredProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Empty(result);
     }
@@ -139,10 +135,9 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("unknownField", Operator.Contains, "e")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(GetTestUsers().Count(), result.Count);
     }
@@ -157,10 +152,9 @@ public class BasicFilteringTests
             Filters = [new FilterCriterion("name", Operator.Contains, "")]
         };
 
-        List<User> result = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(GetTestUsers().Count(), result.Count);
     }

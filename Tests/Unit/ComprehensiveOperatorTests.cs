@@ -771,12 +771,9 @@ public class ComprehensiveOperatorTests
 
         var exception = Assert.Throws<SuperfilterException>(() => 
         {
-            SuperfilterBuilder.For<User>()
+            return users.WithSuperfilter()
                 .MapProperty("moneyAmount", u => u.MoneyAmount)
-                .WithFilters(filters)
-                .Build(users);
-            
-            return users.ToList();
+                .WithFilters(filters).ToList();
         });
         Assert.IsType<ArgumentException>(exception.InnerException?.InnerException);
     }
@@ -792,11 +789,9 @@ public class ComprehensiveOperatorTests
 
         var exception = Assert.Throws<SuperfilterException>(() => 
         {
-            SuperfilterBuilder.For<User>()
+            return users.WithSuperfilter()
                 .MapProperty("moneyAmount", u => u.MoneyAmount)
-                .WithFilters(filters)
-                .Build(users);
-            return users.ToList();
+                .WithFilters(filters).ToList();
         });
         Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
@@ -812,11 +807,9 @@ public class ComprehensiveOperatorTests
 
         var exception = Assert.Throws<SuperfilterException>(() => 
         {
-            SuperfilterBuilder.For<User>()
+            return users.WithSuperfilter()
                 .MapProperty("decimalValue", u => u.DecimalValue)
-                .WithFilters(filters)
-                .Build(users);
-            return users.ToList();
+                .WithFilters(filters).ToList();
         });
         Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
@@ -825,9 +818,8 @@ public class ComprehensiveOperatorTests
 
     private List<User> GetFilteredUsers<T>(IQueryable<User> users, HasFiltersDto filters, System.Linq.Expressions.Expression<Func<User, T>> propertySelector)
     {
-        return SuperfilterBuilder.For<User>()
+        return users.WithSuperfilter()
             .MapProperty(filters.Filters[0].Field, propertySelector)
-            .WithFilters(filters)
-            .Build(users).ToList();
+            .WithFilters(filters).ToList();
     }
 }

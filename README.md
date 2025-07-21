@@ -20,7 +20,7 @@ Superfilter is a lightweight C# .NET 9.0 library for applying dynamic filtering 
 
 ## Getting Started
 
-### 🚀 Simplified API (One Instance = One Type)
+### 🚀 Simplified API with IQueryable Extensions
 
 ```csharp
 using Superfilter;
@@ -29,48 +29,45 @@ using Superfilter;
 [HttpPost("search")]
 public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest request)
 {
-    // Create ready-to-use Superfilter instance with type-safe property mappings
-    var superfilter = SuperfilterBuilder.For<User>()
+    // Apply filters and sorting using fluent IQueryable extensions
+    var result = await _context.Users
+        .WithSuperfilter()                               // Start fluent configuration
         .MapProperty(u => u.Id)                          // IntelliSense support
         .MapProperty(u => u.Car.Brand.Name)              // Navigation properties work naturally
-        .MapProperty("name", u => u.Name)                // Explicit key usage; prevent exposes the property path as the key
+        .MapProperty("name", u => u.Name)                // Explicit key usage
         .MapRequiredProperty(u => u.MoneyAmount)         // Require this property to be included in filters
-        .WithFilters(request.Filters)                    // Dynamic filters from client
-        .WithSorts(request.Sorts)                        // Dynamic sorts from client
-        .Build();                                        // Ready-to-use instance!
-
-    // Apply filters and sorting directly
-    var query = _context.Users.AsQueryable();
-    query = superfilter.ApplyConfiguredFilters(query);
-    query = query.ApplySorting(superfilter);
+        .WithFilters(request.Filters)                    // Apply dynamic filters from client - returns filtered IQueryable
+        .ToListAsync();
     
-    return Ok(await query.ToListAsync());
+    return Ok(result);
 }
 ```
 
-## ConfigurationBuilder API Reference
+## IQueryable Extension API Reference
 
 ### Core Methods
 
 | Method | Description |
 |--------|-------------|
-| `SuperfilterBuilder.For<T>()` | Creates a new builder for entity type T |
+| `.WithSuperfilter()` | Starts fluent configuration chain for IQueryable |
 | `MapProperty<TProperty>(key, selector, required)` | Maps any property with automatic type inference |
 | `MapRequiredProperty<TProperty>(key, selector)` | Maps a required property |
-| `Build()` | Creates a ready-to-use Superfilter instance |
+| `WithFilters(IHasFilters)` | Applies filters and returns filtered IQueryable |
 
 ### Property Mapping Examples
 
 ```csharp
 // MapProperty handles all types automatically with type inference
-var superfilter = SuperfilterBuilder.For<User>()
+var result = _context.Users
+    .WithSuperfilter()
     .MapProperty(u => u.Name)                    // string
-    .MapProperty(u => u.Id)                        // int  
-    .MapProperty(u => u.BornDate)            // DateTime?
-    .MapProperty(u => u.MoneyAmount)                     // int
-    .MapProperty(u => u.IsActive)                        // bool
-    .MapProperty(u => u.Car.Brand.Name)                  // nested string
-    .Build();
+    .MapProperty(u => u.Id)                      // int  
+    .MapProperty(u => u.BornDate)                // DateTime?
+    .MapProperty(u => u.MoneyAmount)             // int
+    .MapProperty(u => u.IsActive)                // bool
+    .MapProperty(u => u.Car.Brand.Name)          // nested string
+    .WithFilters(request.Filters)                // Apply filters
+    .ToList();
 ```
 
 ### Dynamic Data Methods (From Client)
