@@ -31,18 +31,16 @@ public class ValidationTests
     public void FilterProperty_SuperfilterExceptionThrown_WhenRequiredFilterIsMissing()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapRequiredProperty("id", x => x.Id)
-            .WithFilters(filters)
-            .Build();
-
-        SuperfilterException exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
+            users.WithSuperfilter()
+                .MapRequiredProperty("id", x => x.Id)
+                .WithFilters(filters).ToList());
 
         Assert.Equal("Filter id is required.", exception.Message);
     }
@@ -51,56 +49,48 @@ public class ValidationTests
     public void FilterProperty_WithInvalidOperatorForStringType_ThrowsException()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.GreaterThan, "test")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build();
-
-        Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users));
+        Assert.Throws<SuperfilterException>(() =>
+            users.WithSuperfilter()
+                .MapProperty("name", x => x.Name)
+                .WithFilters(filters).ToList());
     }
 
     [Fact]
     public void FilterProperty_WithNullValue_SkipsFilter()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, null!)]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build();
+            .WithFilters(filters).ToList();
 
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
-
-        Assert.Equal(users.Count(), result.Count);
+        Assert.Equal(GetTestUsers().Count(), result.Count);
     }
 
     [Fact]
     public void FilterProperty_WithWhitespaceValue_FiltersWithWhitespace()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "   ")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Empty(result);
     }

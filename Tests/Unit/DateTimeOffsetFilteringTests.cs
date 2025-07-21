@@ -1,4 +1,3 @@
-using System.Globalization;
 using Database.Models;
 using Superfilter;
 using Superfilter.Constants;
@@ -11,8 +10,8 @@ public class DateTimeOffsetFilteringTests
 {
     private static IQueryable<User> GetTestUsers()
     {
-        var baseTime = new DateTimeOffset(2023, 1, 1, 0, 0, 0, TimeSpan.Zero);
-        
+        DateTimeOffset baseTime = new(2023, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
         Brand brandFord = new() { Id = 1, Name = "Ford", Rate = 5 };
         Brand brandFiat = new() { Id = 2, Name = "Fiat", Rate = 3 };
         Brand brandBmw = new() { Id = 3, Name = "BMW", Rate = 4 };
@@ -59,19 +58,16 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_DateTimeOffset_Equals_ShouldReturnCorrectResult()
     {
         IQueryable<User> users = GetTestUsers();
-        var targetDate = new DateTimeOffset(2023, 1, 11, 0, 0, 0, TimeSpan.Zero);
-        
-        var filters = new HasFiltersDto
+        DateTimeOffset targetDate = new(2023, 1, 11, 0, 0, 0, TimeSpan.Zero);
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.Equals, targetDate.ToString("O"))]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Equal(1, result.First().Id);
@@ -81,19 +77,16 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_DateTimeOffset_GreaterThan_ShouldReturnCorrectResult()
     {
         IQueryable<User> users = GetTestUsers();
-        var targetDate = new DateTimeOffset(2023, 1, 15, 0, 0, 0, TimeSpan.Zero);
-        
-        var filters = new HasFiltersDto
+        DateTimeOffset targetDate = new(2023, 1, 15, 0, 0, 0, TimeSpan.Zero);
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.GreaterThan, targetDate.ToString("O"))]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(3, result.Count);
         Assert.DoesNotContain(result, u => u.Id == 1);
@@ -103,19 +96,16 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_DateTimeOffset_LessThan_ShouldReturnCorrectResult()
     {
         IQueryable<User> users = GetTestUsers();
-        var targetDate = new DateTimeOffset(2023, 1, 25, 0, 0, 0, TimeSpan.Zero);
-        
-        var filters = new HasFiltersDto
+        DateTimeOffset targetDate = new(2023, 1, 25, 0, 0, 0, TimeSpan.Zero);
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.LessThan, targetDate.ToString("O"))]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, u => u.Id == 1);
@@ -126,19 +116,16 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_DateTimeOffset_IsEqualToYear_ShouldReturnCorrectResult()
     {
         IQueryable<User> users = GetTestUsers();
-        var targetDate = new DateTimeOffset(2023, 5, 15, 0, 0, 0, TimeSpan.Zero);
-        
-        var filters = new HasFiltersDto
+        DateTimeOffset targetDate = new(2023, 5, 15, 0, 0, 0, TimeSpan.Zero);
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToYear, targetDate.ToString("O"))]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(4, result.Count);
     }
@@ -147,19 +134,16 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_DateTimeOffset_IsEqualToYearAndMonth_ShouldReturnCorrectResult()
     {
         IQueryable<User> users = GetTestUsers();
-        var targetDate = new DateTimeOffset(2023, 1, 15, 0, 0, 0, TimeSpan.Zero);
-        
-        var filters = new HasFiltersDto
+        DateTimeOffset targetDate = new(2023, 1, 15, 0, 0, 0, TimeSpan.Zero);
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToYearAndMonth, targetDate.ToString("O"))]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(3, result.Count);
         Assert.DoesNotContain(result, u => u.Id == 4);
@@ -169,19 +153,16 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_DateTimeOffset_IsEqualToFullDate_ShouldReturnCorrectResult()
     {
         IQueryable<User> users = GetTestUsers();
-        var targetDate = new DateTimeOffset(2023, 1, 11, 0, 0, 0, TimeSpan.Zero);
-        
-        var filters = new HasFiltersDto
+        DateTimeOffset targetDate = new(2023, 1, 11, 0, 0, 0, TimeSpan.Zero);
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToFullDate, targetDate.ToString("O"))]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Equal(1, result.First().Id);
@@ -191,19 +172,16 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_NullableDateTimeOffset_WithNullValue_ShouldHandleCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        var targetDate = new DateTimeOffset(2023, 2, 1, 0, 0, 0, TimeSpan.Zero);
-        
-        var filters = new HasFiltersDto
+        DateTimeOffset targetDate = new(2023, 2, 1, 0, 0, 0, TimeSpan.Zero);
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("registrationDate", Operator.Equals, targetDate.ToString("O"))]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("registrationDate", x => x.RegistrationDate!)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Equal(1, result.First().Id);
@@ -213,19 +191,16 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_NestedDateTimeOffset_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        var targetDate = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero);
-        
-        var filters = new HasFiltersDto
+        DateTimeOffset targetDate = new(2021, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("car.manufactureDate", Operator.Equals, targetDate.ToString("O"))]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("car.manufactureDate", x => x.Car!.ManufactureDate!)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Equal(1, result.First().Id);
@@ -235,17 +210,15 @@ public class DateTimeOffsetFilteringTests
     public void FilterProperty_DateTimeOffsetWithInvalidFormat_ShouldThrowException()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.Equals, "invalid-date")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters)
-            .Build();
-
-        Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        Assert.Throws<SuperfilterException>(() =>
+            users.WithSuperfilter()
+                .MapProperty("lastLoginDate", x => x.LastLoginDate)
+                .WithFilters(filters).ToList());
     }
 }

@@ -8,21 +8,21 @@ public partial class Superfilter
     private void ValidateRequiredFiltersPresence()
     {
         EnsureGlobalConfigurationIsSet();
-        
+
         foreach ((string? fieldConfigKey, FieldConfiguration? fieldConfig) in GlobalConfiguration.PropertyMappings)
         {
             if (IsRequiredFilterPresent(fieldConfig, fieldConfigKey)) continue;
             throw new SuperfilterException($"Filter {fieldConfigKey} is required.");
         }
     }
-    
+
     private bool IsRequiredFilterPresent(FieldConfiguration fieldConfig, string propertyName)
     {
         EnsureGlobalConfigurationIsSet();
-        
+
         bool filterIsPresent = GlobalConfiguration.HasFilters.Filters
             .Any(filters => string.Equals(filters.Field, propertyName, StringComparison.CurrentCultureIgnoreCase));
-        
+
         return !fieldConfig.IsRequired || filterIsPresent;
     }
 

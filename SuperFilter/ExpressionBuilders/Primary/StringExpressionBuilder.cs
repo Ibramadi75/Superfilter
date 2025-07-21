@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Reflection;
 using Superfilter.Constants;
 
 namespace Superfilter.ExpressionBuilders;
@@ -31,13 +30,13 @@ public static class StringExpressionBuilder
         string[] values = filterValue.Split(',', StringSplitOptions.RemoveEmptyEntries)
             .Select(v => v.Trim())
             .ToArray();
-        
+
         if (values.Length == 0)
             return Expression.Constant(false);
-        
-        Expression[] comparisons = values.Select(value => 
+
+        Expression[] comparisons = values.Select(value =>
             Expression.Equal(property, Expression.Constant(value))).ToArray();
-        
+
         return comparisons.Aggregate(Expression.OrElse);
     }
 }

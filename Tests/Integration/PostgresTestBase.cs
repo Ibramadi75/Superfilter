@@ -18,8 +18,8 @@ public abstract class PostgreSqlIntegrationTestBase : IAsyncLifetime
     public async Task InitializeAsync()
     {
         await _container.StartAsync();
-        
-        var options = new DbContextOptionsBuilder<AppDbContext>()
+
+        DbContextOptions<AppDbContext> options = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(_container.GetConnectionString())
             .Options;
 
@@ -36,7 +36,7 @@ public abstract class PostgreSqlIntegrationTestBase : IAsyncLifetime
 
     private async Task SeedTestDataAsync()
     {
-        var brands = new[]
+        Brand[] brands = new[]
         {
             new Brand { Id = 1, Name = "Ford", Rate = 5 },
             new Brand { Id = 2, Name = "Fiat", Rate = 3 },
@@ -44,7 +44,7 @@ public abstract class PostgreSqlIntegrationTestBase : IAsyncLifetime
             new Brand { Id = 4, Name = "Honda", Rate = 2 }
         };
 
-        var cars = new[]
+        Car[] cars = new[]
         {
             new Car { Id = 1, Name = "Ford Fiesta", BrandId = 1, UserId = 1 },
             new Car { Id = 2, Name = "Fiat 500", BrandId = 2, UserId = 2 },
@@ -52,54 +52,54 @@ public abstract class PostgreSqlIntegrationTestBase : IAsyncLifetime
             new Car { Id = 4, Name = "Honda Civic", BrandId = 4, UserId = 4 }
         };
 
-        var users = new[]
+        User[] users = new[]
         {
-            new User 
-            { 
-                Id = 1, 
-                Name = "Alice", 
-                MoneyAmount = 150, 
-                CarId = 1, 
+            new User
+            {
+                Id = 1,
+                Name = "Alice",
+                MoneyAmount = 150,
+                CarId = 1,
                 HouseId = 1,
                 BornDate = new DateTime(1990, 5, 15, 0, 0, 0, DateTimeKind.Utc)
             },
-            new User 
-            { 
-                Id = 2, 
-                Name = "Bob", 
-                MoneyAmount = 200, 
-                CarId = 2, 
+            new User
+            {
+                Id = 2,
+                Name = "Bob",
+                MoneyAmount = 200,
+                CarId = 2,
                 HouseId = 2,
                 BornDate = new DateTime(2003, 12, 10, 0, 0, 0, DateTimeKind.Utc)
             },
-            new User 
-            { 
-                Id = 3, 
-                Name = "Charlie", 
-                MoneyAmount = 50, 
-                CarId = 3, 
+            new User
+            {
+                Id = 3,
+                Name = "Charlie",
+                MoneyAmount = 50,
+                CarId = 3,
                 HouseId = 3,
                 BornDate = new DateTime(1985, 8, 22, 0, 0, 0, DateTimeKind.Utc)
             },
-            new User 
-            { 
-                Id = 4, 
-                Name = "Dave", 
-                MoneyAmount = 300, 
-                CarId = 4, 
+            new User
+            {
+                Id = 4,
+                Name = "Dave",
+                MoneyAmount = 300,
+                CarId = 4,
                 HouseId = 4,
                 BornDate = new DateTime(1995, 3, 7, 0, 0, 0, DateTimeKind.Utc)
             }
         };
 
-        var cities = new[]
+        City[] cities = new[]
         {
             new City { Id = 1, Name = "Paris", MayorId = 1 },
             new City { Id = 2, Name = "Chatillon", MayorId = 2 },
             new City { Id = 3, Name = "Lyon", MayorId = 3 }
         };
 
-        var houses = new[]
+        House[] houses = new[]
         {
             new House { Id = 1, Address = "123 Main Street", UserId = 1, CityId = 1 },
             new House { Id = 2, Address = "456 Oak Street", UserId = 2, CityId = 2 },
@@ -109,19 +109,22 @@ public abstract class PostgreSqlIntegrationTestBase : IAsyncLifetime
 
         await Context.Brands.AddRangeAsync(brands);
         await Context.SaveChangesAsync();
-        
+
         await Context.Users.AddRangeAsync(users);
         await Context.SaveChangesAsync();
-        
+
         await Context.Cities.AddRangeAsync(cities);
         await Context.SaveChangesAsync();
-        
+
         await Context.Cars.AddRangeAsync(cars);
         await Context.SaveChangesAsync();
-        
+
         await Context.Houses.AddRangeAsync(houses);
         await Context.SaveChangesAsync();
     }
 
-    protected string GetConnectionString() => _container.GetConnectionString();
+    protected string GetConnectionString()
+    {
+        return _container.GetConnectionString();
+    }
 }

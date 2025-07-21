@@ -36,8 +36,8 @@ public class UltraLargeScaleTest
     }
 
     [Benchmark]
-    public List<User> SuperfilterApproach()
+    public List<User> SuperfilterExtensionsApproachMethod()
     {
-        return FilterMethods.SuperfilterApproachMethod(_users, _defaultHasFilters);
+        return FilterMethods.SuperfilterIQueryableExtensionsApproachMethod(_users, _defaultHasFilters);
     }
 }

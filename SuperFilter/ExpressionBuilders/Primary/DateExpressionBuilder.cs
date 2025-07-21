@@ -10,7 +10,7 @@ public static class DateExpressionBuilder
         // Handle null check operators first (they don't need date parsing)
         if (operatorName == Operator.IsNull)
             return Expression.Equal(property, Expression.Constant(null, property.Type));
-        
+
         if (operatorName == Operator.IsNotNull)
             return Expression.NotEqual(property, Expression.Constant(null, property.Type));
 
@@ -25,7 +25,7 @@ public static class DateExpressionBuilder
         // Handle null check operators first (they don't need date parsing)
         if (operatorName == Operator.IsNull)
             return Expression.Equal(property, Expression.Constant(null, property.Type));
-        
+
         if (operatorName == Operator.IsNotNull)
             return Expression.NotEqual(property, Expression.Constant(null, property.Type));
 
@@ -70,18 +70,18 @@ public static class DateExpressionBuilder
             Operator.IsAfter => Expression.GreaterThan(property, Expression.Constant(filterDate, property.Type)),
             _ => throw new InvalidOperationException($"Invalid operator for {typeof(T).Name}.")
         };
-            
+
         return Expression.AndAlso(Expression.NotEqual(property, Expression.Constant(null, property.Type)), comparison);
     }
 
     private static Expression CreateDatePartComparison<T>(Expression property, T filterDate, bool compareYear, bool compareMonth, bool compareDay)
     {
         Expression comparison = Expression.Constant(true);
-        
+
         Expression actualProperty = property.Type.IsGenericType && property.Type.GetGenericTypeDefinition() == typeof(Nullable<>)
             ? Expression.Property(property, "Value")
             : property;
-        
+
         if (compareYear)
         {
             Expression yearComparison = Expression.Equal(
@@ -90,7 +90,7 @@ public static class DateExpressionBuilder
             );
             comparison = Expression.AndAlso(comparison, yearComparison);
         }
-        
+
         if (compareMonth)
         {
             Expression monthComparison = Expression.Equal(
@@ -99,7 +99,7 @@ public static class DateExpressionBuilder
             );
             comparison = Expression.AndAlso(comparison, monthComparison);
         }
-        
+
         if (compareDay)
         {
             Expression dayComparison = Expression.Equal(
@@ -108,28 +108,37 @@ public static class DateExpressionBuilder
             );
             comparison = Expression.AndAlso(comparison, dayComparison);
         }
-        
+
         return comparison;
     }
 
-    private static int GetYear<T>(T date) => date switch
+    private static int GetYear<T>(T date)
     {
-        DateTime dt => dt.Year,
-        DateTimeOffset dto => dto.Year,
-        _ => throw new InvalidOperationException($"Unsupported date type: {typeof(T).Name}")
-    };
+        return date switch
+        {
+            DateTime dt => dt.Year,
+            DateTimeOffset dto => dto.Year,
+            _ => throw new InvalidOperationException($"Unsupported date type: {typeof(T).Name}")
+        };
+    }
 
-    private static int GetMonth<T>(T date) => date switch
+    private static int GetMonth<T>(T date)
     {
-        DateTime dt => dt.Month,
-        DateTimeOffset dto => dto.Month,
-        _ => throw new InvalidOperationException($"Unsupported date type: {typeof(T).Name}")
-    };
+        return date switch
+        {
+            DateTime dt => dt.Month,
+            DateTimeOffset dto => dto.Month,
+            _ => throw new InvalidOperationException($"Unsupported date type: {typeof(T).Name}")
+        };
+    }
 
-    private static int GetDay<T>(T date) => date switch
+    private static int GetDay<T>(T date)
     {
-        DateTime dt => dt.Day,
-        DateTimeOffset dto => dto.Day,
-        _ => throw new InvalidOperationException($"Unsupported date type: {typeof(T).Name}")
-    };
+        return date switch
+        {
+            DateTime dt => dt.Day,
+            DateTimeOffset dto => dto.Day,
+            _ => throw new InvalidOperationException($"Unsupported date type: {typeof(T).Name}")
+        };
+    }
 }

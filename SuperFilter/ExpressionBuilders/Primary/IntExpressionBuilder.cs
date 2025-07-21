@@ -25,5 +25,4 @@ public static class IntExpressionBuilder
 
         return CommonExpressionBuilder.BuildComparisonExpression(property, constant, filterOperator);
     }
-
 }

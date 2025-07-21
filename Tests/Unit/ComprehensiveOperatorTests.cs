@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq.Expressions;
 using Database.Models;
 using Superfilter;
 using Superfilter.Constants;
@@ -20,7 +21,7 @@ public class ComprehensiveOperatorTests
         {
             new()
             {
-                Id = 1, Name = "Alice", MoneyAmount = 100, 
+                Id = 1, Name = "Alice", MoneyAmount = 100,
                 BornDate = DateTime.ParseExact("01/01/2000", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 LongValue = 1000L, DecimalValue = 100.5m, DoubleValue = 100.75, FloatValue = 100.25f,
                 NullableLongValue = 1100L, NullableDecimalValue = 100.6m, NullableDoubleValue = 100.85, NullableFloatValue = 100.35f,
@@ -28,7 +29,7 @@ public class ComprehensiveOperatorTests
             },
             new()
             {
-                Id = 2, Name = "Bob", MoneyAmount = 200, 
+                Id = 2, Name = "Bob", MoneyAmount = 200,
                 BornDate = DateTime.ParseExact("15/06/1995", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 LongValue = 2000L, DecimalValue = 200.5m, DoubleValue = 200.75, FloatValue = 200.25f,
                 NullableLongValue = 2200L, NullableDecimalValue = 200.6m, NullableDoubleValue = 200.85, NullableFloatValue = 200.35f,
@@ -36,7 +37,7 @@ public class ComprehensiveOperatorTests
             },
             new()
             {
-                Id = 3, Name = "Charlie", MoneyAmount = 300, 
+                Id = 3, Name = "Charlie", MoneyAmount = 300,
                 BornDate = DateTime.ParseExact("10/12/1990", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 LongValue = 3000L, DecimalValue = 300.5m, DoubleValue = 300.75, FloatValue = 300.25f,
                 NullableLongValue = 3300L, NullableDecimalValue = 300.6m, NullableDoubleValue = 300.85, NullableFloatValue = 300.35f,
@@ -44,7 +45,7 @@ public class ComprehensiveOperatorTests
             },
             new()
             {
-                Id = 4, Name = "David", MoneyAmount = 150, 
+                Id = 4, Name = "David", MoneyAmount = 150,
                 BornDate = null,
                 LongValue = 1500L, DecimalValue = 150.5m, DoubleValue = 150.75, FloatValue = 150.25f,
                 NullableLongValue = null, NullableDecimalValue = null, NullableDoubleValue = null, NullableFloatValue = null,
@@ -52,7 +53,7 @@ public class ComprehensiveOperatorTests
             },
             new()
             {
-                Id = 5, Name = "", MoneyAmount = 250, 
+                Id = 5, Name = "", MoneyAmount = 250,
                 BornDate = DateTime.ParseExact("25/08/2005", "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 LongValue = 2500L, DecimalValue = 250.5m, DoubleValue = 250.75, FloatValue = 250.25f,
                 NullableLongValue = 2750L, NullableDecimalValue = 250.6m, NullableDoubleValue = 250.85, NullableFloatValue = 250.35f,
@@ -61,18 +62,25 @@ public class ComprehensiveOperatorTests
         }.AsQueryable();
     }
 
+    private List<User> GetFilteredUsers<T>(IQueryable<User> users, HasFiltersDto filters, Expression<Func<User, T>> propertySelector)
+    {
+        return users.WithSuperfilter()
+            .MapProperty(filters.Filters[0].Field, propertySelector)
+            .WithFilters(filters).ToList();
+    }
+
     #region String Operators Tests
 
     [Fact]
     public void StringOperator_Equals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Equals, "Alice")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Single(result);
         Assert.Equal("Alice", result[0].Name);
@@ -81,13 +89,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_NotEquals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.NotEquals, "Alice")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Equal(4, result.Count);
         Assert.DoesNotContain(result, u => u.Name == "Alice");
@@ -96,13 +104,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_StartsWith_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.StartsWith, "B")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Single(result);
         Assert.Equal("Bob", result[0].Name);
@@ -111,13 +119,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_EndsWith_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.EndsWith, "e")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, u => u.Name == "Alice");
@@ -127,13 +135,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_Contains_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "a")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, u => u.Name == "David");
@@ -143,13 +151,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_NotContains_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.NotContains, "a")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Equal(3, result.Count);
         Assert.DoesNotContain(result, u => u.Name == "David");
@@ -159,13 +167,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_IsEmpty_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.IsEmpty, "")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Single(result);
         Assert.Equal("", result[0].Name);
@@ -174,13 +182,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_IsNotEmpty_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.IsNotEmpty, "")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Equal(4, result.Count);
         Assert.DoesNotContain(result, u => u.Name == "");
@@ -189,13 +197,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_In_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.In, "Alice,Bob,Charlie")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Equal(3, result.Count);
         Assert.Contains(result, u => u.Name == "Alice");
@@ -206,13 +214,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void StringOperator_NotIn_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.NotIn, "Alice,Bob")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.Name);
+        List<User> result = GetFilteredUsers(users, filters, u => u.Name);
 
         Assert.Equal(3, result.Count);
         Assert.DoesNotContain(result, u => u.Name == "Alice");
@@ -226,13 +234,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_Equals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.Equals, "200")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Single(result);
         Assert.Equal(200, result[0].MoneyAmount);
@@ -241,13 +249,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_NotEquals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.NotEquals, "200")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(4, result.Count);
         Assert.DoesNotContain(result, u => u.MoneyAmount == 200);
@@ -256,13 +264,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_LessThan_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.LessThan, "200")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(2, result.Count);
         Assert.All(result, u => Assert.True(u.MoneyAmount < 200));
@@ -271,13 +279,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_LessThanOrEqual_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.LessThanOrEqual, "200")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.True(u.MoneyAmount <= 200));
@@ -286,13 +294,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_GreaterThan_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "200")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(2, result.Count);
         Assert.All(result, u => Assert.True(u.MoneyAmount > 200));
@@ -301,13 +309,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_GreaterThanOrEqual_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThanOrEqual, "200")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.True(u.MoneyAmount >= 200));
@@ -316,13 +324,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_Between_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.Between, "150,250")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.True(u.MoneyAmount >= 150 && u.MoneyAmount <= 250));
@@ -331,13 +339,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_NotBetween_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.NotBetween, "150,250")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(2, result.Count);
         Assert.All(result, u => Assert.True(u.MoneyAmount < 150 || u.MoneyAmount > 250));
@@ -346,13 +354,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_In_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.In, "100,200,300")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.Contains(u.MoneyAmount, new[] { 100, 200, 300 }));
@@ -361,13 +369,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_NotIn_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.NotIn, "100,200")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
+        List<User> result = GetFilteredUsers(users, filters, u => u.MoneyAmount);
 
         Assert.Equal(3, result.Count);
         Assert.DoesNotContain(result, u => u.MoneyAmount == 100);
@@ -381,13 +389,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void LongOperator_Equals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("longValue", Operator.Equals, "2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.LongValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.LongValue);
 
         Assert.Single(result);
         Assert.Equal(2000L, result[0].LongValue);
@@ -396,13 +404,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void LongOperator_Between_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("longValue", Operator.Between, "1500,2500")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.LongValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.LongValue);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.True(u.LongValue >= 1500L && u.LongValue <= 2500L));
@@ -411,13 +419,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void LongOperator_In_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("longValue", Operator.In, "1000,2000,3000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.LongValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.LongValue);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.Contains(u.LongValue, new[] { 1000L, 2000L, 3000L }));
@@ -426,13 +434,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void NullableLongOperator_IsNull_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("nullableLongValue", Operator.IsNull, "")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.NullableLongValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.NullableLongValue);
 
         Assert.Single(result);
         Assert.Null(result[0].NullableLongValue);
@@ -445,13 +453,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DecimalOperator_Equals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "200.5")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.DecimalValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.DecimalValue);
 
         Assert.Single(result);
         Assert.Equal(200.5m, result[0].DecimalValue);
@@ -460,13 +468,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DecimalOperator_LessThanOrEqual_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("decimalValue", Operator.LessThanOrEqual, "200.5")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.DecimalValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.DecimalValue);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.True(u.DecimalValue <= 200.5m));
@@ -475,13 +483,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DecimalOperator_Between_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Between, "150.5,250.5")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.DecimalValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.DecimalValue);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.True(u.DecimalValue >= 150.5m && u.DecimalValue <= 250.5m));
@@ -494,13 +502,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DoubleOperator_GreaterThan_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("doubleValue", Operator.GreaterThan, "200.75")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.DoubleValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.DoubleValue);
 
         Assert.Equal(2, result.Count);
         Assert.All(result, u => Assert.True(u.DoubleValue > 200.75));
@@ -509,13 +517,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DoubleOperator_NotEquals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("doubleValue", Operator.NotEquals, "200.75")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.DoubleValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.DoubleValue);
 
         Assert.Equal(4, result.Count);
         Assert.DoesNotContain(result, u => u.DoubleValue == 200.75);
@@ -528,13 +536,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void FloatOperator_GreaterThanOrEqual_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("floatValue", Operator.GreaterThanOrEqual, "200.25")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.FloatValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.FloatValue);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.True(u.FloatValue >= 200.25f));
@@ -543,13 +551,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void FloatOperator_NotBetween_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("floatValue", Operator.NotBetween, "150.25,250.25")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.FloatValue);
+        List<User> result = GetFilteredUsers(users, filters, u => u.FloatValue);
 
         Assert.Equal(2, result.Count);
         Assert.All(result, u => Assert.True(u.FloatValue < 150.25f || u.FloatValue > 250.25f));
@@ -562,13 +570,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_Equals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.Equals, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Single(result);
         Assert.Equal(new DateTime(2000, 1, 1), result[0].BornDate);
@@ -577,13 +585,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_NotEquals_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.NotEquals, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Equal(3, result.Count);
         Assert.DoesNotContain(result, u => u.BornDate == new DateTime(2000, 1, 1));
@@ -592,13 +600,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_LessThan_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.LessThan, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Equal(2, result.Count);
         Assert.All(result, u => Assert.True(u.BornDate < new DateTime(2000, 1, 1)));
@@ -607,13 +615,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_LessThanOrEqual_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.LessThanOrEqual, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Equal(3, result.Count);
         Assert.All(result, u => Assert.True(u.BornDate <= new DateTime(2000, 1, 1)));
@@ -622,13 +630,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_GreaterThan_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.GreaterThan, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Single(result);
         Assert.All(result, u => Assert.True(u.BornDate > new DateTime(2000, 1, 1)));
@@ -637,13 +645,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_GreaterThanOrEqual_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.GreaterThanOrEqual, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Equal(2, result.Count);
         Assert.All(result, u => Assert.True(u.BornDate >= new DateTime(2000, 1, 1)));
@@ -652,13 +660,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_IsBefore_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsBefore, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Equal(2, result.Count);
         Assert.All(result, u => Assert.True(u.BornDate < new DateTime(2000, 1, 1)));
@@ -667,13 +675,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_IsAfter_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsAfter, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Single(result);
         Assert.All(result, u => Assert.True(u.BornDate > new DateTime(2000, 1, 1)));
@@ -682,13 +690,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_IsEqualToYear_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Single(result);
         Assert.Equal(2000, result[0].BornDate?.Year);
@@ -697,13 +705,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_IsEqualToYearAndMonth_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYearAndMonth, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Single(result);
         Assert.Equal(2000, result[0].BornDate?.Year);
@@ -713,13 +721,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_IsEqualToFullDate_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToFullDate, "01/01/2000")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Single(result);
         Assert.Equal(new DateTime(2000, 1, 1), result[0].BornDate);
@@ -728,13 +736,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_IsNull_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsNull, "")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Single(result);
         Assert.Null(result[0].BornDate);
@@ -743,13 +751,13 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void DateTimeOperator_IsNotNull_ShouldFilterCorrectly()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsNotNull, "")]
         };
 
-        var result = GetFilteredUsers(users, filters, u => u.BornDate);
+        List<User> result = GetFilteredUsers(users, filters, u => u.BornDate);
 
         Assert.Equal(4, result.Count);
         Assert.All(result, u => Assert.NotNull(u.BornDate));
@@ -762,66 +770,56 @@ public class ComprehensiveOperatorTests
     [Fact]
     public void IntegerOperator_Between_InvalidFormat_ShouldThrowException()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.Between, "100")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("moneyAmount", u => u.MoneyAmount)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
+        {
+            return users.WithSuperfilter()
+                .MapProperty("moneyAmount", u => u.MoneyAmount)
+                .WithFilters(filters).ToList();
+        });
         Assert.IsType<ArgumentException>(exception.InnerException?.InnerException);
     }
 
     [Fact]
     public void IntegerOperator_InvalidValue_ShouldThrowException()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.Equals, "invalid")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("moneyAmount", u => u.MoneyAmount)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
+        {
+            return users.WithSuperfilter()
+                .MapProperty("moneyAmount", u => u.MoneyAmount)
+                .WithFilters(filters).ToList();
+        });
         Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
 
     [Fact]
     public void DecimalOperator_InvalidValue_ShouldThrowException()
     {
-        var users = GetTestUsers();
-        var filters = new HasFiltersDto
+        IQueryable<User> users = GetTestUsers();
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "invalid")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty("decimalValue", u => u.DecimalValue)
-            .WithFilters(filters)
-            .Build();
-
-        var exception = Assert.Throws<SuperfilterException>(() => superfilter.ApplyConfiguredFilters(users).ToList());
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
+        {
+            return users.WithSuperfilter()
+                .MapProperty("decimalValue", u => u.DecimalValue)
+                .WithFilters(filters).ToList();
+        });
         Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
 
     #endregion
-
-    private List<User> GetFilteredUsers<T>(IQueryable<User> users, HasFiltersDto filters, System.Linq.Expressions.Expression<Func<User, T>> propertySelector)
-    {
-        var superfilter = SuperfilterBuilder.For<User>()
-            .MapProperty(filters.Filters[0].Field, propertySelector)
-            .WithFilters(filters)
-            .Build();
-
-        return superfilter.ApplyConfiguredFilters(users).ToList();
-    }
 }

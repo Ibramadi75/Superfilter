@@ -26,5 +26,4 @@ public static class DecimalExpressionBuilder
 
         return CommonExpressionBuilder.BuildComparisonExpression(property, constant, filterOperator);
     }
-
 }

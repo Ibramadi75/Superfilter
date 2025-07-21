@@ -58,18 +58,15 @@ public class NestedPropertyFilteringTests
     public void FilterByCarBrandName_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "BMW")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.Car!.Brand!.Name == "BMW");
@@ -79,19 +76,16 @@ public class NestedPropertyFilteringTests
     public void FilterByHouseAddress_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("houseAddress", Operator.Contains, "Oak")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("id", x => x.Id)
             .MapProperty("houseAddress", x => x.House!.Address)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.House!.Address.Contains("Oak"));
@@ -101,18 +95,15 @@ public class NestedPropertyFilteringTests
     public void FilterByCarBrandRate_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("carBrandRate", Operator.GreaterThan, "3")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandRate", x => x.Car!.Brand!.Rate)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, user => user.Car!.Brand!.Rate == 5);
@@ -123,18 +114,15 @@ public class NestedPropertyFilteringTests
     public void FilterByDoubleNestedProperty_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "Ford")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.Car!.Brand!.Name == "Ford");

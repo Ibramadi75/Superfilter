@@ -17,21 +17,18 @@ internal static class SuperfilterExtensions
         Expression body = propertyExpression.Body is UnaryExpression unary ? unary.Operand : propertyExpression.Body;
         string propertyName = ((MemberExpression)body).Member.Name;
 
-        KeyValuePair<string, FieldConfiguration> kvp = globalConfiguration.PropertyMappings
+        (string? propertyMapKey, FieldConfiguration? propertyMap) = globalConfiguration.PropertyMappings
             .FirstOrDefault(x => x.Value.Selector.ToString() == propertyExpression.ToString());
 
-        if (kvp.Key == null || kvp.Value == null)
+        if (propertyMapKey == null || propertyMap == null)
             return query;
 
-        string actualKey = kvp.Key;
-        FieldConfiguration fieldConfig = kvp.Value;
-
         FilterCriterion? filter = globalConfiguration.HasFilters.Filters
-            .FirstOrDefault(filters => string.Equals(filters.Field, actualKey, StringComparison.CurrentCultureIgnoreCase));
+            .FirstOrDefault(filters => string.Equals(filters.Field, propertyMapKey, StringComparison.CurrentCultureIgnoreCase));
 
         if (filter == null || (string.IsNullOrEmpty(filter.Value) && filter.Operator != Operator.IsNull && filter.Operator != Operator.IsNotNull && filter.Operator != Operator.IsEmpty && filter.Operator != Operator.IsNotEmpty))
         {
-            if (fieldConfig.IsRequired)
+            if (propertyMap.IsRequired)
                 throw new SuperfilterException($"Filter {propertyName} is required.");
             return query;
         }
@@ -56,7 +53,7 @@ internal static class SuperfilterExtensions
     {
         if (superfilter.InternalGlobalConfiguration == null)
             throw new SuperfilterException("Superfilter is not properly initialized");
-        
+
         return query.ApplySorting(superfilter.InternalGlobalConfiguration);
     }
 
@@ -106,7 +103,6 @@ internal static class SuperfilterExtensions
 
     private static string RemoveUntilFirstDot(string input)
     {
-        int index = input.IndexOf('.');
-        return index == -1 ? input : input[(index + 1)..];
+        return !input.Contains('.') ? input : input[(input.IndexOf('.') + 1)..];
     }
 }

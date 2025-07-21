@@ -59,18 +59,15 @@ public class BasicFilteringTests
     public void FilterProperty_OnInteger_ValidFilter_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("id", Operator.GreaterThan, "1")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapRequiredProperty("id", x => x.Id)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Equal(users.Count() - 1, result.Count);
         Assert.DoesNotContain(result, user => user.Id == 1);
@@ -80,18 +77,15 @@ public class BasicFilteringTests
     public void FilterProperty_OnDate_ValidFilter_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "23/02/2003")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("bornDate", x => x.BornDate!)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Single(result);
     }
@@ -100,18 +94,15 @@ public class BasicFilteringTests
     public void FilterProperty_OnString_ContainsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.True(result.Count > 0);
         Assert.All(result, user => Assert.Contains("e", user.Name, StringComparison.OrdinalIgnoreCase));
@@ -121,18 +112,15 @@ public class BasicFilteringTests
     public void FilterProperty_NoMatchingFilter_EmptyResult()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "nonexistent")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapRequiredProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build();
-
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
+            .WithFilters(filters).ToList();
 
         Assert.Empty(result);
     }
@@ -141,39 +129,33 @@ public class BasicFilteringTests
     public void FilterProperty_FieldNotInCriteria_NoFilterApplied()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("unknownField", Operator.Contains, "e")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build();
+            .WithFilters(filters).ToList();
 
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
-
-        Assert.Equal(users.Count(), result.Count);
+        Assert.Equal(GetTestUsers().Count(), result.Count);
     }
 
     [Fact]
     public void FilterProperty_EmptyValueInFilter_SkipFiltering()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "")]
         };
 
-        var superfilter = SuperfilterBuilder.For<User>()
+        List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
-            .Build();
+            .WithFilters(filters).ToList();
 
-        List<User> result = superfilter.ApplyConfiguredFilters(users).ToList();
-
-        Assert.Equal(users.Count(), result.Count);
+        Assert.Equal(GetTestUsers().Count(), result.Count);
     }
 }

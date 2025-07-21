@@ -26,5 +26,4 @@ public static class FloatExpressionBuilder
 
         return CommonExpressionBuilder.BuildComparisonExpression(property, constant, filterOperator);
     }
-
 }

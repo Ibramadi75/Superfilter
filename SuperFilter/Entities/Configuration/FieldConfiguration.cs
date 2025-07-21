@@ -9,7 +9,7 @@ public class FieldConfiguration(LambdaExpression selector, bool isRequired = fal
 
     public string GetPropertyName()
     {
-        var body = Selector.Body is UnaryExpression unary ? unary.Operand : Selector.Body;
+        Expression body = Selector.Body is UnaryExpression unary ? unary.Operand : Selector.Body;
         if (body is MemberExpression member)
             return member.Member.Name;
         throw new InvalidOperationException("Cannot extract property name from selector expression");

@@ -5,22 +5,6 @@ namespace Superfilter.Constants;
 
 public static class MethodInfoMappings
 {
-    private static Dictionary<Operator, MethodInfo?> MethodInfosForStringFiltering => new()
-    {
-        { Operator.StartsWith, typeof(string).GetMethod(nameof(string.StartsWith), [typeof(string)]) },
-        { Operator.EndsWith, typeof(string).GetMethod(nameof(string.EndsWith), [typeof(string)]) },
-        { Operator.Contains, typeof(string).GetMethod(nameof(string.Contains), [typeof(string)]) },
-        { Operator.Equals, typeof(string).GetMethod(nameof(string.Equals), [typeof(string)]) },
-        { Operator.NotEquals, typeof(string).GetMethod(nameof(string.Equals), [typeof(string)]) },
-        { Operator.NotContains, typeof(string).GetMethod(nameof(string.Contains), [typeof(string)]) },
-        { Operator.IsNull, null },
-        { Operator.IsNotNull, null },
-        { Operator.IsEmpty, null },
-        { Operator.IsNotEmpty, null },
-        { Operator.In, null },
-        { Operator.NotIn, null }
-    };
-
     private static readonly Dictionary<Operator, MethodInfo?> MethodInfosForDateTimeFiltering = new()
     {
         { Operator.Equals, typeof(DateTime).GetMethod(nameof(DateTime.Equals), [typeof(DateTime)]) },
@@ -129,6 +113,22 @@ public static class MethodInfoMappings
         { Operator.NotIn, null },
         { Operator.IsNull, null },
         { Operator.IsNotNull, null }
+    };
+
+    private static Dictionary<Operator, MethodInfo?> MethodInfosForStringFiltering => new()
+    {
+        { Operator.StartsWith, typeof(string).GetMethod(nameof(string.StartsWith), [typeof(string)]) },
+        { Operator.EndsWith, typeof(string).GetMethod(nameof(string.EndsWith), [typeof(string)]) },
+        { Operator.Contains, typeof(string).GetMethod(nameof(string.Contains), [typeof(string)]) },
+        { Operator.Equals, typeof(string).GetMethod(nameof(string.Equals), [typeof(string)]) },
+        { Operator.NotEquals, typeof(string).GetMethod(nameof(string.Equals), [typeof(string)]) },
+        { Operator.NotContains, typeof(string).GetMethod(nameof(string.Contains), [typeof(string)]) },
+        { Operator.IsNull, null },
+        { Operator.IsNotNull, null },
+        { Operator.IsEmpty, null },
+        { Operator.IsNotEmpty, null },
+        { Operator.In, null },
+        { Operator.NotIn, null }
     };
 
     public static Dictionary<Operator, MethodInfo?> GetMethodInfos(Type propertyType)
