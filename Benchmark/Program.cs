@@ -6,5 +6,3 @@ Console.WriteLine("🔍 Test du point de basculement performance...");
 BenchmarkSwitcher
     .FromAssembly(Assembly.GetExecutingAssembly())
     .Run(args);
-    
-    

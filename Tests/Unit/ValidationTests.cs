@@ -31,13 +31,13 @@ public class ValidationTests
     public void FilterProperty_SuperfilterExceptionThrown_WhenRequiredFilterIsMissing()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
 
-        SuperfilterException exception = Assert.Throws<SuperfilterException>(() => 
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapRequiredProperty("id", x => x.Id)
                 .WithFilters(filters).ToList());
@@ -49,13 +49,13 @@ public class ValidationTests
     public void FilterProperty_WithInvalidOperatorForStringType_ThrowsException()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.GreaterThan, "test")]
         };
 
-        Assert.Throws<SuperfilterException>(() => 
+        Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapProperty("name", x => x.Name)
                 .WithFilters(filters).ToList());
@@ -65,8 +65,8 @@ public class ValidationTests
     public void FilterProperty_WithNullValue_SkipsFilter()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, null!)]
         };
@@ -82,8 +82,8 @@ public class ValidationTests
     public void FilterProperty_WithWhitespaceValue_FiltersWithWhitespace()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "   ")]
         };

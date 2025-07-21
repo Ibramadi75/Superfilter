@@ -41,8 +41,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
@@ -64,8 +64,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
@@ -91,8 +91,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("carName", Operator.StartsWith, "F")]
         };
@@ -119,8 +119,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters =
             [
@@ -152,8 +152,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("NonExistentProperty", Operator.Equals, "test")]
         };
@@ -177,8 +177,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
     {
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyamount", Operator.GreaterThan, "200")]
         };

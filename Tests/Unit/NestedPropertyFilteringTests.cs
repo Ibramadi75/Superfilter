@@ -58,8 +58,8 @@ public class NestedPropertyFilteringTests
     public void FilterByCarBrandName_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "BMW")]
         };
@@ -76,8 +76,8 @@ public class NestedPropertyFilteringTests
     public void FilterByHouseAddress_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("houseAddress", Operator.Contains, "Oak")]
         };
@@ -95,8 +95,8 @@ public class NestedPropertyFilteringTests
     public void FilterByCarBrandRate_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("carBrandRate", Operator.GreaterThan, "3")]
         };
@@ -114,8 +114,8 @@ public class NestedPropertyFilteringTests
     public void FilterByDoubleNestedProperty_FiltersCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("carBrandName", Operator.Equals, "Ford")]
         };

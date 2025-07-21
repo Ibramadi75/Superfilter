@@ -30,7 +30,9 @@ public static class CommonExpressionBuilder
     }
 
     private static Expression BuildInExpression(Expression[] comparisons)
-        => comparisons.Length == 0 ? Expression.Constant(false) : comparisons.Aggregate(Expression.OrElse);
+    {
+        return comparisons.Length == 0 ? Expression.Constant(false) : comparisons.Aggregate(Expression.OrElse);
+    }
 
     private static BinaryExpression BuildBetweenExpression(Expression property, Expression minConstant, Expression maxConstant)
     {
@@ -43,7 +45,7 @@ public static class CommonExpressionBuilder
     public static Expression BuildInExpressionWithParser<T>(Expression property, string filterValue, Func<string, T> parser, string typeName)
     {
         string[] values = filterValue.Split(',', StringSplitOptions.RemoveEmptyEntries);
-        
+
         if (values.Length == 0)
             return Expression.Constant(false);
 
@@ -66,7 +68,7 @@ public static class CommonExpressionBuilder
     public static Expression BuildBetweenExpressionWithParser<T>(Expression property, string filterValue, Func<string, T> parser, string typeName)
     {
         string[] values = filterValue.Split(',', StringSplitOptions.RemoveEmptyEntries);
-        
+
         if (values.Length != 2)
             throw new ArgumentException("Between operator requires exactly two values separated by comma");
 
@@ -86,7 +88,7 @@ public static class CommonExpressionBuilder
         }
     }
 
-    public static Expression BuildComplexFilterExpression(Expression property, string filterValue, Operator filterOperator, 
+    public static Expression BuildComplexFilterExpression(Expression property, string filterValue, Operator filterOperator,
         Func<Expression, string, Expression> inBuilder, Func<Expression, string, Expression> betweenBuilder,
         Func<Expression, string, Operator, Expression> comparisonBuilder)
     {
@@ -104,12 +106,10 @@ public static class CommonExpressionBuilder
     public static Expression WrapWithNullCheck(Expression property, Expression expression)
     {
         if (IsNullableType(property.Type))
-        {
             return Expression.AndAlso(
                 Expression.NotEqual(property, Expression.Constant(null, property.Type)),
                 expression
             );
-        }
         return expression;
     }
 

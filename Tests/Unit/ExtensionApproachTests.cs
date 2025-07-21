@@ -22,7 +22,7 @@ public class ExtensionApproachTests
     public void ExtensionApproach_WithManualMapping_ShouldWorkCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        var filters = new HasFiltersDto
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Equals, "Alice")]
         };
@@ -41,7 +41,7 @@ public class ExtensionApproachTests
     public void ExtensionApproach_WithFiltering_ShouldWorkCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        var filters = new HasFiltersDto
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Equals, "Bob")]
         };
@@ -60,8 +60,8 @@ public class ExtensionApproachTests
     public void ExtensionApproach_WithNumericFilter_ShouldWorkCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "150")]
         };
@@ -81,14 +81,14 @@ public class ExtensionApproachTests
     public void ExtensionApproach_WithAutoPropertyMapping_ShouldWork()
     {
         IQueryable<User> users = GetTestUsers();
-        var filters = new HasFiltersDto
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("User.Name", Operator.Contains, "li")]
         };
 
         List<User> result = users
             .WithSuperfilter()
-            .MapProperty(x => x.Name)  // Auto-maps to "User.Name"
+            .MapProperty(x => x.Name) // Auto-maps to "User.Name"
             .WithFilters(filters)
             .ToList();
 

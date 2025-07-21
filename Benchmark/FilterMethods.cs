@@ -1,4 +1,3 @@
-using Benchmark;
 using Superfilter;
 using Superfilter.Constants;
 using Superfilter.Defaults;
@@ -45,6 +44,7 @@ internal static class FilterMethods
                         string[] values = filter.Value.Split(',');
                         query = query.Where(u => values.Contains(u.Country));
                     }
+
                     // ... 
                     break;
                 }
@@ -53,7 +53,7 @@ internal static class FilterMethods
         return query.ToList();
     }
 
-    
+
     public static List<User> SuperfilterIQueryableExtensionsApproachMethod(List<User> users, DefaultHasFilters filters)
     {
         IQueryable<User> query = users.AsQueryable();
@@ -61,7 +61,7 @@ internal static class FilterMethods
         if (filters.Filters.Count == 0)
             return users;
 
-        var result = query
+        List<User>? result = query
             .WithSuperfilter()
             .MapProperty(x => x.Name)
             .MapProperty(x => x.Age)

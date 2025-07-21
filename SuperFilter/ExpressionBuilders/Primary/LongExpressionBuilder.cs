@@ -26,5 +26,4 @@ public static class LongExpressionBuilder
         Expression comparison = CommonExpressionBuilder.BuildComparisonExpression(property, constant, filterOperator);
         return CommonExpressionBuilder.WrapWithNullCheck(property, comparison);
     }
-
 }

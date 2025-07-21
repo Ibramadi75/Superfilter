@@ -8,7 +8,7 @@ public class User
     public DateTime? BornDate { get; init; }
     public DateTimeOffset? RegistrationDate { get; init; }
     public DateTimeOffset LastLoginDate { get; init; }
-    
+
     // New numeric properties for testing
     public long LongValue { get; init; }
     public long? NullableLongValue { get; init; }

@@ -57,8 +57,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnLong_EqualsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("longValue", Operator.Equals, "1000000000000")]
         };
@@ -75,8 +75,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnLong_LessThanOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("longValue", Operator.LessThan, "2000000000000")]
         };
@@ -94,8 +94,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnLong_GreaterThanOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("longValue", Operator.GreaterThan, "1000000000000")]
         };
@@ -112,8 +112,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnNullableLong_EqualsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("nullableLongValue", Operator.Equals, "2000000000000")]
         };
@@ -134,8 +134,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnDecimal_EqualsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "123.456")]
         };
@@ -152,8 +152,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnDecimal_LessThanOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("decimalValue", Operator.LessThan, "500")]
         };
@@ -171,8 +171,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnDecimal_GreaterThanOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("decimalValue", Operator.GreaterThan, "500")]
         };
@@ -189,8 +189,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnNullableDecimal_EqualsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("nullableDecimalValue", Operator.Equals, "789.012")]
         };
@@ -211,8 +211,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnDouble_EqualsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("doubleValue", Operator.Equals, "3.14159")]
         };
@@ -229,8 +229,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnDouble_LessThanOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("doubleValue", Operator.LessThan, "5")]
         };
@@ -248,8 +248,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnDouble_GreaterThanOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("doubleValue", Operator.GreaterThan, "5")]
         };
@@ -266,8 +266,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnNullableDouble_EqualsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("nullableDoubleValue", Operator.Equals, "2.71828")]
         };
@@ -288,8 +288,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnFloat_EqualsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("floatValue", Operator.Equals, "1.5")]
         };
@@ -306,8 +306,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnFloat_LessThanOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("floatValue", Operator.LessThan, "2")]
         };
@@ -325,8 +325,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnFloat_GreaterThanOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("floatValue", Operator.GreaterThan, "2")]
         };
@@ -343,8 +343,8 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnNullableFloat_EqualsOperator_ApplyFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("nullableFloatValue", Operator.Equals, "2.5")]
         };
@@ -365,13 +365,13 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnLong_InvalidFormat_ThrowsFormatException()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("longValue", Operator.Equals, "not_a_long")]
         };
 
-        var exception = Assert.Throws<SuperfilterException>(() => 
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapProperty("longValue", x => x.LongValue)
                 .WithFilters(filters).ToList());
@@ -382,13 +382,13 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnDecimal_InvalidFormat_ThrowsFormatException()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "not_a_decimal")]
         };
 
-        var exception = Assert.Throws<SuperfilterException>(() => 
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapProperty("decimalValue", x => x.DecimalValue)
                 .WithFilters(filters).ToList());
@@ -399,13 +399,13 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnDouble_InvalidFormat_ThrowsFormatException()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("doubleValue", Operator.Equals, "not_a_double")]
         };
 
-        var exception = Assert.Throws<SuperfilterException>(() => 
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapProperty("doubleValue", x => x.DoubleValue)
                 .WithFilters(filters).ToList());
@@ -416,13 +416,13 @@ public class NumericTypeFilteringTests
     public void FilterProperty_OnFloat_InvalidFormat_ThrowsFormatException()
     {
         IQueryable<User> users = GetTestUsers();
-        
-        var filters = new HasFiltersDto
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("floatValue", Operator.Equals, "not_a_float")]
         };
 
-        var exception = Assert.Throws<SuperfilterException>(() => 
+        SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapProperty("floatValue", x => x.FloatValue)
                 .WithFilters(filters).ToList());

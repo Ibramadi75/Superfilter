@@ -53,7 +53,7 @@ internal static class SuperfilterExtensions
     {
         if (superfilter.InternalGlobalConfiguration == null)
             throw new SuperfilterException("Superfilter is not properly initialized");
-        
+
         return query.ApplySorting(superfilter.InternalGlobalConfiguration);
     }
 
@@ -96,10 +96,13 @@ internal static class SuperfilterExtensions
         return query;
     }
 
-    private static Expression GetNestedPropertyExpression(Expression parameter, string propertyPath) 
-        =>propertyPath.Split('.').Aggregate(parameter, Expression.Property);
+    private static Expression GetNestedPropertyExpression(Expression parameter, string propertyPath)
+    {
+        return propertyPath.Split('.').Aggregate(parameter, Expression.Property);
+    }
 
-    private static string RemoveUntilFirstDot(string input) 
-        => !input.Contains('.') ? 
-            input : input[(input.IndexOf('.') + 1)..];
+    private static string RemoveUntilFirstDot(string input)
+    {
+        return !input.Contains('.') ? input : input[(input.IndexOf('.') + 1)..];
+    }
 }

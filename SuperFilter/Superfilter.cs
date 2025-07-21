@@ -12,13 +12,13 @@ public partial class Superfilter
 
     public IQueryable<T> ApplyConfiguredFilters<T>(IQueryable<T> query)
     {
-        if (FieldConfigurations == null || FieldConfigurations.Count == 0) 
+        if (FieldConfigurations == null || FieldConfigurations.Count == 0)
             throw new SuperfilterException($"No field configuration found. Call InitializeFieldSelectors<{typeof(T).Name}>() first.");
 
         if (GlobalConfiguration == null) throw new SuperfilterException("No global configuration found");
 
         ValidateRequiredFiltersPresence();
-        
+
         if (GlobalConfiguration.HasFilters.Filters.Count == 0)
             return query;
 
@@ -46,19 +46,21 @@ public partial class Superfilter
 
         return query;
     }
+
     internal void InitializeGlobalConfiguration(GlobalConfiguration globalConfiguration)
     {
         if (GlobalConfiguration != null)
             throw new SuperfilterException("GlobalConfiguration is already set. Use a new instance of Superfilter for different configurations.\n Using the same instance will lead to unexpected behavior.");
         GlobalConfiguration = globalConfiguration;
     }
+
     internal void InitializeFieldSelectors<T>()
     {
         if (GlobalConfiguration is null)
             throw new SuperfilterException("GlobalConfiguration must be set before using InitializeFieldSelectors");
 
         if (FieldConfigurations != null)
-            throw new SuperfilterException($"FieldSelectors already initialized for this instance. Use a new Superfilter instance for different types.");
+            throw new SuperfilterException("FieldSelectors already initialized for this instance. Use a new Superfilter instance for different types.");
 
         FieldConfigurations = new Dictionary<string, FieldConfiguration>();
 
@@ -68,7 +70,6 @@ public partial class Superfilter
 
             // Si l'expression retourne object, on doit la reconstruire avec le type correct
             if (fieldConfig.Selector.Body.Type == typeof(object) && fieldConfig.Selector.Body is UnaryExpression unary && unary.NodeType == ExpressionType.Convert)
-            {
                 try
                 {
                     string propertyPath = ExtractPropertyPathFromSelectorString(fieldConfig.Selector.ToString());
@@ -78,7 +79,6 @@ public partial class Superfilter
                 {
                     // Si la reconstruction échoue, on garde l'expression originale
                 }
-            }
 
             FieldConfigurations[mapping.Key] = fieldConfig;
         }

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Superfilter;
 using Superfilter.Constants;
@@ -12,18 +14,18 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     [Fact]
     public async Task ApplyFilters_WithPostgreSQL_ShouldGenerateValidQuery()
     {
-        var users = Context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+        IQueryable<User> users = Context.Users.AsQueryable();
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        var filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters);
-        var sqlQuery = filteredQuery.ToQueryString();
-        var result = await filteredQuery.ToListAsync();
+        string sqlQuery = filteredQuery.ToQueryString();
+        List<User> result = await filteredQuery.ToListAsync();
 
         testOutputHelper.WriteLine("Generated PostgreSQL Query:");
         testOutputHelper.WriteLine(sqlQuery);
@@ -40,28 +42,28 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     [Fact]
     public async Task ApplyFilters_WithComplexNavigationProperties_ShouldWorkWithPostgreSQL()
     {
-        var users = Context.Users
+        IQueryable<User> users = Context.Users
             .Include(u => u.Car)
             .ThenInclude(c => c!.Brand)
             .Include(u => u.House)
             .ThenInclude(h => h!.City)
             .AsQueryable();
 
-        var filters = new HasFiltersDto
+        HasFiltersDto filters = new()
         {
-            Filters = 
+            Filters =
             [
                 new FilterCriterion("User.Car.Brand.Name", Operator.Equals, "Ford"),
                 new FilterCriterion("User.City.Name", Operator.StartsWith, "P")
             ]
         };
 
-        var filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty(x => x.Car!.Brand!.Name)
             .MapProperty(x => x.House!.City.Name)
             .WithFilters(filters);
-        var sqlQuery = filteredQuery.ToQueryString();
-        var result = await filteredQuery.ToListAsync();
+        string sqlQuery = filteredQuery.ToQueryString();
+        List<User> result = await filteredQuery.ToListAsync();
 
         testOutputHelper.WriteLine("Complex Navigation Query:");
         testOutputHelper.WriteLine(sqlQuery);
@@ -75,18 +77,18 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     [Fact]
     public async Task ApplyFilters_WithDateOperations_ShouldWorkWithPostgreSQLDateFunctions()
     {
-        var users = Context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+        IQueryable<User> users = Context.Users.AsQueryable();
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.Equals, "200")]
         };
 
-        var filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .WithFilters(filters);
-        var sqlQuery = filteredQuery.ToQueryString();
-        var result = await filteredQuery.ToListAsync();
+        string sqlQuery = filteredQuery.ToQueryString();
+        List<User> result = await filteredQuery.ToListAsync();
 
         testOutputHelper.WriteLine("Basic Filter Query:");
         testOutputHelper.WriteLine(sqlQuery);
@@ -101,18 +103,18 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     [Fact]
     public async Task ApplyFilters_WithStringContains_ShouldUsePostgreSQLILike()
     {
-        var users = Context.Users.AsQueryable();
-        
-        var filters = new HasFiltersDto
+        IQueryable<User> users = Context.Users.AsQueryable();
+
+        HasFiltersDto filters = new()
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "li")]
         };
 
-        var filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters);
-        var sqlQuery = filteredQuery.ToQueryString();
-        var result = await filteredQuery.ToListAsync();
+        string sqlQuery = filteredQuery.ToQueryString();
+        List<User> result = await filteredQuery.ToListAsync();
 
         testOutputHelper.WriteLine("String Contains Query:");
         testOutputHelper.WriteLine(sqlQuery);
@@ -126,14 +128,14 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     [Fact]
     public async Task ApplyFilters_WithMultipleComplexFilters_ShouldPerformWellOnPostgreSQL()
     {
-        var users = Context.Users
+        IQueryable<User> users = Context.Users
             .Include(u => u.Car)
             .ThenInclude(c => c!.Brand)
             .AsQueryable();
 
-        var filters = new HasFiltersDto
+        HasFiltersDto filters = new()
         {
-            Filters = 
+            Filters =
             [
                 new FilterCriterion("User.MoneyAmount", Operator.GreaterThan, "75"),
                 new FilterCriterion("User.Car.Name", Operator.Contains, "Ford"),
@@ -141,14 +143,14 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             ]
         };
 
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        var filteredQuery = users.WithSuperfilter()
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty(x => x.MoneyAmount)
             .MapProperty(x => x.Car!.Name)
             .MapProperty(x => x.Car!.Brand!.Rate)
             .WithFilters(filters);
-        var sqlQuery = filteredQuery.ToQueryString();
-        var result = await filteredQuery.ToListAsync();
+        string sqlQuery = filteredQuery.ToQueryString();
+        List<User> result = await filteredQuery.ToListAsync();
         stopwatch.Stop();
 
         testOutputHelper.WriteLine("Complex Multi-Filter Query:");

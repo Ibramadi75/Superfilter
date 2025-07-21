@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Optimize>true</Optimize>
-        
+
         <!-- Package Information -->
         <PackageId>Superfilter</PackageId>
         <Version>0.1.5-alpha</Version>
@@ -25,23 +25,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Update="Superfilter.RequiredFilters.cs">
-        <DependentUpon>Superfilter.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Superfilter.ExpressionUtils.cs">
-        <DependentUpon>Superfilter.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Superfilter.FieldConfig.cs">
-        <DependentUpon>Superfilter.cs</DependentUpon>
-      </Compile>
+        <Compile Update="Superfilter.RequiredFilters.cs">
+            <DependentUpon>Superfilter.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Superfilter.ExpressionUtils.cs">
+            <DependentUpon>Superfilter.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Superfilter.FieldConfig.cs">
+            <DependentUpon>Superfilter.cs</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Constants\" />
+        <Folder Include="Constants\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="../README.md" Pack="true" PackagePath="\" />
+        <None Include="../README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>

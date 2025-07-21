@@ -26,5 +26,4 @@ public static class DoubleExpressionBuilder
 
         return CommonExpressionBuilder.BuildComparisonExpression(property, constant, filterOperator);
     }
-
 }

@@ -4,7 +4,9 @@
 
 # Superfilter
 
-Superfilter is a lightweight C# .NET 9.0 library for applying dynamic filtering and sorting on `IQueryable` sources. It maps textual filter criteria to strongly typed expressions, making it easy to expose flexible query capabilities in web APIs or other data-driven applications.
+Superfilter is a lightweight C# .NET 9.0 library for applying dynamic filtering and sorting on `IQueryable` sources. It
+maps textual filter criteria to strongly typed expressions, making it easy to expose flexible query capabilities in web
+APIs or other data-driven applications.
 
 ## Features
 
@@ -12,7 +14,8 @@ Superfilter is a lightweight C# .NET 9.0 library for applying dynamic filtering 
 - Map filter keys to entity properties with lambda selectors and type inference
 - Supports nested navigation properties (e.g., `x => x.Car.Brand.Name`)
 - Validates required filters with configurable error handling
-- Built‑in operators: `Equals`, `LessThan`, `GreaterThan`, `StartsWith`, `Contains`, `IsEqualToYear`, `IsEqualToYearAndMonth`, `IsEqualToFullDate`
+- Built‑in operators: `Equals`, `LessThan`, `GreaterThan`, `StartsWith`, `Contains`, `IsEqualToYear`,
+  `IsEqualToYearAndMonth`, `IsEqualToFullDate`
 - Integrated sorting functionality
 - Works seamlessly with Entity Framework and LINQ-to-Objects
 - Type-safe expression building with proper type inference
@@ -61,16 +64,16 @@ var result = await _context.Users
 
 ### Core Extension Methods
 
-| Method | Description |
-|--------|-------------|
-| `.WithSuperfilter()` | Starts fluent configuration chain for IQueryable |
-| `MapProperty<TProperty>(selector)` | Maps property with auto-generated key |
-| `MapProperty<TProperty>(key, selector)` | Maps property with explicit key |
-| `MapRequiredProperty<TProperty>(selector)` | Maps required property with auto-generated key |
-| `MapRequiredProperty<TProperty>(key, selector)` | Maps required property with explicit key |
-| `WithFilters(IHasFilters)` | Applies filters and returns filtered IQueryable |
-| `AddStaticFilter(field, operator, value)` | Adds a static filter |
-| `WithErrorStrategy(OnErrorStrategy)` | Sets error handling strategy |
+| Method                                          | Description                                      |
+|-------------------------------------------------|--------------------------------------------------|
+| `.WithSuperfilter()`                            | Starts fluent configuration chain for IQueryable |
+| `MapProperty<TProperty>(selector)`              | Maps property with auto-generated key            |
+| `MapProperty<TProperty>(key, selector)`         | Maps property with explicit key                  |
+| `MapRequiredProperty<TProperty>(selector)`      | Maps required property with auto-generated key   |
+| `MapRequiredProperty<TProperty>(key, selector)` | Maps required property with explicit key         |
+| `WithFilters(IHasFilters)`                      | Applies filters and returns filtered IQueryable  |
+| `AddStaticFilter(field, operator, value)`       | Adds a static filter                             |
+| `WithErrorStrategy(OnErrorStrategy)`            | Sets error handling strategy                     |
 
 ### Property Mapping Examples
 
@@ -116,16 +119,16 @@ var result = _context.Users
 
 ## Supported Operators
 
-| Operator | Description | Example |
-|----------|-------------|---------|
-| `Equals` | Exact match | `name = "John"` |
-| `Contains` | String contains | `name LIKE "%John%"` |
-| `StartsWith` | String starts with | `name LIKE "John%"` |
-| `LessThan` | Numeric/Date less than | `age < 30` |
-| `GreaterThan` | Numeric/Date greater than | `age > 18` |
-| `IsEqualToYear` | Date year equals | `YEAR(birthDate) = 1990` |
+| Operator                | Description                | Example                                           |
+|-------------------------|----------------------------|---------------------------------------------------|
+| `Equals`                | Exact match                | `name = "John"`                                   |
+| `Contains`              | String contains            | `name LIKE "%John%"`                              |
+| `StartsWith`            | String starts with         | `name LIKE "John%"`                               |
+| `LessThan`              | Numeric/Date less than     | `age < 30`                                        |
+| `GreaterThan`           | Numeric/Date greater than  | `age > 18`                                        |
+| `IsEqualToYear`         | Date year equals           | `YEAR(birthDate) = 1990`                          |
 | `IsEqualToYearAndMonth` | Date year and month equals | `YEAR(birthDate) = 1990 AND MONTH(birthDate) = 5` |
-| `IsEqualToFullDate` | Full date equals | `DATE(birthDate) = '1990-05-15'` |
+| `IsEqualToFullDate`     | Full date equals           | `DATE(birthDate) = '1990-05-15'`                  |
 
 ## Note on Property Mapping
 
@@ -134,7 +137,9 @@ The `MapProperty` method is available in two forms:
 1. `MapProperty(key, selector)` - Explicit key definition for the property mapping
 2. `MapProperty(selector)` - Auto-generated key based on property path
 
-**Security Note:** When using auto-generated keys (`MapProperty(selector)`), consider whether exposing your data model schema to the frontend is acceptable for your use case. This approach might reveal internal details of your data model structure.
+**Security Note:** When using auto-generated keys (`MapProperty(selector)`), consider whether exposing your data model
+schema to the frontend is acceptable for your use case. This approach might reveal internal details of your data model
+structure.
 
 ## Installation
 

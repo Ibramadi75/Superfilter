@@ -16,6 +16,7 @@ public partial class Superfilter
         Type funcType = typeof(Func<,>).MakeGenericType(typeof(T), targetType);
         return Expression.Lambda(funcType, body, expression.Parameters);
     }
+
     private static Type ExtractPropertyTypeFromSelector(LambdaExpression selector)
     {
         Expression body = selector.Body is UnaryExpression unary ? unary.Operand : selector.Body;
@@ -40,7 +41,7 @@ public partial class Superfilter
 
         throw new SuperfilterException("Unsupported selector type for " + selector);
     }
-    
+
     internal static LambdaExpression BuildSelectorLambda<T>(string memberExpression)
     {
         ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
@@ -53,21 +54,21 @@ public partial class Superfilter
     {
         return propertyPath.Split('.').Aggregate(parameter, Expression.Property);
     }
-    
+
     /// <summary>
-    /// Extracts the property path from a selector-like string by removing everything
-    /// before the first dot ('.') and, if present, everything after the first comma (',').
+    ///     Extracts the property path from a selector-like string by removing everything
+    ///     before the first dot ('.') and, if present, everything after the first comma (',').
     /// </summary>
     /// <param name="input">
-    /// A string representing a selector, typically in the form of a lambda expression
-    /// as a string (e.g., "x => x.User.Name" or "x => x.User.Name, String").
+    ///     A string representing a selector, typically in the form of a lambda expression
+    ///     as a string (e.g., "x => x.User.Name" or "x => x.User.Name, String").
     /// </param>
     /// <returns>
-    /// The substring after the first dot, truncated at the first comma if one exists.
-    /// For example:
-    /// - "x => x.User.Name" returns "User.Name"
-    /// - "x => x.User.Name, String" returns "User.Name"
-    /// - "x" returns "x"
+    ///     The substring after the first dot, truncated at the first comma if one exists.
+    ///     For example:
+    ///     - "x => x.User.Name" returns "User.Name"
+    ///     - "x => x.User.Name, String" returns "User.Name"
+    ///     - "x" returns "x"
     /// </returns>
     internal static string ExtractPropertyPathFromSelectorString(string input)
     {
@@ -79,16 +80,16 @@ public partial class Superfilter
 
         return commaIndex == -1 ? afterDot : afterDot[..commaIndex];
     }
-    
+
     /// <summary>
-    /// Extracts the last word in a string that is separated by dots ('.').
+    ///     Extracts the last word in a string that is separated by dots ('.').
     /// </summary>
     /// <param name="input">
-    /// A string that may contain multiple words separated by dots.
+    ///     A string that may contain multiple words separated by dots.
     /// </param>
     /// <returns>
-    /// The last word in the string after the last dot.
-    /// "Database.Models.User" returns "User"
+    ///     The last word in the string after the last dot.
+    ///     "Database.Models.User" returns "User"
     /// </returns>
     internal static string ExtractLastWordFromDotSeparatedString(string input)
     {
