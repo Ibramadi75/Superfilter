@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-using Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Superfilter;
 using Superfilter.Constants;
@@ -60,7 +58,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
 
         var filteredQuery = users.WithSuperfilter()
             .MapProperty(x => x.Car!.Brand!.Name)
-            .MapProperty(x => x.House!.City!.Name)
+            .MapProperty(x => x.House!.City.Name)
             .WithFilters(filters);
         var sqlQuery = filteredQuery.ToQueryString();
         var result = await filteredQuery.ToListAsync();
