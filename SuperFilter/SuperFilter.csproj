@@ -8,9 +8,9 @@
 
         <!-- Package Information -->
         <PackageId>Superfilter</PackageId>
-        <Version>0.1.5-alpha</Version>
-        <AssemblyVersion>0.1.5.0</AssemblyVersion>
-        <FileVersion>0.1.5.0</FileVersion>
+        <Version>0.2.0</Version>
+        <AssemblyVersion>0.2.0.0</AssemblyVersion>
+        <FileVersion>0.2.0.0</FileVersion>
         <Authors>Ibrahim Madi</Authors>
         <Description>A lightweight C# .NET library for dynamic filtering and sorting of IQueryable sources. Designed to integrate seamlessly with Entity Framework Core (EF Core).</Description>
         <PackageTags>filter;sorting;linq;queryable;dynamic;ef-core</PackageTags>
@@ -21,7 +21,18 @@
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>Updated repository URL and documentation. Enhanced README with complete examples and best practices.</PackageReleaseNotes>
+        <PackageReleaseNotes>🚀 VERSION 0.2.0 - BREAKING CHANGES:
+        
+- REMOVED: SuperfilterBuilder.For&lt;T&gt;() approach (breaking change)
+- NEW: Unified IQueryable extension approach with .WithSuperfilter()
+- SIMPLIFIED: Single fluent API - no more dual approaches
+- IMPROVED: Natural integration with existing LINQ workflows
+- UPDATED: Complete documentation and examples
+- ENHANCED: Better IntelliSense and type safety
+        
+Migration: Replace SuperfilterBuilder.For&lt;T&gt;().Build(query) with query.WithSuperfilter().WithFilters()
+        
+This is a breaking change - please update your code accordingly.</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

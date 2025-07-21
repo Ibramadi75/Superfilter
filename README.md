@@ -144,7 +144,7 @@ structure.
 ## Installation
 
 ```bash
-dotnet add package Superfilter --version 0.1.6-alpha
+dotnet add package Superfilter --version 0.2.0
 ```
 
 ## Links
