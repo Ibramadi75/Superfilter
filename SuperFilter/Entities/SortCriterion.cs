@@ -1,3 +1,3 @@
 namespace Superfilter.Entities;
 
-public record SortCriterion(string Field, string dir);
+public record SortCriterion(string Field, string Dir);

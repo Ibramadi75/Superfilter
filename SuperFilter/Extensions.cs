@@ -80,8 +80,8 @@ internal static class SuperfilterExtensions
             LambdaExpression lambda = Expression.Lambda(Expression.Convert(propertyAccess, propertyType), parameter);
 
             string methodName = query.Expression.Type == typeof(IOrderedQueryable<T>)
-                ? sorter.dir.Equals("asc", StringComparison.CurrentCultureIgnoreCase) ? "ThenBy" : "ThenByDescending"
-                : sorter.dir.Equals("asc", StringComparison.CurrentCultureIgnoreCase)
+                ? sorter.Dir.Equals("asc", StringComparison.CurrentCultureIgnoreCase) ? "ThenBy" : "ThenByDescending"
+                : sorter.Dir.Equals("asc", StringComparison.CurrentCultureIgnoreCase)
                     ? "OrderBy"
                     : "OrderByDescending";
 

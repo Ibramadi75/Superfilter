@@ -216,6 +216,8 @@ public class QueryableWrapper<T> where T : class
     private class FilterContainer(List<FilterCriterion> filters) : IHasFilters
     {
         public List<FilterCriterion> Filters { get; set; } = filters;
+        public int PageNumber { get; init; }
+        public int PageSize { get; init; }
     }
 
     /// <summary>

@@ -60,7 +60,7 @@ public class BasicFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("id", Operator.GreaterThan, "1")]
         };
@@ -78,7 +78,7 @@ public class BasicFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "23/02/2003")]
         };
@@ -95,7 +95,7 @@ public class BasicFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
@@ -113,7 +113,7 @@ public class BasicFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "nonexistent")]
         };
@@ -130,7 +130,7 @@ public class BasicFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("unknownField", Operator.Contains, "e")]
         };
@@ -147,7 +147,7 @@ public class BasicFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "")]
         };

@@ -75,7 +75,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_Equals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Equals, "Alice")]
         };
@@ -90,7 +90,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_NotEquals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.NotEquals, "Alice")]
         };
@@ -105,7 +105,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_StartsWith_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.StartsWith, "B")]
         };
@@ -120,7 +120,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_EndsWith_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.EndsWith, "e")]
         };
@@ -136,7 +136,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_Contains_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "a")]
         };
@@ -152,7 +152,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_NotContains_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.NotContains, "a")]
         };
@@ -168,7 +168,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_IsEmpty_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.IsEmpty, "")]
         };
@@ -183,7 +183,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_IsNotEmpty_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.IsNotEmpty, "")]
         };
@@ -198,7 +198,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_In_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.In, "Alice,Bob,Charlie")]
         };
@@ -215,7 +215,7 @@ public class ComprehensiveOperatorTests
     public void StringOperator_NotIn_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.NotIn, "Alice,Bob")]
         };
@@ -235,7 +235,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_Equals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.Equals, "200")]
         };
@@ -250,7 +250,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_NotEquals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.NotEquals, "200")]
         };
@@ -265,7 +265,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_LessThan_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.LessThan, "200")]
         };
@@ -280,7 +280,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_LessThanOrEqual_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.LessThanOrEqual, "200")]
         };
@@ -295,7 +295,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_GreaterThan_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "200")]
         };
@@ -310,7 +310,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_GreaterThanOrEqual_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThanOrEqual, "200")]
         };
@@ -325,7 +325,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_Between_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.Between, "150,250")]
         };
@@ -340,7 +340,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_NotBetween_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.NotBetween, "150,250")]
         };
@@ -355,7 +355,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_In_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.In, "100,200,300")]
         };
@@ -370,7 +370,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_NotIn_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.NotIn, "100,200")]
         };
@@ -390,7 +390,7 @@ public class ComprehensiveOperatorTests
     public void LongOperator_Equals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("longValue", Operator.Equals, "2000")]
         };
@@ -405,7 +405,7 @@ public class ComprehensiveOperatorTests
     public void LongOperator_Between_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("longValue", Operator.Between, "1500,2500")]
         };
@@ -420,7 +420,7 @@ public class ComprehensiveOperatorTests
     public void LongOperator_In_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("longValue", Operator.In, "1000,2000,3000")]
         };
@@ -435,7 +435,7 @@ public class ComprehensiveOperatorTests
     public void NullableLongOperator_IsNull_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("nullableLongValue", Operator.IsNull, "")]
         };
@@ -454,7 +454,7 @@ public class ComprehensiveOperatorTests
     public void DecimalOperator_Equals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "200.5")]
         };
@@ -469,7 +469,7 @@ public class ComprehensiveOperatorTests
     public void DecimalOperator_LessThanOrEqual_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("decimalValue", Operator.LessThanOrEqual, "200.5")]
         };
@@ -484,7 +484,7 @@ public class ComprehensiveOperatorTests
     public void DecimalOperator_Between_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Between, "150.5,250.5")]
         };
@@ -503,7 +503,7 @@ public class ComprehensiveOperatorTests
     public void DoubleOperator_GreaterThan_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("doubleValue", Operator.GreaterThan, "200.75")]
         };
@@ -518,7 +518,7 @@ public class ComprehensiveOperatorTests
     public void DoubleOperator_NotEquals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("doubleValue", Operator.NotEquals, "200.75")]
         };
@@ -537,7 +537,7 @@ public class ComprehensiveOperatorTests
     public void FloatOperator_GreaterThanOrEqual_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("floatValue", Operator.GreaterThanOrEqual, "200.25")]
         };
@@ -552,7 +552,7 @@ public class ComprehensiveOperatorTests
     public void FloatOperator_NotBetween_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("floatValue", Operator.NotBetween, "150.25,250.25")]
         };
@@ -571,7 +571,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_Equals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.Equals, "01/01/2000")]
         };
@@ -586,7 +586,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_NotEquals_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.NotEquals, "01/01/2000")]
         };
@@ -601,7 +601,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_LessThan_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.LessThan, "01/01/2000")]
         };
@@ -616,7 +616,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_LessThanOrEqual_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.LessThanOrEqual, "01/01/2000")]
         };
@@ -631,7 +631,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_GreaterThan_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.GreaterThan, "01/01/2000")]
         };
@@ -646,7 +646,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_GreaterThanOrEqual_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.GreaterThanOrEqual, "01/01/2000")]
         };
@@ -661,7 +661,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_IsBefore_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsBefore, "01/01/2000")]
         };
@@ -676,7 +676,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_IsAfter_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsAfter, "01/01/2000")]
         };
@@ -691,7 +691,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_IsEqualToYear_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYear, "01/01/2000")]
         };
@@ -706,7 +706,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_IsEqualToYearAndMonth_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToYearAndMonth, "01/01/2000")]
         };
@@ -722,7 +722,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_IsEqualToFullDate_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsEqualToFullDate, "01/01/2000")]
         };
@@ -737,7 +737,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_IsNull_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsNull, "")]
         };
@@ -752,7 +752,7 @@ public class ComprehensiveOperatorTests
     public void DateTimeOperator_IsNotNull_ShouldFilterCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("bornDate", Operator.IsNotNull, "")]
         };
@@ -771,7 +771,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_Between_InvalidFormat_ShouldThrowException()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.Between, "100")]
         };
@@ -789,7 +789,7 @@ public class ComprehensiveOperatorTests
     public void IntegerOperator_InvalidValue_ShouldThrowException()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.Equals, "invalid")]
         };
@@ -807,7 +807,7 @@ public class ComprehensiveOperatorTests
     public void DecimalOperator_InvalidValue_ShouldThrowException()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "invalid")]
         };
