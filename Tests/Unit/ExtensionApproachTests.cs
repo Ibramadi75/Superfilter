@@ -22,7 +22,7 @@ public class ExtensionApproachTests
     public void ExtensionApproach_WithManualMapping_ShouldWorkCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Equals, "Alice")]
         };
@@ -41,7 +41,7 @@ public class ExtensionApproachTests
     public void ExtensionApproach_WithFiltering_ShouldWorkCorrectly()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Equals, "Bob")]
         };
@@ -61,7 +61,7 @@ public class ExtensionApproachTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "150")]
         };
@@ -81,7 +81,7 @@ public class ExtensionApproachTests
     public void ExtensionApproach_WithAutoPropertyMapping_ShouldWork()
     {
         IQueryable<User> users = GetTestUsers();
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("User.Name", Operator.Contains, "li")]
         };

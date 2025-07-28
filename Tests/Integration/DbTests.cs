@@ -42,7 +42,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
@@ -65,7 +65,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
@@ -92,7 +92,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("carName", Operator.StartsWith, "F")]
         };
@@ -120,7 +120,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters =
             [
@@ -153,7 +153,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("NonExistentProperty", Operator.Equals, "test")]
         };
@@ -178,7 +178,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyamount", Operator.GreaterThan, "200")]
         };

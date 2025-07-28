@@ -1,4 +1,4 @@
-![stable](https://img.shields.io/badge/status-Stable_1.0-green?style=for-the-badge)
+![stable](https://img.shields.io/badge/status-Stable_1.0.1-green?style=for-the-badge)
 [![NuGet](https://img.shields.io/nuget/v/Superfilter?style=for-the-badge)](https://www.nuget.org/packages/Superfilter/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/Ibramadi75/Superfilter)
 
@@ -13,6 +13,7 @@ APIs or other data-driven applications.
 ## Features
 
 - **🚀 Fluent IQueryable Extensions** - Natural integration with LINQ queries
+- **📄 Pagination Support** - Built-in pagination with `IHasPagination` interface
 - Map filter keys to entity properties with lambda selectors and type inference
 - Supports nested navigation properties (e.g., `x => x.Car.Brand.Name`)
 - Validates required filters with configurable error handling
@@ -60,6 +61,38 @@ var result = await _context.Users
     .WithFilters(request.Filters)                        // Apply filters
     .ApplySorting(request.Sorts)                         // Apply sorting
     .ToListAsync();
+```
+
+### With Pagination
+
+```csharp
+// Using IHasPagination interface for pagination support
+public class UserSearchRequest : IHasPagination, IHasFilters
+{
+    public int PageNumber { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
+    public List<FilterCriterion> Filters { get; set; } = new();
+}
+
+// Apply filters with pagination
+[HttpPost("search")]
+public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest request)
+{
+    var query = _context.Users
+        .WithSuperfilter()
+        .MapProperty(u => u.Name)
+        .MapProperty(u => u.Age)
+        .WithFilters(request.Filters);
+
+    // Apply pagination using Skip and Take
+    var skip = (request.PageNumber - 1) * request.PageSize;
+    var result = await query
+        .Skip(skip)
+        .Take(request.PageSize)
+        .ToListAsync();
+    
+    return Ok(result);
+}
 ```
 
 ## API Reference
@@ -149,7 +182,7 @@ structure.
 ## Installation
 
 ```bash
-dotnet add package Superfilter --version 1.0.0
+dotnet add package Superfilter --version 1.0.1
 ```
 
 ## Links

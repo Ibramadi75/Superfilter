@@ -8,12 +8,12 @@
 
         <!-- Package Information -->
         <PackageId>Superfilter</PackageId>
-        <Version>1.0.0</Version>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-        <FileVersion>1.0.0.0</FileVersion>
+        <Version>1.0.1</Version>
+        <AssemblyVersion>1.0.1.0</AssemblyVersion>
+        <FileVersion>1.0.1.0</FileVersion>
         <Authors>Ibrahim Madi</Authors>
         <Description>A lightweight C# .NET library for dynamic filtering and sorting of IQueryable sources. Designed to integrate seamlessly with Entity Framework Core (EF Core).</Description>
-        <PackageTags>filter;sorting;linq;queryable;dynamic;ef-core</PackageTags>
+        <PackageTags>filter;sorting;linq;queryable;dynamic;ef-core;pagination</PackageTags>
         <RepositoryUrl>https://github.com/Ibramadi75/Superfilter</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -21,7 +21,7 @@
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>Version 1.0.0: Multi-target framework support for .NET 8.0 and .NET 9.0. Stable release with comprehensive filtering and sorting capabilities.</PackageReleaseNotes>
+        <PackageReleaseNotes>Version 1.0.1: Added pagination support with IHasPagination interface. Enhanced filtering capabilities with pagination integration.</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

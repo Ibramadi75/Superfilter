@@ -16,7 +16,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     {
         IQueryable<User> users = Context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
@@ -49,7 +49,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .ThenInclude(h => h!.City)
             .AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters =
             [
@@ -79,7 +79,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     {
         IQueryable<User> users = Context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.Equals, "200")]
         };
@@ -105,7 +105,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     {
         IQueryable<User> users = Context.Users.AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "li")]
         };
@@ -133,7 +133,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .ThenInclude(c => c!.Brand)
             .AsQueryable();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters =
             [

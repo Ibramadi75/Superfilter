@@ -58,7 +58,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("longValue", Operator.Equals, "1000000000000")]
         };
@@ -76,7 +76,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("longValue", Operator.LessThan, "2000000000000")]
         };
@@ -95,7 +95,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("longValue", Operator.GreaterThan, "1000000000000")]
         };
@@ -113,7 +113,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("nullableLongValue", Operator.Equals, "2000000000000")]
         };
@@ -135,7 +135,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "123.456")]
         };
@@ -153,7 +153,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("decimalValue", Operator.LessThan, "500")]
         };
@@ -172,7 +172,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("decimalValue", Operator.GreaterThan, "500")]
         };
@@ -190,7 +190,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("nullableDecimalValue", Operator.Equals, "789.012")]
         };
@@ -212,7 +212,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("doubleValue", Operator.Equals, "3.14159")]
         };
@@ -230,7 +230,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("doubleValue", Operator.LessThan, "5")]
         };
@@ -249,7 +249,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("doubleValue", Operator.GreaterThan, "5")]
         };
@@ -267,7 +267,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("nullableDoubleValue", Operator.Equals, "2.71828")]
         };
@@ -289,7 +289,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("floatValue", Operator.Equals, "1.5")]
         };
@@ -307,7 +307,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("floatValue", Operator.LessThan, "2")]
         };
@@ -326,7 +326,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("floatValue", Operator.GreaterThan, "2")]
         };
@@ -344,7 +344,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("nullableFloatValue", Operator.Equals, "2.5")]
         };
@@ -366,7 +366,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("longValue", Operator.Equals, "not_a_long")]
         };
@@ -383,7 +383,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("decimalValue", Operator.Equals, "not_a_decimal")]
         };
@@ -400,7 +400,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("doubleValue", Operator.Equals, "not_a_double")]
         };
@@ -417,7 +417,7 @@ public class NumericTypeFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("floatValue", Operator.Equals, "not_a_float")]
         };

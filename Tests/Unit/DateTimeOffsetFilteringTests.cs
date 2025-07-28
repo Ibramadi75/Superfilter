@@ -60,7 +60,7 @@ public class DateTimeOffsetFilteringTests
         IQueryable<User> users = GetTestUsers();
         DateTimeOffset targetDate = new(2023, 1, 11, 0, 0, 0, TimeSpan.Zero);
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.Equals, targetDate.ToString("O"))]
         };
@@ -79,7 +79,7 @@ public class DateTimeOffsetFilteringTests
         IQueryable<User> users = GetTestUsers();
         DateTimeOffset targetDate = new(2023, 1, 15, 0, 0, 0, TimeSpan.Zero);
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.GreaterThan, targetDate.ToString("O"))]
         };
@@ -98,7 +98,7 @@ public class DateTimeOffsetFilteringTests
         IQueryable<User> users = GetTestUsers();
         DateTimeOffset targetDate = new(2023, 1, 25, 0, 0, 0, TimeSpan.Zero);
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.LessThan, targetDate.ToString("O"))]
         };
@@ -118,7 +118,7 @@ public class DateTimeOffsetFilteringTests
         IQueryable<User> users = GetTestUsers();
         DateTimeOffset targetDate = new(2023, 5, 15, 0, 0, 0, TimeSpan.Zero);
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToYear, targetDate.ToString("O"))]
         };
@@ -136,7 +136,7 @@ public class DateTimeOffsetFilteringTests
         IQueryable<User> users = GetTestUsers();
         DateTimeOffset targetDate = new(2023, 1, 15, 0, 0, 0, TimeSpan.Zero);
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToYearAndMonth, targetDate.ToString("O"))]
         };
@@ -155,7 +155,7 @@ public class DateTimeOffsetFilteringTests
         IQueryable<User> users = GetTestUsers();
         DateTimeOffset targetDate = new(2023, 1, 11, 0, 0, 0, TimeSpan.Zero);
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.IsEqualToFullDate, targetDate.ToString("O"))]
         };
@@ -174,7 +174,7 @@ public class DateTimeOffsetFilteringTests
         IQueryable<User> users = GetTestUsers();
         DateTimeOffset targetDate = new(2023, 2, 1, 0, 0, 0, TimeSpan.Zero);
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("registrationDate", Operator.Equals, targetDate.ToString("O"))]
         };
@@ -193,7 +193,7 @@ public class DateTimeOffsetFilteringTests
         IQueryable<User> users = GetTestUsers();
         DateTimeOffset targetDate = new(2021, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("car.manufactureDate", Operator.Equals, targetDate.ToString("O"))]
         };
@@ -211,7 +211,7 @@ public class DateTimeOffsetFilteringTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("lastLoginDate", Operator.Equals, "invalid-date")]
         };

@@ -32,7 +32,7 @@ public class ValidationTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "e")]
         };
@@ -50,7 +50,7 @@ public class ValidationTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.GreaterThan, "test")]
         };
@@ -66,7 +66,7 @@ public class ValidationTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, null!)]
         };
@@ -83,7 +83,7 @@ public class ValidationTests
     {
         IQueryable<User> users = GetTestUsers();
 
-        HasFiltersDto filters = new()
+        HasFiltersDto filters = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "   ")]
         };
