@@ -1,16 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Optimize>true</Optimize>
 
         <!-- Package Information -->
         <PackageId>Superfilter</PackageId>
-        <Version>0.1.5-alpha</Version>
-        <AssemblyVersion>0.1.5.0</AssemblyVersion>
-        <FileVersion>0.1.5.0</FileVersion>
+        <Version>1.0.0</Version>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
         <Authors>Ibrahim Madi</Authors>
         <Description>A lightweight C# .NET library for dynamic filtering and sorting of IQueryable sources. Designed to integrate seamlessly with Entity Framework Core (EF Core).</Description>
         <PackageTags>filter;sorting;linq;queryable;dynamic;ef-core</PackageTags>
@@ -21,7 +21,7 @@
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>Updated repository URL and documentation. Enhanced README with complete examples and best practices.</PackageReleaseNotes>
+        <PackageReleaseNotes>Version 1.0.0: Multi-target framework support for .NET 8.0 and .NET 9.0. Stable release with comprehensive filtering and sorting capabilities.</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

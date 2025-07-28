@@ -1,12 +1,14 @@
-![pre-alpha](https://img.shields.io/badge/status-Available_soon_🚧-ff69b4?style=for-the-badge&logoColor=white&label=WIP)
+![stable](https://img.shields.io/badge/status-Stable_1.0-green?style=for-the-badge)
 [![NuGet](https://img.shields.io/nuget/v/Superfilter?style=for-the-badge)](https://www.nuget.org/packages/Superfilter/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/Ibramadi75/Superfilter)
 
 # Superfilter
 
-Superfilter is a lightweight C# .NET 9.0 library for applying dynamic filtering and sorting on `IQueryable` sources. It
+Superfilter is a lightweight C# library for applying dynamic filtering and sorting on `IQueryable` sources. It
 maps textual filter criteria to strongly typed expressions, making it easy to expose flexible query capabilities in web
 APIs or other data-driven applications.
+
+**🎯 Framework Support:** .NET 8.0 and .NET 9.0
 
 ## Features
 
@@ -147,7 +149,7 @@ structure.
 ## Installation
 
 ```bash
-dotnet add package Superfilter --version 0.1.6-alpha
+dotnet add package Superfilter --version 1.0.0
 ```
 
 ## Links
