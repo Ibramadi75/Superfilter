@@ -316,6 +316,15 @@ public class QueryableWrapper<T> where T : class
     ///     Automatically uses stored filters/sorts from the request if available.
     /// </summary>
     /// <returns>A FilteredQueryable for optional pagination chaining</returns>
+    [Obsolete("Use ApplyFilters() instead. Build() will be removed in v2.0")]
+    public FilteredQueryable<T> Build() => ApplyFilters();
+
+    /// <summary>
+    ///     Applies filters and sorts, returns a FilteredQueryable that can be used directly
+    ///     or chained with ApplyPagination().
+    ///     Automatically uses stored filters/sorts from the request if available.
+    /// </summary>
+    /// <returns>A FilteredQueryable for optional pagination chaining</returns>
     public FilteredQueryable<T> ApplyFilters()
     {
         return new FilteredQueryable<T>(ApplyConfiguration(), _storedHasPagination);
