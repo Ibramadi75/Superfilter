@@ -40,7 +40,7 @@ public class ValidationTests
         SuperfilterException exception = Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapRequiredProperty("id", x => x.Id)
-                .WithFilters(filters).ToList());
+                .WithFilters(filters).ApplyFilters().ToList());
 
         Assert.Equal("Filter id is required.", exception.Message);
     }
@@ -58,7 +58,7 @@ public class ValidationTests
         Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapProperty("name", x => x.Name)
-                .WithFilters(filters).ToList());
+                .WithFilters(filters).ApplyFilters().ToList());
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class ValidationTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(GetTestUsers().Count(), result.Count);
     }
@@ -90,7 +90,7 @@ public class ValidationTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Empty(result);
     }

@@ -8,72 +8,60 @@ namespace Tests.Unit;
 
 public class PaginationTests
 {
+    #region DTO and Interface Tests
+
     [Fact]
     public void HasFiltersDto_WithPagination_ShouldHaveCorrectProperties()
     {
-        HasFiltersDto filters = new(2, 5)
+        HasFiltersDto request = new(2, 5)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "a")]
         };
 
-        Assert.Equal(2, filters.PageNumber);
-        Assert.Equal(5, filters.PageSize);
-        Assert.Single(filters.Filters);
-    }
-
-    [Fact]  
-    public void IHasPagination_SkipProperty_ShouldCalculateCorrectly()
-    {
-        HasFiltersDto page1 = new(1, 3);
-        HasFiltersDto page2 = new(2, 3);
-        HasFiltersDto page3 = new(3, 3);
-
-        // Test Skip calculation: (PageNumber - 1) * PageSize
-        int skip1 = (page1.PageNumber - 1) * page1.PageSize;
-        int skip2 = (page2.PageNumber - 1) * page2.PageSize;
-        int skip3 = (page3.PageNumber - 1) * page3.PageSize;
-
-        Assert.Equal(0, skip1); // (1-1) * 3 = 0
-        Assert.Equal(3, skip2); // (2-1) * 3 = 3  
-        Assert.Equal(6, skip3); // (3-1) * 3 = 6
+        Assert.Equal(2, request.PageNumber);
+        Assert.Equal(5, request.PageSize);
+        Assert.Single(request.Filters);
     }
 
     [Fact]
-    public void IHasPagination_TakeProperty_ShouldReturnPageSize()
+    public void Pagination_Skip_ShouldCalculateCorrectly()
     {
-        HasFiltersDto filters1 = new(1, 5);
-        HasFiltersDto filters2 = new(2, 10);
-        HasFiltersDto filters3 = new(3, 20);
+        Pagination page1 = new(1, 3);
+        Pagination page2 = new(2, 3);
+        Pagination page3 = new(3, 3);
 
-        // Test Take property: should return PageSize
-        Assert.Equal(5, filters1.PageSize);
-        Assert.Equal(10, filters2.PageSize);
-        Assert.Equal(20, filters3.PageSize);
+        Assert.Equal(0, page1.Skip); // (1-1) * 3 = 0
+        Assert.Equal(3, page2.Skip); // (2-1) * 3 = 3
+        Assert.Equal(6, page3.Skip); // (3-1) * 3 = 6
     }
 
     [Fact]
-    public void HasFiltersDto_Construction_ShouldRequirePaginationParameters()
+    public void Pagination_Take_ShouldReturnPageSize()
     {
-        // Test that the constructor requires pageNumber and pageSize
-        HasFiltersDto filters = new(1, 10);
-        
-        Assert.Equal(1, filters.PageNumber);
-        Assert.Equal(10, filters.PageSize);
-        Assert.Empty(filters.Filters); // Should start with empty filters
+        Pagination p1 = new(1, 5);
+        Pagination p2 = new(2, 10);
+        Pagination p3 = new(3, 20);
+
+        Assert.Equal(5, p1.Take);
+        Assert.Equal(10, p2.Take);
+        Assert.Equal(20, p3.Take);
     }
 
     [Fact]
-    public void HasFiltersDto_InheritsFromIHasPagination_ShouldBeTrue()
+    public void HasFiltersDto_ShouldImplementRequiredInterfaces()
     {
-        HasFiltersDto filters = new(1, 10);
-        
-        // Verify inheritance relationship
-        Assert.IsAssignableFrom<IHasPagination>(filters);
-        Assert.IsAssignableFrom<IHasFilters>(filters);
+        HasFiltersDto request = new(1, 10);
+
+        Assert.IsAssignableFrom<IHasPagination>(request);
+        Assert.IsAssignableFrom<IHasFilters>(request);
     }
 
+    #endregion
+
+    #region New Fluent API - WithSuperfilter(request) Pattern
+
     [Fact]
-    public void PaginationWithFiltering_UsingPageNumberDirect_ShouldWorkCorrectly()
+    public void FluentApi_WithFiltersAndPagination_ShouldWork()
     {
         IQueryable<User> users = new List<User>
         {
@@ -84,77 +72,27 @@ public class PaginationTests
             new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
         }.AsQueryable();
 
-        HasFiltersDto filters = new(1, 2)
+        HasFiltersDto request = new(2, 2) // Page 2, size 2
         {
-            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "200")],
-            Pagination = new Pagination(1, 2)
+            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "100")]
         };
 
-        // Test using direct PageNumber calculation
-        List<User> result = users.WithSuperfilter()
+        // New API: ApplyFilters() then ApplyPagination()
+        List<User> result = users
+            .WithSuperfilter(request)
             .MapProperty("moneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters)
-            .Skip((filters.PageNumber - 1) * filters.PageSize)
-            .Take(filters.PageSize)
+            .ApplyFilters()
+            .ApplyPagination()
             .ToList();
 
-        // Page 1 with size 2 of filtered results (Charlie, Dave, Eve) should return Charlie, Dave
-        Assert.Equal(2, result.Count); 
-        Assert.All(result, u => Assert.True(u.MoneyAmount > 200));
-        Assert.Equal("Charlie", result[0].Name);
-        Assert.Equal("Dave", result[1].Name);
-        
-        // Verify properties and calculations
-        Assert.Equal(1, filters.PageNumber);
-        Assert.Equal(2, filters.PageSize);
-        Assert.Equal(0, (filters.PageNumber - 1) * filters.PageSize); // Skip should be 0
-        Assert.Equal(2, filters.PageSize); // Take should be 2
-    }
-
-    [Fact]
-    public void PaginationWithFiltering_UsingSkipTakeProperties_ShouldWorkCorrectly()
-    {
-        IQueryable<User> users = new List<User>
-        {
-            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
-            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
-            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
-            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
-            new() { Id = 5, Name = "Eve", MoneyAmount = 500 },
-            new() { Id = 6, Name = "Frank", MoneyAmount = 600 }
-        }.AsQueryable();
-
-        HasFiltersDto filters = new(2, 2) // Page 2, size 2
-        {
-            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "200")],
-        };
-
-        // Test using IHasPagination calculated values
-        int skipCount = (filters.PageNumber - 1) * filters.PageSize;
-        int takeCount = filters.PageSize;
-        
-        List<User> result = users.WithSuperfilter()
-            .MapProperty("moneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters)
-            .Skip(skipCount) // Uses calculated value 
-            .Take(takeCount) // Uses calculated value
-            .ToList();
-
-        // Page 2 with size 2 of filtered results (Charlie, Dave, Eve, Frank) should return Eve, Frank
+        // Filtered (Bob, Charlie, Dave, Eve), Page 2 size 2 = Dave, Eve
         Assert.Equal(2, result.Count);
-        Assert.All(result, u => Assert.True(u.MoneyAmount > 200));
-        Assert.Equal("Eve", result[0].Name);
-        Assert.Equal("Frank", result[1].Name);
-
-        // Verify properties and calculations
-        Assert.Equal(2, filters.PageNumber);
-        Assert.Equal(2, filters.PageSize);
-        Assert.Equal(2, skipCount); // (2-1) * 2 = 2
-        Assert.Equal(2, takeCount); // PageSize = 2
+        Assert.Equal("Dave", result[0].Name);
+        Assert.Equal("Eve", result[1].Name);
     }
 
     [Fact]
-    public void PaginationWithFiltering_BasicCase_ShouldWorkWithSuperfilter()
+    public void FluentApi_WithFiltersOnly_ShouldWork()
     {
         IQueryable<User> users = new List<User>
         {
@@ -163,22 +101,337 @@ public class PaginationTests
             new() { Id = 3, Name = "Charlie", MoneyAmount = 300 }
         }.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
-            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "100")],
+            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "150")]
         };
 
-        // Test that filtering works with the pagination-enabled DTO
-        List<User> result = users.WithSuperfilter()
+        // Build() auto-applies stored filters
+        List<User> result = users
+            .WithSuperfilter(request)
             .MapProperty("moneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters)
+            .ApplyFilters()
             .ToList();
 
-        Assert.Equal(2, result.Count); // Bob, Charlie have > 100
-        Assert.All(result, u => Assert.True(u.MoneyAmount > 100));
-
-        // Test that pagination properties are accessible
-        Assert.Equal(1, filters.PageNumber);
-        Assert.Equal(10, filters.PageSize);
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, u => u.Name == "Bob");
+        Assert.Contains(result, u => u.Name == "Charlie");
     }
+
+    [Fact]
+    public void FluentApi_Page1_ShouldReturnFirstPage()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        HasFiltersDto request = new(1, 2) // Page 1, size 2
+        {
+            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "200")]
+        };
+
+        List<User> result = users
+            .WithSuperfilter(request)
+            .MapProperty("moneyAmount", x => x.MoneyAmount)
+            .ApplyFilters()
+            .ApplyPagination()
+            .ToList();
+
+        // Filtered (Charlie, Dave, Eve), Page 1 size 2 = Charlie, Dave
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Charlie", result[0].Name);
+        Assert.Equal("Dave", result[1].Name);
+    }
+
+    [Fact]
+    public void FluentApi_LastPage_ShouldReturnRemainingItems()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        HasFiltersDto request = new(2, 2) // Page 2, size 2
+        {
+            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "200")]
+        };
+
+        List<User> result = users
+            .WithSuperfilter(request)
+            .MapProperty("moneyAmount", x => x.MoneyAmount)
+            .ApplyFilters()
+            .ApplyPagination()
+            .ToList();
+
+        // Filtered (Charlie, Dave, Eve), Page 2 size 2 = Eve only
+        Assert.Single(result);
+        Assert.Equal("Eve", result[0].Name);
+    }
+
+    [Fact]
+    public void FluentApi_MultipleFilters_ShouldApplyAll()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        HasFiltersDto request = new(1, 10)
+        {
+            Filters =
+            [
+                new FilterCriterion("moneyAmount", Operator.GreaterThan, "150"),
+                new FilterCriterion("name", Operator.Contains, "a")
+            ]
+        };
+
+        List<User> result = users
+            .WithSuperfilter(request)
+            .MapProperty("moneyAmount", x => x.MoneyAmount)
+            .MapProperty("name", x => x.Name)
+            .ApplyFilters()
+            .ToList();
+
+        // MoneyAmount > 150 AND Name contains 'a' = Charlie, Dave
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, u => u.Name == "Charlie");
+        Assert.Contains(result, u => u.Name == "Dave");
+    }
+
+    #endregion
+
+    #region Offset-based Pagination
+
+    [Fact]
+    public void FluentApi_OffsetPagination_ShouldWork()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        HasFiltersDto request = new(1, 10)
+        {
+            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "100")]
+        };
+
+        // Skip 1, take 2 of filtered results
+        List<User> result = users
+            .WithSuperfilter(request)
+            .MapProperty("moneyAmount", x => x.MoneyAmount)
+            .ApplyFilters()
+            .ApplyOffsetPagination(skip: 1, take: 2)
+            .ToList();
+
+        // Filtered (Bob, Charlie, Dave, Eve), skip 1 take 2 = Charlie, Dave
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Charlie", result[0].Name);
+        Assert.Equal("Dave", result[1].Name);
+    }
+
+    [Fact]
+    public void FluentApi_OffsetPagination_SkipAll_ShouldReturnEmpty()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 }
+        }.AsQueryable();
+
+        HasFiltersDto request = new(1, 10)
+        {
+            Filters = [new FilterCriterion("moneyAmount", Operator.GreaterThan, "100")]
+        };
+
+        List<User> result = users
+            .WithSuperfilter(request)
+            .MapProperty("moneyAmount", x => x.MoneyAmount)
+            .ApplyFilters()
+            .ApplyOffsetPagination(skip: 10, take: 5)
+            .ToList();
+
+        Assert.Empty(result);
+    }
+
+    #endregion
+
+    #region IQueryable Extension Methods (without Superfilter)
+
+    [Fact]
+    public void IQueryable_ApplyPagination_PageBased_ShouldWork()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        List<User> result = users
+            .ApplyPagination(pageNumber: 2, pageSize: 2)
+            .ToList();
+
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Charlie", result[0].Name);
+        Assert.Equal("Dave", result[1].Name);
+    }
+
+    [Fact]
+    public void IQueryable_ApplyPagination_WithIHasPagination_ShouldWork()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        HasFiltersDto request = new(3, 2); // Page 3, size 2
+
+        List<User> result = users
+            .ApplyPagination(request)
+            .ToList();
+
+        // Page 3 size 2 = Eve only
+        Assert.Single(result);
+        Assert.Equal("Eve", result[0].Name);
+    }
+
+    [Fact]
+    public void IQueryable_ApplyOffsetPagination_ShouldWork()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        List<User> result = users
+            .ApplyOffsetPagination(skip: 3, take: 2)
+            .ToList();
+
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Dave", result[0].Name);
+        Assert.Equal("Eve", result[1].Name);
+    }
+
+    #endregion
+
+    #region Static Filters with Pagination
+
+    [Fact]
+    public void StaticFilters_WithPagination_ShouldWork()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        HasFiltersDto request = new(1, 2); // Page 1, size 2
+
+        List<User> result = users
+            .WithSuperfilter(request)
+            .MapProperty("moneyAmount", x => x.MoneyAmount)
+            .AddStaticFilter("moneyAmount", Operator.GreaterThan, "200")
+            .ApplyFilters()
+            .ApplyPagination()
+            .ToList();
+
+        // Static filter (Charlie, Dave, Eve), Page 1 size 2 = Charlie, Dave
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Charlie", result[0].Name);
+        Assert.Equal("Dave", result[1].Name);
+    }
+
+    [Fact]
+    public void StaticFilters_WithOffsetPagination_ShouldWork()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 },
+            new() { Id = 2, Name = "Bob", MoneyAmount = 200 },
+            new() { Id = 3, Name = "Charlie", MoneyAmount = 300 },
+            new() { Id = 4, Name = "Dave", MoneyAmount = 400 },
+            new() { Id = 5, Name = "Eve", MoneyAmount = 500 }
+        }.AsQueryable();
+
+        List<User> result = users
+            .WithSuperfilter()
+            .MapProperty("moneyAmount", x => x.MoneyAmount)
+            .AddStaticFilter("moneyAmount", Operator.GreaterThan, "200")
+            .ApplyFilters()
+            .ApplyOffsetPagination(skip: 1, take: 1)
+            .ToList();
+
+        // Filtered (Charlie, Dave, Eve), skip 1 take 1 = Dave
+        Assert.Single(result);
+        Assert.Equal("Dave", result[0].Name);
+    }
+
+    #endregion
+
+    #region Error Handling
+
+    [Fact]
+    public void ParameterlessWithFilters_WithoutRequest_ShouldThrow()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 }
+        }.AsQueryable();
+
+        Assert.Throws<InvalidOperationException>(() =>
+            users.WithSuperfilter()
+                .MapProperty("moneyAmount", x => x.MoneyAmount)
+                .WithFilters()
+                .ApplyFilters()
+                .ToList());
+    }
+
+    [Fact]
+    public void ParameterlessApplyPagination_WithoutRequest_ShouldThrow()
+    {
+        IQueryable<User> users = new List<User>
+        {
+            new() { Id = 1, Name = "Alice", MoneyAmount = 100 }
+        }.AsQueryable();
+
+        Assert.Throws<InvalidOperationException>(() =>
+            users.WithSuperfilter()
+                .MapProperty("moneyAmount", x => x.MoneyAmount)
+                .ApplyFilters()
+                .ApplyPagination()
+                .ToList());
+    }
+
+    #endregion
 }
