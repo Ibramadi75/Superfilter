@@ -4,7 +4,7 @@
 
 # Superfilter
 
-Superfilter is a lightweight C# library for applying dynamic filtering and sorting on `IQueryable` sources. It
+Superfilter is a lightweight C# library for applying dynamic filtering, sorting, and pagination on `IQueryable` sources. It
 maps textual filter criteria to strongly typed expressions, making it easy to expose flexible query capabilities in web
 APIs or other data-driven applications.
 
@@ -13,7 +13,7 @@ APIs or other data-driven applications.
 ## Features
 
 - **🚀 Fluent IQueryable Extensions** - Natural integration with LINQ queries
-- **📄 Pagination Support** - Built-in pagination with `IHasPagination` interface
+- **📄 Built-in Pagination** - Page-based and offset-based pagination support
 - Map filter keys to entity properties with lambda selectors and type inference
 - Supports nested navigation properties (e.g., `x => x.Car.Brand.Name`)
 - Validates required filters with configurable error handling
@@ -26,116 +26,126 @@ APIs or other data-driven applications.
 
 ## Getting Started
 
-### 🚀 Fluent IQueryable Extensions
+### Request DTO Setup
+
+```csharp
+// Your request DTO should implement the required interfaces
+public class UserSearchRequest : IHasFilters, IHasPagination
+{
+    public List<FilterCriterion> Filters { get; set; } = new();
+    public Pagination Pagination { get; set; } = new(1, 10);
+}
+```
+
+### 🚀 Basic Usage (Recommended Pattern)
 
 ```csharp
 using Superfilter;
 
-// In a controller or service method
 [HttpPost("search")]
 public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest request)
 {
-    // Apply filters using fluent IQueryable extensions
     var result = await _context.Users
-        .WithSuperfilter()                               // Start fluent configuration
-        .MapProperty(u => u.Id)                          // IntelliSense support
-        .MapProperty(u => u.Car.Brand.Name)              // Navigation properties work naturally
-        .MapProperty("name", u => u.Name)                // Explicit key usage
-        .MapRequiredProperty(u => u.MoneyAmount)         // Require this property to be included in filters
-        .WithFilters(request.Filters)                    // Apply dynamic filters - returns filtered IQueryable
+        .WithSuperfilter(request)                    // Pass request once - stores filters & pagination
+        .MapProperty("name", u => u.Name)            // Map filterable properties
+        .MapProperty("age", u => u.Age)
+        .MapProperty(u => u.Car.Brand.Name)          // Navigation properties with auto-generated key
+        .ApplyFilters()                              // Apply filters and sorts
+        .ApplyPagination()                           // Apply pagination (Skip/Take)
         .ToListAsync();
-    
+
     return Ok(result);
 }
+```
+
+### Without Pagination
+
+```csharp
+// If you don't need pagination, just call ApplyFilters()
+var result = await _context.Users
+    .WithSuperfilter(request)
+    .MapProperty("name", u => u.Name)
+    .ApplyFilters()                                  // Returns FilteredQueryable<T>
+    .ToListAsync();                                  // Works directly - no pagination applied
 ```
 
 ### With Sorting
 
 ```csharp
-// Apply both filters and sorting
+// Sorting is automatically applied from request.Sorters if your DTO implements IHasSorts
+public class UserSearchRequest : IHasFilters, IHasSorts, IHasPagination
+{
+    public List<FilterCriterion> Filters { get; set; } = new();
+    public List<SortCriterion> Sorters { get; set; } = new();
+    public Pagination Pagination { get; set; } = new(1, 10);
+}
+
 var result = await _context.Users
-    .WithSuperfilter()
-    .MapProperty(u => u.Name)
-    .MapProperty(u => u.Age)
-    .MapProperty(u => u.MoneyAmount)
-    .WithFilters(request.Filters)                        // Apply filters
-    .ApplySorting(request.Sorts)                         // Apply sorting
+    .WithSuperfilter(request)
+    .MapProperty("name", u => u.Name)
+    .MapProperty("age", u => u.Age)
+    .ApplyFilters()                                  // Applies both filters AND sorts
+    .ApplyPagination()
     .ToListAsync();
 ```
 
-### With Pagination
+### Offset-based Pagination
 
 ```csharp
-// Using IHasPagination interface for pagination support
-public class UserSearchRequest : IHasPagination, IHasFilters
-{
-    public int PageNumber { get; set; } = 1;
-    public int PageSize { get; set; } = 10;
-    public List<FilterCriterion> Filters { get; set; } = new();
-}
+// Use ApplyOffsetPagination for skip/take style pagination
+var result = await _context.Users
+    .WithSuperfilter(request)
+    .MapProperty("name", u => u.Name)
+    .ApplyFilters()
+    .ApplyOffsetPagination(skip: 20, take: 10)       // Skip 20, take 10
+    .ToListAsync();
+```
 
-// Apply filters with pagination
-[HttpPost("search")]
-public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequest request)
-{
-    var query = _context.Users
-        .WithSuperfilter()
-        .MapProperty(u => u.Name)
-        .MapProperty(u => u.Age)
-        .WithFilters(request.Filters);
+### Alternative Pattern (Without Request in WithSuperfilter)
 
-    // Apply pagination using Skip and Take
-    var skip = (request.PageNumber - 1) * request.PageSize;
-    var result = await query
-        .Skip(skip)
-        .Take(request.PageSize)
-        .ToListAsync();
-    
-    return Ok(result);
-}
+```csharp
+// You can also pass filters separately - useful when filters come from different sources
+var result = await _context.Users
+    .WithSuperfilter()                               // No request passed
+    .MapProperty("name", u => u.Name)
+    .MapProperty("age", u => u.Age)
+    .WithFilters(filtersFromOneSource)               // Pass filters explicitly
+    .ApplyFilters()
+    .ApplyPagination(paginationFromAnotherSource)    // Pass pagination explicitly
+    .ToListAsync();
 ```
 
 ## API Reference
 
 ### Core Extension Methods
 
-| Method                                          | Description                                      |
-|-------------------------------------------------|--------------------------------------------------|
-| `.WithSuperfilter()`                            | Starts fluent configuration chain for IQueryable |
-| `MapProperty<TProperty>(selector)`              | Maps property with auto-generated key            |
-| `MapProperty<TProperty>(key, selector)`         | Maps property with explicit key                  |
-| `MapRequiredProperty<TProperty>(selector)`      | Maps required property with auto-generated key   |
-| `MapRequiredProperty<TProperty>(key, selector)` | Maps required property with explicit key         |
-| `WithFilters(IHasFilters)`                      | Applies filters and returns filtered IQueryable  |
-| `AddStaticFilter(field, operator, value)`       | Adds a static filter                             |
-| `WithErrorStrategy(OnErrorStrategy)`            | Sets error handling strategy                     |
+| Method                                          | Description                                              |
+|-------------------------------------------------|----------------------------------------------------------|
+| `.WithSuperfilter(request)`                     | Starts fluent chain with request (recommended)           |
+| `.WithSuperfilter()`                            | Starts fluent chain without request                      |
+| `MapProperty<TProperty>(selector)`              | Maps property with auto-generated key                    |
+| `MapProperty<TProperty>(key, selector)`         | Maps property with explicit key                          |
+| `MapRequiredProperty<TProperty>(selector)`      | Maps required property with auto-generated key           |
+| `ApplyFilters()`                                | Applies filters/sorts, returns `FilteredQueryable<T>`    |
+| `ApplyPagination()`                             | Applies pagination from stored request                   |
+| `ApplyPagination(IHasPagination)`               | Applies pagination from provided object                  |
+| `ApplyPagination(pageNumber, pageSize)`         | Applies pagination with explicit values                  |
+| `ApplyOffsetPagination(skip, take)`             | Applies offset-based pagination                          |
+| `ApplyFiltersAndPagination()`                   | Shortcut for `ApplyFilters().ApplyPagination()`          |
+| `AddStaticFilter(field, operator, value)`       | Adds a static filter                                     |
+| `WithErrorStrategy(OnErrorStrategy)`            | Sets error handling strategy                             |
 
 ### Property Mapping Examples
 
 ```csharp
-// MapProperty handles all types automatically with type inference
 var result = _context.Users
-    .WithSuperfilter()
-    .MapProperty(u => u.Name)                    // string - auto key: "User.Name"
-    .MapProperty(u => u.Id)                      // int - auto key: "User.Id"
-    .MapProperty(u => u.BornDate)                // DateTime? - auto key: "User.BornDate"
-    .MapProperty(u => u.MoneyAmount)             // int - auto key: "User.MoneyAmount"
-    .MapProperty(u => u.IsActive)                // bool - auto key: "User.IsActive"
-    .MapProperty(u => u.Car.Brand.Name)          // nested string - auto key: "User.Car.Brand.Name"
-    .MapProperty("customKey", u => u.Email)      // explicit key
-    .WithFilters(request.Filters)
-    .ToList();
-```
-
-### Error Handling
-
-```csharp
-// Configure error handling strategy
-var result = _context.Users
-    .WithSuperfilter()
-    .WithErrorStrategy(OnErrorStrategy.Ignore)   // Or OnErrorStrategy.ThrowException
-    .MapProperty(u => u.Name)
-    .WithFilters(request.Filters)
+    .WithSuperfilter(request)
+    .MapProperty("name", u => u.Name)                // string - explicit key
+    .MapProperty(u => u.Id)                          // int - auto key: "User.Id"
+    .MapProperty(u => u.BornDate)                    // DateTime? - auto key: "User.BornDate"
+    .MapProperty(u => u.Car.Brand.Name)              // nested - auto key: "User.Car.Brand.Name"
+    .MapRequiredProperty("amount", u => u.MoneyAmount) // required filter
+    .ApplyFilters()
     .ToList();
 ```
 
@@ -144,11 +154,23 @@ var result = _context.Users
 ```csharp
 // Add static filters (applied in addition to dynamic filters)
 var result = _context.Users
-    .WithSuperfilter()
-    .MapProperty(u => u.Name)
-    .MapProperty(u => u.IsActive)
-    .AddStaticFilter("User.IsActive", Operator.Equals, "true")  // Always filter active users
-    .WithFilters(request.Filters)                               // Plus dynamic filters from client
+    .WithSuperfilter(request)
+    .MapProperty("name", u => u.Name)
+    .MapProperty("isActive", u => u.IsActive)
+    .AddStaticFilter("isActive", Operator.Equals, "true")  // Always filter active users
+    .ApplyFilters()
+    .ApplyPagination()
+    .ToList();
+```
+
+### Error Handling
+
+```csharp
+var result = _context.Users
+    .WithSuperfilter(request)
+    .WithErrorStrategy(OnErrorStrategy.Ignore)       // Or OnErrorStrategy.ThrowException
+    .MapProperty("name", u => u.Name)
+    .ApplyFilters()
     .ToList();
 ```
 
@@ -173,8 +195,7 @@ The `MapProperty` method is available in two forms:
 2. `MapProperty(selector)` - Auto-generated key based on property path
 
 **Security Note:** When using auto-generated keys (`MapProperty(selector)`), consider whether exposing your data model
-schema to the frontend is acceptable for your use case. This approach might reveal internal details of your data model
-structure.
+schema to the frontend is acceptable for your use case.
 
 ### Benchmarks show better results with Superfilter
 <img width="1006" height="251" alt="image" src="https://github.com/user-attachments/assets/0dc5d072-72f1-4734-b32c-c132ffab9c02" />
@@ -224,6 +245,7 @@ dotnet test --filter "FullyQualifiedName!~PostgreSqlIntegrationTests"
 - ✅ **Natural Navigation Properties** support without complex setup
 - ✅ **Flexible Filtering** - combine static and dynamic filters seamlessly
 - ✅ **Entity Framework Ready** - optimized for EF Core query generation
+- ✅ **Async Support** - Full compatibility with `ToListAsync()` and other async methods
 
 ## License
 

@@ -42,14 +42,13 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
 
@@ -66,14 +65,13 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
@@ -94,14 +92,13 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters = [new FilterCriterion("carName", Operator.StartsWith, "F")]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty("carName", x => x.Car!.Name)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
@@ -123,7 +120,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters =
             [
@@ -132,10 +129,9 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             ]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .MapProperty("Name", x => x.Name)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
@@ -151,6 +147,11 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         Assert.All(result, user => Assert.Contains("a", user.Name, StringComparison.OrdinalIgnoreCase));
     }
 
+    /// <summary>
+    /// This test demonstrates the alternative pattern where filters are passed separately
+    /// via WithFilters() instead of through WithSuperfilter(request).
+    /// This is useful when filters come from a different source than pagination.
+    /// </summary>
     [Fact]
     public void ApplyFilters_WithNonExistentProperty_ShouldIgnoreFilter()
     {
@@ -162,6 +163,7 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
             Filters = [new FilterCriterion("NonExistentProperty", Operator.Equals, "test")]
         };
 
+        // Alternative pattern: pass filters separately via WithFilters()
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
@@ -183,14 +185,13 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         using AppDbContext context = GetDbContext();
         IQueryable<User> users = context.Users.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters = [new FilterCriterion("moneyamount", Operator.GreaterThan, "200")]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty("moneyamount", x => x.MoneyAmount)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();

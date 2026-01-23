@@ -16,14 +16,13 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     {
         IQueryable<User> users = Context.Users.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.GreaterThan, "100")]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
@@ -50,7 +49,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .ThenInclude(h => h!.City)
             .AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters =
             [
@@ -59,10 +58,9 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             ]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty(x => x.Car!.Brand!.Name)
             .MapProperty(x => x.House!.City.Name)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
@@ -81,14 +79,13 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     {
         IQueryable<User> users = Context.Users.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters = [new FilterCriterion("MoneyAmount", Operator.Equals, "200")]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
@@ -108,14 +105,13 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
     {
         IQueryable<User> users = Context.Users.AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters = [new FilterCriterion("name", Operator.Contains, "li")]
         };
 
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
@@ -137,7 +133,7 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .ThenInclude(c => c!.Brand)
             .AsQueryable();
 
-        HasFiltersDto filters = new(1, 10)
+        HasFiltersDto request = new(1, 10)
         {
             Filters =
             [
@@ -148,11 +144,10 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         };
 
         Stopwatch stopwatch = Stopwatch.StartNew();
-        IQueryable<User> filteredQuery = users.WithSuperfilter()
+        IQueryable<User> filteredQuery = users.WithSuperfilter(request)
             .MapProperty(x => x.MoneyAmount)
             .MapProperty(x => x.Car!.Name)
             .MapProperty(x => x.Car!.Brand!.Rate)
-            .WithFilters(filters)
             .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
