@@ -67,6 +67,7 @@ internal static class FilterMethods
             .MapProperty(x => x.Age)
             .MapProperty(x => x.Country)
             .WithFilters(filters)
+            .ApplyFilters()
             .ToList();
 
         return result;
