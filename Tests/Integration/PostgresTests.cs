@@ -23,7 +23,8 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
 
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
 
@@ -61,7 +62,8 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty(x => x.Car!.Brand!.Name)
             .MapProperty(x => x.House!.City.Name)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
 
@@ -86,7 +88,8 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
 
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
 
@@ -112,7 +115,8 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
 
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
 
@@ -148,7 +152,8 @@ public class PostgreSqlIntegrationTests(ITestOutputHelper testOutputHelper) : Po
             .MapProperty(x => x.MoneyAmount)
             .MapProperty(x => x.Car!.Name)
             .MapProperty(x => x.Car!.Brand!.Rate)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = await filteredQuery.ToListAsync();
         stopwatch.Stop();

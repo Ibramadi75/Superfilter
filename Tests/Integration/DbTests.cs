@@ -49,7 +49,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
 
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
 
         testOutputHelper.WriteLine(sqlQuery);
@@ -72,7 +73,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
 
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
@@ -99,7 +101,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
 
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("carName", x => x.Car!.Name)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
@@ -132,7 +135,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("MoneyAmount", x => x.MoneyAmount)
             .MapProperty("Name", x => x.Name)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
@@ -160,7 +164,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
 
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 
@@ -185,7 +190,8 @@ public class DatabaseIntegrationTests(ITestOutputHelper testOutputHelper)
 
         IQueryable<User> filteredQuery = users.WithSuperfilter()
             .MapProperty("moneyamount", x => x.MoneyAmount)
-            .WithFilters(filters);
+            .WithFilters(filters)
+            .ApplyFilters();
         string sqlQuery = filteredQuery.ToQueryString();
         List<User> result = filteredQuery.ToList();
 

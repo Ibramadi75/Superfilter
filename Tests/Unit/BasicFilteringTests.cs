@@ -67,7 +67,7 @@ public class BasicFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapRequiredProperty("id", x => x.Id)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(users.Count() - 1, result.Count);
         Assert.DoesNotContain(result, user => user.Id == 1);
@@ -85,7 +85,7 @@ public class BasicFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("bornDate", x => x.BornDate!)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Single(result);
     }
@@ -102,7 +102,7 @@ public class BasicFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.True(result.Count > 0);
         Assert.All(result, user => Assert.Contains("e", user.Name, StringComparison.OrdinalIgnoreCase));
@@ -120,7 +120,7 @@ public class BasicFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapRequiredProperty("name", x => x.Name)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Empty(result);
     }
@@ -137,7 +137,7 @@ public class BasicFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(GetTestUsers().Count(), result.Count);
     }
@@ -154,7 +154,7 @@ public class BasicFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("name", x => x.Name)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(GetTestUsers().Count(), result.Count);
     }

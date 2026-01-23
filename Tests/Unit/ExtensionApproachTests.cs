@@ -31,6 +31,7 @@ public class ExtensionApproachTests
             .WithSuperfilter()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
+            .ApplyFilters()
             .ToList();
 
         Assert.Single(result);
@@ -50,6 +51,7 @@ public class ExtensionApproachTests
             .WithSuperfilter()
             .MapProperty("name", x => x.Name)
             .WithFilters(filters)
+            .ApplyFilters()
             .ToList();
 
         Assert.Single(result);
@@ -70,6 +72,7 @@ public class ExtensionApproachTests
             .WithSuperfilter()
             .MapProperty("moneyAmount", x => x.MoneyAmount)
             .WithFilters(filters)
+            .ApplyFilters()
             .ToList();
 
         Assert.Equal(2, result.Count);
@@ -90,6 +93,7 @@ public class ExtensionApproachTests
             .WithSuperfilter()
             .MapProperty(x => x.Name) // Auto-maps to "User.Name"
             .WithFilters(filters)
+            .ApplyFilters()
             .ToList();
 
         Assert.Equal(2, result.Count);

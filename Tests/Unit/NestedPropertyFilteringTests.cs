@@ -66,7 +66,7 @@ public class NestedPropertyFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.Car!.Brand!.Name == "BMW");
@@ -85,7 +85,7 @@ public class NestedPropertyFilteringTests
         List<User> result = users.WithSuperfilter()
             .MapProperty("id", x => x.Id)
             .MapProperty("houseAddress", x => x.House!.Address)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.House!.Address.Contains("Oak"));
@@ -103,7 +103,7 @@ public class NestedPropertyFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandRate", x => x.Car!.Brand!.Rate)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, user => user.Car!.Brand!.Rate == 5);
@@ -122,7 +122,7 @@ public class NestedPropertyFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("carBrandName", x => x.Car!.Brand!.Name)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Single(result);
         Assert.Contains(result, user => user.Car!.Brand!.Name == "Ford");

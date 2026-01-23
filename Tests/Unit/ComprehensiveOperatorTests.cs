@@ -66,7 +66,7 @@ public class ComprehensiveOperatorTests
     {
         return users.WithSuperfilter()
             .MapProperty(filters.Filters[0].Field, propertySelector)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
     }
 
     #region String Operators Tests
@@ -780,7 +780,7 @@ public class ComprehensiveOperatorTests
         {
             return users.WithSuperfilter()
                 .MapProperty("moneyAmount", u => u.MoneyAmount)
-                .WithFilters(filters).ToList();
+                .WithFilters(filters).ApplyFilters().ToList();
         });
         Assert.IsType<ArgumentException>(exception.InnerException?.InnerException);
     }
@@ -798,7 +798,7 @@ public class ComprehensiveOperatorTests
         {
             return users.WithSuperfilter()
                 .MapProperty("moneyAmount", u => u.MoneyAmount)
-                .WithFilters(filters).ToList();
+                .WithFilters(filters).ApplyFilters().ToList();
         });
         Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }
@@ -816,7 +816,7 @@ public class ComprehensiveOperatorTests
         {
             return users.WithSuperfilter()
                 .MapProperty("decimalValue", u => u.DecimalValue)
-                .WithFilters(filters).ToList();
+                .WithFilters(filters).ApplyFilters().ToList();
         });
         Assert.IsType<FormatException>(exception.InnerException?.InnerException);
     }

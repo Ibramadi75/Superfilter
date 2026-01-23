@@ -67,7 +67,7 @@ public class DateTimeOffsetFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Single(result);
         Assert.Equal(1, result.First().Id);
@@ -86,7 +86,7 @@ public class DateTimeOffsetFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(3, result.Count);
         Assert.DoesNotContain(result, u => u.Id == 1);
@@ -105,7 +105,7 @@ public class DateTimeOffsetFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, u => u.Id == 1);
@@ -125,7 +125,7 @@ public class DateTimeOffsetFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(4, result.Count);
     }
@@ -143,7 +143,7 @@ public class DateTimeOffsetFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Equal(3, result.Count);
         Assert.DoesNotContain(result, u => u.Id == 4);
@@ -162,7 +162,7 @@ public class DateTimeOffsetFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("lastLoginDate", x => x.LastLoginDate)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Single(result);
         Assert.Equal(1, result.First().Id);
@@ -181,7 +181,7 @@ public class DateTimeOffsetFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("registrationDate", x => x.RegistrationDate!)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Single(result);
         Assert.Equal(1, result.First().Id);
@@ -200,7 +200,7 @@ public class DateTimeOffsetFilteringTests
 
         List<User> result = users.WithSuperfilter()
             .MapProperty("car.manufactureDate", x => x.Car!.ManufactureDate!)
-            .WithFilters(filters).ToList();
+            .WithFilters(filters).ApplyFilters().ToList();
 
         Assert.Single(result);
         Assert.Equal(1, result.First().Id);
@@ -219,6 +219,6 @@ public class DateTimeOffsetFilteringTests
         Assert.Throws<SuperfilterException>(() =>
             users.WithSuperfilter()
                 .MapProperty("lastLoginDate", x => x.LastLoginDate)
-                .WithFilters(filters).ToList());
+                .WithFilters(filters).ApplyFilters().ToList());
     }
 }
