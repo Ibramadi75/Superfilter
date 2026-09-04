@@ -8,7 +8,16 @@ Superfilter is a lightweight C# library for applying dynamic filtering, sorting,
 maps textual filter criteria to strongly typed expressions, making it easy to expose flexible query capabilities in web
 APIs or other data-driven applications.
 
-**🎯 Framework Support:** .NET 8.0 and .NET 9.0
+**🎯 Framework Support:** .NET 8.0, .NET 9.0, and .NET 10.0
+
+| Target framework | Support |
+|------------------|---------|
+| .NET 8.0 (`net8.0`) | ✅ |
+| .NET 9.0 (`net9.0`) | ✅ |
+| .NET 10.0 (`net10.0`) | ✅ |
+
+Building and testing all target frameworks requires the .NET 10 SDK. The .NET 10 target uses Entity Framework Core
+10 and the Npgsql Entity Framework Core provider 10.
 
 ## Features
 
