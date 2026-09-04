@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Optimize>true</Optimize>
@@ -25,6 +25,15 @@
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3"/>
     </ItemGroup>
 
 </Project>
